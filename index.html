@@ -7,56 +7,87 @@
 </head>
 <body>
   <script>
-    let countEnjoyment = 0, countDisgust = 0, countSadness = 0, countFear = 0, countAnger = 0;
+    let backgroundImages = [];
+let motifImages = [];
+let countEnjoyment = 0, countDisgust = 0, countSadness = 0, countFear = 0, countAnger = 0;
+let selectedBackground, selectedMotif;
 
-    function setup() {
-      createCanvas(400, 400);
-      background(255);
+function preload() {
+  // 背景画像を読み込む（あなたの用意した画像ファイル名に変更してください）
+  backgroundImages[0] = loadImage('background1.jpg');  // No.1
+  backgroundImages[1] = loadImage('background2.jpg');  // No.2
+  backgroundImages[2] = loadImage('background3.jpg');  // No.3
+  backgroundImages[3] = loadImage('background4.jpg');  // No.4
 
-      // ボタンの設定
-      createButton('Enjoyment').position(10, 10).mousePressed(() => { countEnjoyment++; drawArt(); });
-      createButton('Disgust').position(100, 10).mousePressed(() => { countDisgust++; drawArt(); });
-      createButton('Sadness').position(190, 10).mousePressed(() => { countSadness++; drawArt(); });
-      createButton('Fear').position(280, 10).mousePressed(() => { countFear++; drawArt(); });
-      createButton('Anger').position(370, 10).mousePressed(() => { countAnger++; drawArt(); });
-    }
+  // モチーフ画像を読み込む
+  motifImages['Enjoyment'] = loadImage('sun.png');     // 太陽
+  motifImages['Disgust'] = loadImage('shooting_star.png');  // 流れ星
+  motifImages['Sadness'] = loadImage('moon.png');     // 三日月
+  motifImages['Fear'] = loadImage('fireworks.png');   // 花火
+  motifImages['Anger'] = loadImage('star.png');       // 星
+}
 
-    function drawArt() {
-      background(255);
+function setup() {
+  createCanvas(600, 400);
+  background(255);
 
-      for (let i = 0; i < countEnjoyment; i++) {
-        fill(255, 200, 0, 150);
-        ellipse(random(width), random(height), 50, 50);
-      }
+  // ボタンを作成
+  createButton('Enjoyment').position(10, 10).mousePressed(() => { countEnjoyment++; });
+  createButton('Disgust').position(100, 10).mousePressed(() => { countDisgust++; });
+  createButton('Sadness').position(190, 10).mousePressed(() => { countSadness++; });
+  createButton('Fear').position(280, 10).mousePressed(() => { countFear++; });
+  createButton('Anger').position(370, 10).mousePressed(() => { countAnger++; });
 
-      for (let i = 0; i < countDisgust; i++) {
-        stroke(100, 50, 50);
-        fill(100, 50, 50, 100);
-        beginShape();
-        for (let j = 0; j < 5; j++) {
-          vertex(random(width), random(height));
-        }
-        endShape(CLOSE);
-      }
+  // チェックボタンを作成
+  createButton('Check').position(500, 10).mousePressed(displayArtwork);
+}
 
-      for (let i = 0; i < countSadness; i++) {
-        stroke(100, 100, 255, 100);
-        fill(100, 100, 255, 50);
-        rect(random(width), random(height), 40, 60);
-      }
+function displayArtwork() {
+  let totalGroup1 = countEnjoyment; // Group 1: Enjoyment
+  let totalGroup2 = countDisgust + countSadness + countFear + countAnger; // Group 2: 他の感情
 
-      for (let i = 0; i < countFear; i++) {
-        stroke(0);
-        fill(0);
-        triangle(random(width), random(height), random(width), random(height), random(width), random(height));
-      }
+  // 背景を決定する
+  let ratio = totalGroup1 / (totalGroup1 + totalGroup2);  // Group 1 と Group 2 の比率
+  if (ratio >= 1) {
+    selectedBackground = backgroundImages[0];  // ①：② = 10:0
+  } else if (ratio >= 0.6) {
+    selectedBackground = backgroundImages[1];  // ①：② = 6:4
+  } else if (ratio >= 0.4) {
+    selectedBackground = backgroundImages[2];  // ①：② = 4:6
+  } else {
+    selectedBackground = backgroundImages[3];  // ①：② = 0:10
+  }
 
-      for (let i = 0; i < countAnger; i++) {
-        stroke(255, 0, 0);
-        fill(255, 0, 0, 150);
-        line(random(width), random(height), random(width), random(height));
-      }
-    }
+  // モチーフを決定する（最も多く押された感情）
+  let maxCount = Math.max(countEnjoyment, countDisgust, countSadness, countFear, countAnger);
+  if (maxCount === countEnjoyment) {
+    selectedMotif = motifImages['Enjoyment'];
+  } else if (maxCount === countDisgust) {
+    selectedMotif = motifImages['Disgust'];
+  } else if (maxCount === countSadness) {
+    selectedMotif = motifImages['Sadness'];
+  } else if (maxCount === countFear) {
+    selectedMotif = motifImages['Fear'];
+  } else if (maxCount === countAnger) {
+    selectedMotif = motifImages['Anger'];
+  }
+
+  // 絵を描く
+  drawArtwork();
+}
+
+function drawArtwork() {
+  // 背景を表示
+  if (selectedBackground) {
+    image(selectedBackground, 0, 0, width, height);
+  }
+
+  // モチーフを画面の中央に表示
+  if (selectedMotif) {
+    image(selectedMotif, width / 2 - 50, height / 2 - 50, 100, 100);  // 中央にモチーフを配置
+  }
+}
+
   </script>
 </body>
 </html>
