@@ -13,104 +13,56 @@
     let selectedBackground, selectedMotif;
 
     function preload() {
-      // Load background images (ensure paths are correct)
-      backgroundImages[0] = loadImage('https://mooo0ooo.github.io/diary/background1.png');  // No.1
-      backgroundImages[1] = loadImage('https://mooo0ooo.github.io/diary/background2.png');  // No.2
-      backgroundImages[2] = loadImage('https://mooo0ooo.github.io/diary/background3.png');  // No.3
-      backgroundImages[3] = loadImage('https://mooo0ooo.github.io/diary/background4.png');  // No.4
+      // 背景画像の読み込み
+      backgroundImages[0] = loadImage('https://mooo0ooo.github.io/diary/background1.png');
+      backgroundImages[1] = loadImage('https://mooo0ooo.github.io/diary/background2.png');
+      backgroundImages[2] = loadImage('https://mooo0ooo.github.io/diary/background3.png');
+      backgroundImages[3] = loadImage('https://mooo0ooo.github.io/diary/background4.png');
 
-      // Load motif images (ensure paths are correct)
-      motifImages['Enjoyment'] = loadImage('https://mooo0ooo.github.io/diary/sun-removebg-preview.png');     // Sun
-      motifImages['Disgust'] = loadImage('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png');  // Shooting Star
-      motifImages['Sadness'] = loadImage('https://mooo0ooo.github.io/diary/moon-removebg-preview.png');     // Crescent Moon
-      motifImages['Fear'] = loadImage('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png');   // Fireworks
-      motifImages['Anger'] = loadImage('https://mooo0ooo.github.io/diary/star-removebg-preview.png');       // Star
+      // モチーフ画像の読み込み
+      motifImages['Enjoyment'] = loadImage('https://mooo0ooo.github.io/diary/sun-removebg-preview.png');
+      motifImages['Disgust'] = loadImage('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png');
+      motifImages['Sadness'] = loadImage('https://mooo0ooo.github.io/diary/moon-removebg-preview.png');
+      motifImages['Fear'] = loadImage('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png');
+      motifImages['Anger'] = loadImage('https://mooo0ooo.github.io/diary/star-removebg-preview.png');
     }
 
     function setup() {
-  createCanvas(windowWidth, windowHeight); // 画面サイズに合わせたキャンバスを作成
-  background(255);
+      createCanvas(windowWidth, windowHeight); // 画面サイズに合わせてキャンバスを作成
+      background(255);
 
-  // ボタンを作成
-  createButton('Enjoyment').position(10, 10).mousePressed(() => { countEnjoyment++; });
-  createButton('Disgust').position(100, 10).mousePressed(() => { countDisgust++; });
-  createButton('Sadness').position(190, 10).mousePressed(() => { countSadness++; });
-  createButton('Fear').position(280, 10).mousePressed(() => { countFear++; });
-  createButton('Anger').position(370, 10).mousePressed(() => { countAnger++; });
+      // ボタンの作成
+      createButton('Enjoyment').position(10, 10).mousePressed(() => { countEnjoyment++; });
+      createButton('Disgust').position(100, 10).mousePressed(() => { countDisgust++; });
+      createButton('Sadness').position(190, 10).mousePressed(() => { countSadness++; });
+      createButton('Fear').position(280, 10).mousePressed(() => { countFear++; });
+      createButton('Anger').position(370, 10).mousePressed(() => { countAnger++; });
 
-  // チェックボタンを作成
-  createButton('Check').position(500, 10).mousePressed(displayArtwork);
-}
-
-function drawArtwork() {
-  // 背景を表示
-  if (selectedBackground) {
-    image(selectedBackground, 0, 0, width, height);
-  }
-
-  // モチーフを中央に表示
-  if (selectedMotif) {
-    tint(255, 150); // 透明度
-    image(selectedMotif, width / 2 - (1000 / 2), height / 2 - (1000 / 2), 1000, 1000); // モチーフの大きさを1000x1000に拡大
-    noTint(); // 透明度をリセット
-  }
-}
-
-// 画面サイズが変更されたときにキャンバスをリサイズ
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight); // 画面サイズに合わせてキャンバスをリサイズ
-  background(255); // キャンバスをクリア
-  drawArtwork(); // 絵を再描画
-}
-
+      // チェックボタンを作成
+      createButton('Check').position(500, 10).mousePressed(displayArtwork);
+    }
 
     function displayArtwork() {
       let totalGroup1 = countEnjoyment; // Group 1: Enjoyment
-      let totalGroup2 = countDisgust + countSadness + countFear + countAnger; // Group 2: Other emotions
+      let totalGroup2 = countDisgust + countSadness + countFear + countAnger; // Group 2: 他の感情
 
-      // Determine background
-      let ratio = totalGroup1 / (totalGroup1 + totalGroup2);  // Ratio of Group 1 to Group 2
+      // 背景の決定
+      let ratio = totalGroup1 / (totalGroup1 + totalGroup2);  // Group 1 と Group 2 の比率
       if (ratio >= 1) {
-        selectedBackground = backgroundImages[0];  // Ratio 10:0
+        selectedBackground = backgroundImages[0];  // 10:0 の比率
       } else if (ratio >= 0.6) {
-        selectedBackground = backgroundImages[1];  // Ratio 6:4
+        selectedBackground = backgroundImages[1];  // 6:4 の比率
       } else if (ratio >= 0.4) {
-        selectedBackground = backgroundImages[2];  // Ratio 4:6
+        selectedBackground = backgroundImages[2];  // 4:6 の比率
       } else {
-        selectedBackground = backgroundImages[3];  // Ratio 0:10
+        selectedBackground = backgroundImages[3];  // 0:10 の比率
       }
 
-      // Determine motif (most frequent emotion)
+      // モチーフの決定（最も多く押された感情）
       let maxCount = Math.max(countEnjoyment, countDisgust, countSadness, countFear, countAnger);
       if (maxCount === countEnjoyment) {
         selectedMotif = motifImages['Enjoyment'];
       } else if (maxCount === countDisgust) {
         selectedMotif = motifImages['Disgust'];
       } else if (maxCount === countSadness) {
-        selectedMotif = motifImages['Sadness'];
-      } else if (maxCount === countFear) {
-        selectedMotif = motifImages['Fear'];
-      } else if (maxCount === countAnger) {
-        selectedMotif = motifImages['Anger'];
-      }
-
-      // Call the drawArtwork function to render the artwork
-      drawArtwork();
-    }
-
-    function drawArtwork() {
-      // Display background
-      if (selectedBackground) {
-        image(selectedBackground, 0, 0, width, height);
-      }
-
-      // Display motif in the center
-      if (selectedMotif) {
-        tint(255, 150); // Transparency
-        image(selectedMotif, width / 2 - 500, height / 2 - 50, 1000, 1000); // Place motif in the center
-        noTint(); // Reset transparency after drawing
-      }
-    }
-  </script>
-</body>
-</html>
+        selectedMot
