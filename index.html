@@ -28,19 +28,41 @@
     }
 
     function setup() {
-      createCanvas(600, 600);
-      background(255);
+  createCanvas(windowWidth, windowHeight); // 画面サイズに合わせたキャンバスを作成
+  background(255);
 
-      // Create buttons
-      createButton('Enjoyment').position(10, 10).mousePressed(() => { countEnjoyment++; });
-      createButton('Disgust').position(100, 10).mousePressed(() => { countDisgust++; });
-      createButton('Sadness').position(190, 10).mousePressed(() => { countSadness++; });
-      createButton('Fear').position(280, 10).mousePressed(() => { countFear++; });
-      createButton('Anger').position(370, 10).mousePressed(() => { countAnger++; });
+  // ボタンを作成
+  createButton('Enjoyment').position(10, 10).mousePressed(() => { countEnjoyment++; });
+  createButton('Disgust').position(100, 10).mousePressed(() => { countDisgust++; });
+  createButton('Sadness').position(190, 10).mousePressed(() => { countSadness++; });
+  createButton('Fear').position(280, 10).mousePressed(() => { countFear++; });
+  createButton('Anger').position(370, 10).mousePressed(() => { countAnger++; });
 
-      // Create check button
-      createButton('Check').position(500, 10).mousePressed(displayArtwork);
-    }
+  // チェックボタンを作成
+  createButton('Check').position(500, 10).mousePressed(displayArtwork);
+}
+
+function drawArtwork() {
+  // 背景を表示
+  if (selectedBackground) {
+    image(selectedBackground, 0, 0, width, height);
+  }
+
+  // モチーフを中央に表示
+  if (selectedMotif) {
+    tint(255, 150); // 透明度
+    image(selectedMotif, width / 2 - (1000 / 2), height / 2 - (1000 / 2), 1000, 1000); // モチーフの大きさを1000x1000に拡大
+    noTint(); // 透明度をリセット
+  }
+}
+
+// 画面サイズが変更されたときにキャンバスをリサイズ
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight); // 画面サイズに合わせてキャンバスをリサイズ
+  background(255); // キャンバスをクリア
+  drawArtwork(); // 絵を再描画
+}
+
 
     function displayArtwork() {
       let totalGroup1 = countEnjoyment; // Group 1: Enjoyment
