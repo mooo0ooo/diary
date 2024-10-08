@@ -73,8 +73,19 @@
       }
 
       // 絵を描く
-      drawArtwork();
+     function drawArtwork() {
+    // 背景を表示
+    if (selectedBackground) {
+        image(selectedBackground, 0, 0, width, height);
     }
+
+    // モチーフを画面の中央に表示
+    if (selectedMotif) {
+        tint(255, 150); // 透明度を150に設定（0が完全透明、255が完全不透明）
+        image(selectedMotif, width / 2 - 50, height / 2 - 50, 100, 100); // 中央にモチーフを配置
+        noTint(); // 次の描画に影響を与えないように tint をリセット
+    }
+}
 
     function drawArtwork() {
       // 背景を表示
