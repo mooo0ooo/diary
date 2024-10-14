@@ -28,7 +28,7 @@
     }
 
     function setup() {
-      createCanvas(windowWidth, windowHeight); // 画面サイズに合わせてキャンバスを作成
+      createCanvas(windowWidth, windowHeight);
       background(255);
 
       // ボタンの作成
@@ -65,4 +65,30 @@
       } else if (maxCount === countDisgust) {
         selectedMotif = motifImages['Disgust'];
       } else if (maxCount === countSadness) {
-        selectedMot
+        selectedMotif = motifImages['Sadness'];
+      } else if (maxCount === countFear) {
+        selectedMotif = motifImages['Fear'];
+      } else if (maxCount === countAnger) {
+        selectedMotif = motifImages['Anger'];
+      }
+
+      drawArtwork();
+    }
+
+    function drawArtwork() {
+      //背景を表示
+      if (sekectedBackground) {
+        image(selectedBackground, 0,0, width, height);
+      }
+
+      //モチーフを中央に表示
+  　  if (selectedMotif) {
+       tint(255, 250); //透過
+       image(selectedMotif, width / 2 - 500, height / 2 - 50, 1000, 1000); //モチーフを中央に配置
+       noTint(); //描画後に透明度をリセット 
+      } 
+    }
+
+  </script>
+</body>
+</html>
