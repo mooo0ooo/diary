@@ -77,17 +77,17 @@
 
     function drawArtwork() {
       //背景を表示
-      if (sekectedBackground) {
-        image(selectedBackground, 0,0, width, height);
-      }
+　　　if (selectedBackground) {
+    　　image(selectedBackground, 0, 0, width, height);
+  　　}
 
       //モチーフを中央に表示
   　  if (selectedMotif) {
-       tint(255, 250); //透過
-       image(selectedMotif, width / 2 - 500, height / 2 - 50, 1000, 1000); //モチーフを中央に配置
-       noTint(); //描画後に透明度をリセット 
-      } 
-    }
+    　　tint(255, 250);
+   　　 image(selectedMotif, width / 2 - 500, height / 2 - 50, 1000, 1000);
+    　　noTint();
+  　　}
+　　}
 
     function draw() {
       background(255);
