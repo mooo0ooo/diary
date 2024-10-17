@@ -89,6 +89,27 @@
       } 
     }
 
+    function draw() {
+      background(255);
+
+      //ボタンの装飾
+      buttons.forEach(btn => {
+        btn.x += random(-1, 1);
+        btn.y += random(-1, 1);
+
+        btn.offsetX += random(-0.5, 0.5);
+        btn.offsetY += random(-0.5, 0.5);
+
+        btn.size = map(sin(frameCount * 0.0), -1, 1, 50, 150);
+
+        fill(colors[btn.label]);
+        notSroke();
+        ellipse(btn.x + btn.offsetX, btn.y + btn.offsetY, btn.size, btn.size);
+
+        btn.button.position(btn.x, btn.y);
+      });
+    }
+
   </script>
 </body>
 </html>
