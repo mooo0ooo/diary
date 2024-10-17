@@ -115,10 +115,7 @@
     function draw() {
       background(255);
 
-      // すべてのボタンをランダムに移動させ、もやもやを表示
       buttons.forEach(btn => {
-        btn.x += random(-1, 1);
-        btn.y += random(-1, 1);
 
         btn.offsetX += random(-0.5, 0.5);
         btn.offsetY += random(-0.5, 0.5);
@@ -127,7 +124,7 @@
 
         fill(colors[btn.label]);
         noStroke();
-        ellipse(btn.x + btn.offsetX, btn.y + btn.offsetY, btn.size, btn.size);
+        ellipse(btn.x + btn.offsetX + 50, btn.y + btn.offsetY + 50, btn.size, btn.size);
 
         btn.button.position(btn.x, btn.y);
       });
