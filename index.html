@@ -5,7 +5,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
   <title>p5.js Responsive Example</title>
   <style>
-    /* ボタンのスタイルを整えるためのCSS */
     img {
       display: block;
       position: absolute;
@@ -48,11 +47,12 @@
       buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { countAnger++; });
 
       // チェックボタンも画像で作成
-      createButton('Check').mousePressed(displayArtwork);
+      buttons.check = createImg('https://mooo0ooo.github.io/diary/check_button.png', 'Check').mousePressed(displayArtwork);
 
       positionButtons();  // ボタンの配置を実行
     }
-    
+
+    // ボタンの位置とサイズを画面サイズに基づいて調整する関数
     function positionButtons() {
       let buttonSize = min(windowWidth, windowHeight) * 0.08; // ボタンの大きさを画面のサイズに応じて調整
       let buttonMargin = buttonSize * 0.2; // ボタン間のマージン
@@ -109,30 +109,32 @@
         selectedMotif = motifImages['Anger'];
       }
 
+      // ボタンを隠す
       hideButtons();
       drawArtwork();
     }
 
-    function drawArtwork() {
+    function hideButtons() {
+      // すべてのボタンを非表示に
       for (let key in buttons) {
         buttons[key].hide();
       }
     }
 
     function drawArtwork() {
-      background(255);　//キャンパスをリセット
+      background(255);  // キャンバスをリセット
 
-      //背景を表示
+      // 背景を表示（画面サイズにフィットさせる）
       if (selectedBackground) {
-        image(selectedBackground, 0,0, width, height);
+        image(selectedBackground, 0, 0, width, height);
       }
 
-      //モチーフを中央に表示
+      // モチーフを中央に表示（画面サイズに応じて調整）
   　  if (selectedMotif) {
-       let motifSize = min(width, height) * 0.8;
-       tint(255, 250); //透過
-       image(selectedMotif, width / 2 - 500, height / 2 - 50, 1000, 1000); //モチーフを中央に配置
-       noTint(); //描画後に透明度をリセット 
+       let motifSize = min(width, height) * 0.8;  // モチーフのサイズを画面に合わせて調整
+       tint(255, 250); // 透過
+       image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize); // モチーフを中央に配置
+       noTint(); // 描画後に透明度をリセット 
       } 
     }
 
