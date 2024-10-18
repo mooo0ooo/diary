@@ -4,12 +4,6 @@
   <meta charset="UTF-8">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
   <title>p5.js Responsive Example</title>
-  <style>
-    img {
-      display: block;
-      position: absolute;
-    }
-  </style>
 </head>
 <body>
   <script>
@@ -40,11 +34,11 @@
       background(255);
 
       // 通常のボタンの作成
-      buttons.enjoyment = createButton('').mousePressed(() => { countEnjoyment++; });
-      buttons.disgust = createButton('').mousePressed(() => { countDisgust++; });
-      buttons.sadness = createButton('').mousePressed(() => { countSadness++; });
-      buttons.fear = createButton('').mousePressed(() => { countFear++; });
-      buttons.anger = createButton('').mousePressed(() => { countAnger++; });
+      buttons.enjoyment = createButton('Enjoyment').mousePressed(() => { countEnjoyment++; });
+      buttons.disgust = createButton('Disgust').mousePressed(() => { countDisgust++; });
+      buttons.sadness = createButton('Sadness').mousePressed(() => { countSadness++; });
+      buttons.fear = createButton('Fear').mousePressed(() => { countFear++; });
+      buttons.anger = createButton('Anger').mousePressed(() => { countAnger++; });
 
       buttons.check = createButton('Check').mousePressed(displayArtwork);
       buttons.download = createButton('Download Image').mousePressed(downloadImage);
@@ -56,23 +50,14 @@
     function positionButtons() {
       let topMargin = windowHeight * 0.05; // 上からのマージン
 
-      // 各ボタンの画像サイズを取得してボタンに設定
-      const buttonImages = [
-        { name: 'Enjoyment', img: motifImages['Enjoyment'] },
-        { name: 'Disgust', img: motifImages['Disgust'] },
-        { name: 'Sadness', img: motifImages['Sadness'] },
-        { name: 'Fear', img: motifImages['Fear'] },
-        { name: 'Anger', img: motifImages['Anger'] }
-      ];
-
+      // 各ボタンの配置
+      const buttonNames = ['enjoyment', 'disgust', 'sadness', 'fear', 'anger'];
       let totalWidth = 0; // ボタンの総幅
 
-      buttonImages.forEach((button, index) => {
-        let buttonWidth = button.img.width; // 画像の幅をボタン幅に設定
-        let buttonHeight = button.img.height; // 画像の高さをボタン高さに設定
-        buttons[button.name.toLowerCase()].size(buttonWidth, buttonHeight); // ボタンサイズを設定
-        buttons[button.name.toLowerCase()].position(totalWidth, topMargin); // ボタンの位置を設定
-        totalWidth += buttonWidth + 10; // 次のボタンのために幅を更新（10pxのマージン）
+      buttonNames.forEach((name) => {
+        buttons[name].size(100, 50); // ボタンサイズを設定
+        buttons[name].position(totalWidth + 10, topMargin); // ボタンの位置を設定
+        totalWidth += 110; // 次のボタンのために幅を更新（10pxのマージン）
       });
 
       // チェックボタンを画面の右下に配置
@@ -140,15 +125,12 @@
       // 背景をスクエアとして表示
       if (selectedBackground) {
         let backgroundSize = min(width, height) * 0.8;  // 背景のサイズを画面に合わせて調整
-        let padding = 20;  // 枠と背景の間のスペース
-
-        // 背景画像を中央に表示（黒背景上に）
         image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
       }
 
       // モチーフの描画
       if (selectedMotif) {
-        let motifSize = min(width, height) * 0.6;  // モチーフのサイズを調整
+        let motifSize = min(width, height) * 0.4;  // モチーフのサイズを調整
         image(selectedMotif, width / 2 - motifSize / 2, height / 2 - motifSize / 2, motifSize, motifSize); // モチーフを中央に配置
       }
     }
@@ -161,4 +143,3 @@
   </script>
 </body>
 </html>
-
