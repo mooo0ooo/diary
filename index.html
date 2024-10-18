@@ -39,51 +39,53 @@
       createCanvas(windowWidth, windowHeight);
       background(255);
 
-      // 画像ボタンの作成と保持
-      buttons.enjoyment = createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png', 'Enjoyment').mousePressed(() => { countEnjoyment++; });
-      buttons.disgust = createImg('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png', 'Disgust').mousePressed(() => { countDisgust++; });
-      buttons.sadness = createImg('https://mooo0ooo.github.io/diary/moon-removebg-preview.png', 'Sadness').mousePressed(() => { countSadness++; });
-      buttons.fear = createImg('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png', 'Fear').mousePressed(() => { countFear++; });
-      buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { countAnger++; });
+      // 通常のボタンの作成
+      buttons.enjoyment = createButton('').mousePressed(() => { countEnjoyment++; });
+      buttons.disgust = createButton('').mousePressed(() => { countDisgust++; });
+      buttons.sadness = createButton('').mousePressed(() => { countSadness++; });
+      buttons.fear = createButton('').mousePressed(() => { countFear++; });
+      buttons.anger = createButton('').mousePressed(() => { countAnger++; });
 
-      // チェックボタン
       buttons.check = createButton('Check').mousePressed(displayArtwork);
-
-      //ダウンロードボタン
       buttons.download = createButton('Download Image').mousePressed(downloadImage);
-      buttons.download.hide();
+      buttons.download.hide(); // 初めは非表示
 
-      positionButtons();  // ボタンの配置を実行
+      positionButtons(); // ボタンの配置を実行
     }
 
-    // ボタンの位置とサイズを画面サイズに基づいて調整する関数
     function positionButtons() {
-      let buttonSize = min(windowWidth, windowHeight) * 0.08; // ボタンの大きさを画面のサイズに応じて調整
-      let buttonMargin = buttonSize * 0.2; // ボタン間のマージン
       let topMargin = windowHeight * 0.05; // 上からのマージン
 
-      // ボタンの横方向の中心配置
-      let totalWidth = (buttonSize * 5) + (buttonMargin * 4); // 5つのボタン幅と間のマージンの合計
-      let startX = (windowWidth - totalWidth) / 2;  // 画面中央から配置開始
+      // 各ボタンの画像サイズを取得してボタンに設定
+      const buttonImages = [
+        { name: 'Enjoyment', img: motifImages['Enjoyment'] },
+        { name: 'Disgust', img: motifImages['Disgust'] },
+        { name: 'Sadness', img: motifImages['Sadness'] },
+        { name: 'Fear', img: motifImages['Fear'] },
+        { name: 'Anger', img: motifImages['Anger'] }
+      ];
 
-      // 各ボタンの位置を動的に設定
-      buttons.enjoyment.position(startX, topMargin).size(buttonSize, buttonSize);
-      buttons.disgust.position(startX + (buttonSize + buttonMargin), topMargin).size(buttonSize, buttonSize);
-      buttons.sadness.position(startX + (buttonSize + buttonMargin) * 2, topMargin).size(buttonSize, buttonSize);
-      buttons.fear.position(startX + (buttonSize + buttonMargin) * 3, topMargin).size(buttonSize, buttonSize);
-      buttons.anger.position(startX + (buttonSize + buttonMargin) * 4, topMargin).size(buttonSize, buttonSize);
+      let totalWidth = 0; // ボタンの総幅
+
+      buttonImages.forEach((button, index) => {
+        let buttonWidth = button.img.width; // 画像の幅をボタン幅に設定
+        let buttonHeight = button.img.height; // 画像の高さをボタン高さに設定
+        buttons[button.name.toLowerCase()].size(buttonWidth, buttonHeight); // ボタンサイズを設定
+        buttons[button.name.toLowerCase()].position(totalWidth, topMargin); // ボタンの位置を設定
+        totalWidth += buttonWidth + 10; // 次のボタンのために幅を更新（10pxのマージン）
+      });
 
       // チェックボタンを画面の右下に配置
-      buttons.check.position(windowWidth - buttonSize - buttonMargin, windowHeight - buttonSize - topMargin).size(buttonSize, buttonSize);
-
-      //ダウンロードボタンをチェックボタンの隣に配置  
-      buttons.dawnload.position(windowWidth - (buttonSize * 2) - buttonMargin * 2, windowHeight - buttonSize - topMargin).size(buttonSize * 1.5, buttonSize);
+      let checkWidth = 100; // チェックボタンの幅
+      buttons.check.position(windowWidth - checkWidth - 10, topMargin).size(checkWidth, 50);
+      
+      // ダウンロードボタンをチェックボタンの横に配置
+      buttons.download.position(windowWidth - (checkWidth * 2) - 20, topMargin).size(checkWidth, 50);
     }
 
-    // ウィンドウリサイズ時にキャンバスとボタンの位置を再設定
     function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
-      positionButtons();  // ボタンの再配置
+      positionButtons(); // ボタンの再配置
     }
 
     function displayArtwork() {
@@ -119,7 +121,8 @@
       // ボタンを隠す
       hideButtons();
       drawArtwork();
-
+      
+      // ダウンロードボタンを表示
       buttons.download.show();
     }
 
@@ -146,13 +149,16 @@
       // モチーフの描画
       if (selectedMotif) {
         let motifSize = min(width, height) * 0.6;  // モチーフのサイズを調整
-        tint(255, 250);  // 透過
-        image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
-        noTint();  // 描画後に透過をリセット
+        image(selectedMotif, width / 2 - motifSize / 2, height / 2 - motifSize / 2, motifSize, motifSize); // モチーフを中央に配置
       }
     }
 
-  </script>
+    function downloadImage() {
+      // 画像を保存
+      saveCanvas('artwork', 'png'); // 'artwork' という名前でPNG形式で保存
+    }
 
+  </script>
 </body>
 </html>
+
