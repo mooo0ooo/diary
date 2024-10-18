@@ -49,10 +49,6 @@
       // チェックボタンも画像で作成
       buttons.check = createImg('https://mooo0ooo.github.io/diary/check_button.png', 'Check').mousePressed(displayArtwork);
 
-      // ダウンロードボタンを作成
-      buttons.download = createButton('Download Image').mousePressed(downloadImage);
-      buttons.download.hide();  // 初めは非表示
-
       positionButtons();  // ボタンの配置を実行
     }
 
@@ -75,9 +71,6 @@
 
       // チェックボタンを画面の右下に配置
       buttons.check.position(windowWidth - buttonSize - buttonMargin, windowHeight - buttonSize - topMargin).size(buttonSize, buttonSize);
-      
-      // ダウンロードボタンをチェックボタンの横に配置
-      buttons.download.position(windowWidth - (buttonSize * 2) - buttonMargin * 2, windowHeight - buttonSize - topMargin).size(buttonSize * 1.5, buttonSize);
     }
 
     // ウィンドウリサイズ時にキャンバスとボタンの位置を再設定
@@ -119,9 +112,6 @@
       // ボタンを隠す
       hideButtons();
       drawArtwork();
-      
-      // ダウンロードボタンを表示
-      buttons.download.show();
     }
 
     function hideButtons() {
@@ -132,25 +122,31 @@
     }
 
     function drawArtwork() {
-      // キャンバス全体を黒で塗りつぶす
-      background(0);
+      background(255);  // キャンバスをリセット
 
-      // 背景をスクエアとして表示
+      // 背景を表示（画面サイズにフィットさせる）
       if (selectedBackground) {
-        let backgroundSize = min(width, height) * 0.8;  // 背景のサイズを画面に合わせて調整
-        let padding = 20;  // 枠と背景の間のスペース
-
-        // 背景画像を中央に表示（黒背景上に）
-        image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
+        image(selectedBackground, 0, 0, width, height);
       }
 
-      // モチーフの描画
-      if (selectedMotif) {
-        let motifSize = min(width, height) * 0.6;  
-        tint(255,250);
-        image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
-        noTInt();
+      // モチーフのスクエア描画
+  　  if (selectedMotif) {
+        let squareSize = min(width, height) * 0.8;  // スクエアサイズを画面に合わせて調整
+        let padding = 10;  // 黒枠の幅
+
+        // 黒枠を描画
+        fill(0);
+        noStroke();
+        rect((width - squareSize) / 2 - padding, (height - squareSize) / 2 - padding, squareSize + padding * 2, squareSize + padding * 2);
+
+        // モチーフ画像をスクエア内に描画
+        tint(255, 250); // 透過
+        image(selectedMotif, (width - squareSize) / 2, (height - squareSize) / 2, squareSize, squareSize);
+        noTint(); // 描画後に透明度をリセット
       }
     }
 
   </script>
+
+</body>
+</html>
