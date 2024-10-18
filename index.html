@@ -57,21 +57,26 @@
     }
 
     function createRipple(x, y, color) {
+      // 新しい波紋エフェクトを追加
       rippleEffects.push({ x, y, size: 0, maxSize: 100, color });
     }
 
     function draw() {
+      // キャンバスを白で塗りつぶす
       background(255);
 
-      for (ket i = rippleEffects.length - 1; i >= 0; i--) {
+      // 波紋エフェクトの描画
+      for (let i = rippleEffects.length - 1; i >= 0; i--) {
         let ripple = rippleEffects[i];
-        ripple.size += 2;
+        ripple.size += 2; // 波紋のサイズを増加させる
 
-        nofill;
+        // 波紋を描画
+        noFill();
         stroke(ripple.color);
         strokeWeight(2);
         ellipse(ripple.x, ripple.y, ripple.size);
 
+        // 最大サイズに達したら波紋を削除
         if (ripple.size > ripple.maxSize) {
           rippleEffects.splice(i, 1);
         }
