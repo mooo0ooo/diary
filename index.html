@@ -55,29 +55,26 @@
       positionButtons();  // ボタンの配置を実行
     }
 
-    // ボタンの位置とサイズを画面サイズに基づいて調整する関数
     function positionButtons() {
-      let buttonSize = min(windowWidth, windowHeight) * 0.08; // ボタンの大きさを画面のサイズに応じて調整
-      let buttonMargin = buttonSize * 0.2; // ボタン間のマージン
+      let buttonWidth = windowWidth * 0.15; // ボタンの幅を画面幅に応じて設定
+      let buttonHeight = 50; // ボタンの高さを固定
+      let buttonMargin = 10; // ボタン間のマージン
       let topMargin = windowHeight * 0.05; // 上からのマージン
 
-      // ボタンの横方向の中心配置
-      let totalWidth = (buttonSize * 5) + (buttonMargin * 4); // 5つのボタン幅と間のマージンの合計
-      let startX = (windowWidth - totalWidth) / 2;  // 画面中央から配置開始
-
-      // 各ボタンの位置を動的に設定
-      buttons.enjoyment.position(startX, topMargin).size(buttonSize, buttonSize);
-      buttons.disgust.position(startX + (buttonSize + buttonMargin), topMargin).size(buttonSize, buttonSize);
-      buttons.sadness.position(startX + (buttonSize + buttonMargin) * 2, topMargin).size(buttonSize, buttonSize);
-      buttons.fear.position(startX + (buttonSize + buttonMargin) * 3, topMargin).size(buttonSize, buttonSize);
-      buttons.anger.position(startX + (buttonSize + buttonMargin) * 4, topMargin).size(buttonSize, buttonSize);
+      // 各ボタンの位置を設定
+      buttons.enjoyment.position(buttonMargin, topMargin).size(buttonWidth, buttonHeight);
+      buttons.disgust.position(buttonMargin * 2 + buttonWidth, topMargin).size(buttonWidth, buttonHeight);
+      buttons.sadness.position(buttonMargin * 3 + buttonWidth * 2, topMargin).size(buttonWidth, buttonHeight);
+      buttons.fear.position(buttonMargin * 4 + buttonWidth * 3, topMargin).size(buttonWidth, buttonHeight);
+      buttons.anger.position(buttonMargin * 5 + buttonWidth * 4, topMargin).size(buttonWidth, buttonHeight);
 
       // チェックボタンを画面の右下に配置
-      buttons.check.position(windowWidth - buttonSize - buttonMargin, windowHeight - buttonSize - topMargin).size(buttonSize, buttonSize);
-
-      //ダウンロードボタンをチェックボタンの隣に配置
-      buttons.download.position(windowWidth - (buttonSize * 2) -buttonMargin * 2, windowHeight - buttonSize - topMargin).size(buttonSize * 1.5, buttonSize);
+      buttons.check.position(windowWidth - buttonWidth - buttonMargin, topMargin).size(buttonWidth, buttonHeight);
+      
+      // ダウンロードボタンをチェックボタンの横に配置
+      buttons.download.position(windowWidth - (buttonWidth * 2) - buttonMargin * 2, topMargin).size(buttonWidth, buttonHeight);
     }
+
 
     // ウィンドウリサイズ時にキャンバスとボタンの位置を再設定
     function windowResized() {
