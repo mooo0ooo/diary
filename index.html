@@ -47,7 +47,7 @@
       buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { countAnger++; });
 
       // チェックボタンの作成
-      createButton('Check').mousePressed(displayArtwor);
+      buttons.check = createButton('Check').mousePressed(displayArtwor);
       
       button.download = createButton('Download Image').mousePressed(downloadImage);
       buttons.download.hide();
@@ -74,6 +74,9 @@
 
       // チェックボタンを画面の右下に配置
       buttons.check.position(windowWidth - buttonSize - buttonMargin, windowHeight - buttonSize - topMargin).size(buttonSize, buttonSize);
+
+      //ダウンロードボタンをチェックボタンの隣に配置
+      buttons.download.position(windowWidth - (buttonSize * 2) -buttonMargin * 2, windowHeight - buttonSize - topMargin).size(buttonSize * 1.5, buttonSize);
     }
 
     // ウィンドウリサイズ時にキャンバスとボタンの位置を再設定
@@ -147,6 +150,11 @@
         image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
         noTint();  // 描画後に透過をリセット
       }
+    }
+
+    function downloadImage() {
+      //画像を保存
+      saveCanvas('artWork', 'png');　//artworkという名前でPNG形式で保存
     }
 
   </script>
