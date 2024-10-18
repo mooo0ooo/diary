@@ -56,6 +56,30 @@
       positionButtons();  // ボタンの配置を実行
     }
 
+    function createRipple(x, y, color) {
+      rippleEffects.push({ x, y, size: 0, maxSize: 100, color });
+    }
+
+    function draw() {
+      background(255);
+
+      for (ket i = rippleEffects.length - 1; i >= 0; i--) {
+        let ripple = rippleEffects[i];
+        ripple.size += 2;
+
+        nofill;
+        stroke(ripple.color);
+        strokeWeight(2);
+        ellipse(ripple.x, ripple.y, ripple.size);
+
+        if (ripple.size > ripple.maxSize) {
+          rippleEffects.splice(i, 1);
+        }
+      }
+
+      positionButtons();
+    }
+
     // ボタンの位置とサイズを画面サイズに基づいて調整する関数
     function positionButtons() {
       let buttonSize = min(windowWidth, windowHeight) * 0.08; // ボタンの大きさを画面のサイズに応じて調整
