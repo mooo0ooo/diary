@@ -122,29 +122,21 @@
     }
 
     function drawArtwork() {
-      background(255);  // キャンバスをリセット
+      background(0);
 
-      // 背景を表示（画面サイズにフィットさせる）
       if (selectedBackground) {
-        image(selectedBackground, 0, 0, width, height);
+        let backgroundSize = min(width, height) * 0.8;
+        let padding = 20;
+
+        image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
       }
 
-      // モチーフのスクエア描画
-  　  if (selectedMotif) {
-        let squareSize = min(width, height) * 0.8;  // スクエアサイズを画面に合わせて調整
-        let padding = 10;  // 黒枠の幅
-
-        // 黒枠を描画
-        fill(0);
-        noStroke();
-        rect((width - squareSize) / 2 - padding, (height - squareSize) / 2 - padding, squareSize + padding * 2, squareSize + padding * 2);
-
-        // モチーフ画像をスクエア内に描画
-        tint(255, 250); // 透過
-        image(selectedMotif, (width - squareSize) / 2, (height - squareSize) / 2, squareSize, squareSize);
-        noTint(); // 描画後に透明度をリセット
-      }
-    }
+      if (selectedMotif) {
+        let motifSize = min(width, height) * 0.6;
+        tint(255,250);
+        image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
+        noTint();
+   }
 
   </script>
 
