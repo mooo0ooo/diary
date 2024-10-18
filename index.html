@@ -11,6 +11,7 @@
     let motifImages = [];
     let countEnjoyment = 0, countDisgust = 0, countSadness = 0, countFear = 0, countAnger = 0;
     let selectedBackground, selectedMotif;
+    let buttons = {};
 
     function preload() {
       // 背景画像の読み込み
@@ -41,7 +42,27 @@
       // チェックボタンの作成
       createButton('Check').position(500, 10).mousePressed(displayArtwork);
 
-     }
+      positionButtons();
+
+   }
+
+    function positionButtons() {
+      let buttonSize = min(windowWidth, windowHeight) * 0.1;　//ボタンの大きさを画面サイズに合わせる
+      let buttonMargin = buttonSize * 0.2;　//ボタン間のマージン
+
+      buttons.enjoyment.position(buttonMargin, 10).size(buttonSize, buttonSize);
+      buttons.disgust.position(buttonMargin * 2 + buttonSize, 10).size(buttonSize,buttonSize);
+      buttons.sadness.position(buttonMArgin * 3 + buttonSize * 2, 10).size(buttonSize,buttonSize);
+      buttons.fear.position(buttonMargin * 4 + buttonSize * 3, 10).size(buttonSize,buttonSize);
+      buttons.anger.position(buttonMargin * 5 + buttonSize * 4, 10).size(buttonSize,buttonSize);
+
+      buttons.check.position(windowWidth - buttonSize - buttonMargin, 10).size(buttonSize,buttonSize);
+    }
+
+    function windouwResize() {
+      resizeCanvas(windowWidth, windowHeigh);
+      positionButtons();
+    }
 
     function displayArtwork() {
       let totalGroup1 = countEnjoyment; // Group 1: Enjoyment
