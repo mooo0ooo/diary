@@ -46,8 +46,11 @@
       buttons.fear = createImg('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png', 'Fear').mousePressed(() => { countFear++; });
       buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { countAnger++; });
 
-      // チェックボタンも画像で作成
-      buttons.check = createImg('https://mooo0ooo.github.io/diary/check_button.png', 'Check').mousePressed(displayArtwork);
+      // チェックボタンの作成
+      createButton('Check').mousePressed(displayArtwor);
+      
+      button.download = createButton('Download Image').mousePressed(downloadImage);
+      buttons.download.hide();
 
       positionButtons();  // ボタンの配置を実行
     }
@@ -112,6 +115,9 @@
       // ボタンを隠す
       hideButtons();
       drawArtwork();
+
+      //ダウンロードボタンを表示
+      buttons.download.show();
     }
 
     function hideButtons() {
