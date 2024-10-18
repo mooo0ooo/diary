@@ -31,15 +31,15 @@
       createCanvas(windowWidth, windowHeight);
       background(255);
 
-      // ボタンの作成
-      createButton('Enjoyment').position(10, 10).mousePressed(() => { countEnjoyment++; });
-      createButton('Disgust').position(100, 10).mousePressed(() => { countDisgust++; });
-      createButton('Sadness').position(190, 10).mousePressed(() => { countSadness++; });
-      createButton('Fear').position(280, 10).mousePressed(() => { countFear++; });
-      createButton('Anger').position(370, 10).mousePressed(() => { countAnger++; });
+      // 画像ボタンの作成
+      createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png', 'Enjoyment').position(10, 10).mousePressed(() => { countEnjoyment++; });
+      createImg('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png', 'Disgust').position(100, 10).mousePressed(() => { countDisgust++; });
+      createImg('https://mooo0ooo.github.io/diary/moon-removebg-preview.png', 'Sadness').position(190, 10).mousePressed(() => { countSadness++; });
+      createImg('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png', 'Fear').position(280, 10).mousePressed(() => { countFear++; });
+      createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').position(370, 10).mousePressed(() => { countAnger++; });
 
-      // チェックボタンを作成
-      createButton('Check').position(500, 10).mousePressed(displayArtwork);
+      // チェックボタンを画像に変更
+      createImg('https://mooo0ooo.github.io/diary/check_button.png', 'Check').position(500, 10).mousePressed(displayArtwork);
     }
 
     function displayArtwork() {
@@ -77,7 +77,7 @@
 
     function drawArtwork() {
       //背景を表示
-      if (sekectedBackground) {
+      if (selectedBackground) {
         image(selectedBackground, 0,0, width, height);
       }
 
