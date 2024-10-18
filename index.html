@@ -129,14 +129,21 @@
         image(selectedBackground, 0, 0, width, height);
       }
 
-      if (selectedMotif) {
-        let squareSize = min(width, height) * 0.8;
-        let padding = 10;
+      // モチーフのスクエア描画
+  　  if (selectedMotif) {
+        let squareSize = min(width, height) * 0.8;  // スクエアサイズを画面に合わせて調整
+        let padding = 10;  // 黒枠の幅
 
+        // 黒枠を描画
         fill(0);
         noStroke();
-        rect((width - squareSize) / 2, (height - squareSize) / 2, squareSize, squareSize);
-        noTint();
+        rect((width - squareSize) / 2 - padding, (height - squareSize) / 2 - padding, squareSize + padding * 2, squareSize + padding * 2);
+
+        // モチーフ画像をスクエア内に描画
+        tint(255, 250); // 透過
+        image(selectedMotif, (width - squareSize) / 2, (height - squareSize) / 2, squareSize, squareSize);
+        noTint(); // 描画後に透明度をリセット
+      }
     }
 
   </script>
