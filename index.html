@@ -129,13 +129,14 @@
         image(selectedBackground, 0, 0, width, height);
       }
 
-      // モチーフを中央に表示（画面サイズに応じて調整）
-  　  if (selectedMotif) {
-       let motifSize = min(width, height) * 0.8;  // モチーフのサイズを画面に合わせて調整
-       tint(255, 250); // 透過
-       image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize); // モチーフを中央に配置
-       noTint(); // 描画後に透明度をリセット 
-      } 
+      if (selectedMotif) {
+        let squareSize = min(width, height) * 0.8;
+        let padding = 10;
+
+        fill(0);
+        noStroke();
+        rect((width - squareSize) / 2, (height - squareSize) / 2, squareSize, squareSize);
+        noTint();
     }
 
   </script>
