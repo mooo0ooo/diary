@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-  <title>p5.js Example</title>
+  <title>p5.js Responsive Example</title>
 </head>
 <body>
   <script>
@@ -11,6 +11,7 @@
     let motifImages = [];
     let countEnjoyment = 0, countDisgust = 0, countSadness = 0, countFear = 0, countAnger = 0;
     let selectedBackground, selectedMotif;
+
     let buttons = {};
 
     function preload() {
@@ -32,39 +33,44 @@
       createCanvas(windowWidth, windowHeight);
       background(255);
 
-      // 画像ボタンの作成
-      createImg('https://github.com/mooo0ooo/diary/blob/main/enjoyment.PNG?raw=true', 'Enjoyment').position(10, 10).mousePressed(() => { countEnjoyment++; });
-      createImg('https://github.com/mooo0ooo/diary/blob/main/disgust.PNG?raw=true', 'Disgust').position(100, 10).mousePressed(() => { countDisgust++; });
-      createImg('https://github.com/mooo0ooo/diary/blob/main/sadness.PNG?raw=true', 'Sadness').position(190, 10).mousePressed(() => { countSadness++; });
-      createImg('https://github.com/mooo0ooo/diary/blob/main/fear.PNG?raw=true', 'Fear').position(280, 10).mousePressed(() => { countFear++; });
-      createImg('https://github.com/mooo0ooo/diary/blob/main/anger.PNG?raw=true', 'Anger').position(370, 10).mousePressed(() => { countAnger++; });
+      // 画像ボタンの作成と保持
+      buttons.enjoyment = createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png', 'Enjoyment').mousePressed(() => { countEnjoyment++; });
+      buttons.disgust = createImg('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png', 'Disgust').mousePressed(() => { countDisgust++; });
+      buttons.sadness = createImg('https://mooo0ooo.github.io/diary/moon-removebg-preview.png', 'Sadness').mousePressed(() => { countSadness++; });
+      buttons.fear = createImg('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png', 'Fear').mousePressed(() => { countFear++; });
+      buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { countAnger++; });
 
-      // チェックボタンの作成
-      createButton('Check').position(500, 10).mousePressed(displayArtwork);
+      // チェックボタンも画像で作成
+      buttons.check = createImg('https://mooo0ooo.github.io/diary/check_button.png', 'Check').mousePressed(displayArtwork);
 
-      positionButtons();
-   }
+      positionButtons();  // ボタンの配置を実行
+    }
 
+    // ボタンの位置とサイズを画面サイズに基づいて調整する関数
     function positionButtons() {
-      let buttonSize = min(windowWidth, windowHeight) * 0.1;　//ボタンの大きさを画面サイズに合わせる
-      let buttonMargin = buttonSize * 0.2;　//ボタン間のマージン
-      let topMargin = windowHeight * 0.05;　//上からのマージン
+      let buttonSize = min(windowWidth, windowHeight) * 0.08; // ボタンの大きさを画面のサイズに応じて調整
+      let buttonMargin = buttonSize * 0.3; // ボタン間のマージン
+      let topMargin = windowHeight * 0.05; // 上からのマージン
 
-      let totalWigth = (buttonSize * 5) + (buttonMargin * 4);
-      let startX = (windowWidth - totalWidth) / 2;
+      // ボタンの横方向の中心配置
+      let totalWidth = (buttonSize * 5) + (buttonMargin * 4); // 5つのボタン幅と間のマージンの合計
+      let startX = (windowWidth - totalWidth) / 2;  // 画面中央から配置開始
 
+      // 各ボタンの位置を動的に設定
       buttons.enjoyment.position(startX, topMargin).size(buttonSize, buttonSize);
       buttons.disgust.position(startX + (buttonSize + buttonMargin), topMargin).size(buttonSize, buttonSize);
       buttons.sadness.position(startX + (buttonSize + buttonMargin) * 2, topMargin).size(buttonSize, buttonSize);
       buttons.fear.position(startX + (buttonSize + buttonMargin) * 3, topMargin).size(buttonSize, buttonSize);
       buttons.anger.position(startX + (buttonSize + buttonMargin) * 4, topMargin).size(buttonSize, buttonSize);
 
+      // チェックボタンを画面の右端に配置
       buttons.check.position(windowWidth - buttonSize - buttonMargin, windowHeight - buttonSize - topMargin).size(buttonSize, buttonSize);
     }
 
-    function windouwResized() {
+    // ウィンドウリサイズ時にキャンバスとボタンの位置を再設定
+    function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
-      positionButtons();
+      positionButtons();  // ボタンの再配置
     }
 
     function displayArtwork() {
@@ -103,7 +109,7 @@
     function drawArtwork() {
       //背景を表示
       if (selectedBackground) {
-        image(selectedBackground, 0,0, width, height);
+        image(selectedBackground, 0, 0, width, height);
       }
 
       //モチーフを中央に表示
