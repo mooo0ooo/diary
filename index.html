@@ -34,11 +34,11 @@
       background(255);
 
       // 通常のボタンの作成
-      buttons.enjoyment = createButton('').mousePressed(() => { countEnjoyment++; });
-      buttons.disgust = createButton('').mousePressed(() => { countDisgust++; });
-      buttons.sadness = createButton('').mousePressed(() => { countSadness++; });
-      buttons.fear = createButton('').mousePressed(() => { countFear++; });
-      buttons.anger = createButton('').mousePressed(() => { countAnger++; });
+      buttons.enjoyment = createButton('Enjoyment').mousePressed(() => { countEnjoyment++; });
+      buttons.disgust = createButton('Disgust').mousePressed(() => { countDisgust++; });
+      buttons.sadness = createButton('Sadness').mousePressed(() => { countSadness++; });
+      buttons.fear = createButton('Fear').mousePressed(() => { countFear++; });
+      buttons.anger = createButton('Anger').mousePressed(() => { countAnger++; });
 
       buttons.check = createButton('Check').mousePressed(displayArtwork);
       buttons.download = createButton('Download Image').mousePressed(downloadImage);
