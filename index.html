@@ -93,8 +93,16 @@
           x: x,
           y: y,
           size: size,
-          color: sparkleColors[emotion],
-          outlineColor: sparkleColors[emotion],
+          color: emotion === 'Enjoyment' ? '#FF4500' :
+                   emotion === 'Sadness' ? '#FFD700' :
+                   emotion === 'Disgust' ? '#006400' :
+                   emotion === 'Fear' ? '#550000' :
+                   emotion === 'Anger' ? '#006699' : 'white',
+            outlineColor: emotion === 'Enjoyment' ? '#FF4500' :
+                          emotion === 'Sadness' ? '#FFD700' :
+                          emotion === 'Disgust' ? '#006400' :
+                          emotion === 'Fear' ? '#550000' :
+                          emotion === 'Anger' ? '#006699' : 'black',
           shape: random(['circle', 'star', 'hexagon', 'diamond']), // 形をランダムに
           alpha: 255
         });
@@ -109,11 +117,6 @@
     function draw() {
       background(255);
       drawSparkles();
-
-      // アートワークを描画するためのチェック
-      if (selectedBackground && selectedMotif) {
-        drawArtwork();
-      }
     }
 
     function drawSparkles() {
@@ -180,8 +183,8 @@
 
       // 各感情ボタンの位置を設定
       buttons.enjoyment.position(startX, topMargin).size(buttonSize, buttonSize);
-      buttons.disgust.position(startX + (buttonSize + buttonMargin), topMargin).
-            buttons.sadness.position(startX + (buttonSize + buttonMargin) * 2, topMargin).size(buttonSize, buttonSize);
+      buttons.disgust.position(startX + (buttonSize + buttonMargin), topMargin).size(buttonSize, buttonSize);
+      buttons.sadness.position(startX + (buttonSize + buttonMargin) * 2, topMargin).size(buttonSize, buttonSize);
       buttons.fear.position(startX + (buttonSize + buttonMargin) * 3, topMargin).size(buttonSize, buttonSize);
       buttons.anger.position(startX + (buttonSize + buttonMargin) * 4, topMargin).size(buttonSize, buttonSize);
 
@@ -228,6 +231,7 @@
 
       // ボタンを隠す
       hideButtons();
+      drawArtwork();
     }
 
     function hideButtons() {
@@ -245,7 +249,7 @@
         let backgroundSize = min(width, height) * 0.8;  // 背景のサイズを画面に合わせて調整
         let padding = 20;  // 枠と背景の間のスペース
 
-        // 背景画像を中央に表示
+        // 背景画像を中央に表示（黒背景上に）
         image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
       }
 
@@ -266,4 +270,3 @@
   </script>
 </body>
 </html>
-
