@@ -109,6 +109,8 @@
       buttons.download.hide();
 
       // ラベルの作成
+      let labels = {};
+      
       labels.joy = createDiv('Joy: 喜び').addClass('emotion-label');
       labels.trust = createDiv('Trust: 信頼').addClass('emotion-label');
       labels.fear = createDiv('Fear: 恐れ').addClass('emotion-label');
@@ -330,11 +332,11 @@ function positionButtons() {
 } else if (maxCount === countGrief) {
   selectedMotif = motifImages['Grief'];
 } else if (maxCount === countLoathing) {
-  selectedMotif = motifImages['Loathig'];
+  selectedMotif = motifImages['Loathing'];
 } else if (maxCount === countRage) {
   selectedMotif = motifImages['Rage'];
-} else if (maxCount === countVigliance) {
-  selectedMotif = motifImages['Vigliance'];
+} else if (maxCount === countVigilance) {
+  selectedMotif = motifImages['Vigilance'];
 }
 
       console.log("Selected Background:", selectedBackground);
