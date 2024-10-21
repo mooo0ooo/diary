@@ -29,7 +29,7 @@
       'Sadness': '#00699D',
       'Disgust': '#5D94A6',
       'Anger': '#36C238',
-      'Anticipation': '#FF7CC0'  // セミコロンの誤り修正
+      'Anticipation'; '#FF7CC0'
     };
 
     function preload() {
@@ -40,14 +40,14 @@
       backgroundImages[3] = loadImage('https://mooo0ooo.github.io/diary/background4.png');
 
       // モチーフ画像の読み込み
-      motifImages['Joy'] = loadImage('dairy/fireworks-removebg-preview.png');
-      motifImages['Trust'] = loadImage('dairy/sun-removebg-preview.png');
-      motifImages['Fear'] = loadImage('dairy/moon-removebg-preview.png');
-      motifImages['Surprise'] = loadImage('dairy/thunder.PNG');
-      motifImages['Sadness'] = loadImage('dairy/shooting_star-removebg-preview.png');
-      motifImages['Disgust'] = loadImage('dairy/rain.PNG');
-      motifImages['Anger'] = loadImage('dairy/star-removebg-preview.png');
-      motifImages['Anticipation'] = loadImage('dairy/balloon.PNG');
+      motifImages['Joy'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/fireworks-removebg-preview.png?raw=true');
+      motifImages['Trusu'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/sun-removebg-preview.png?raw=true');
+      motifImages['Fear'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/moon-removebg-preview.png?raw=true');
+      motifImages['Surprise'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/thunder.PNG?raw=true');
+      motifImages['Sadness'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/shooting_star-removebg-preview.png?raw=true');
+      motifImages['Disgust'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/rain.PNG?raw=true');
+      motifImages['Anger'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/star-removebg-preview.png?raw=true');
+      motifImages['Anticipation'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/balloon.PNG?raw=true');
     }
 
     function setup() {
@@ -55,7 +55,7 @@
       background(255);
 
       // 感情のボタンを画像として作成
-      buttons.joy = createImg('dairy/fireworks-removebg-preview.png', 'Joy').mousePressed(() => { handleEmotionButton('Joy'); });
+      buttons.joy = createImg('https://github.com/mooo0ooo/diary/blob/main/fireworks-removebg-preview.png?raw=true', 'Joy').mousePressed(() => { handleEmotionButton('Joy'); });
       buttons.trust = createImg('https://github.com/mooo0ooo/diary/blob/main/sun-removebg-preview.png?raw=true', 'Trust').mousePressed(() => { handleEmotionButton('Trust'); });
       buttons.fear = createImg('https://github.com/mooo0ooo/diary/blob/main/moon-removebg-preview.png?raw=true', 'Fear').mousePressed(() => { handleEmotionButton('Fear'); });
       buttons.surprise = createImg('https://github.com/mooo0ooo/diary/blob/main/thunder.PNG?raw=true', 'Surprise').mousePressed(() => { handleEmotionButton('Surprise'); });
@@ -74,24 +74,141 @@
       positionButtons();  // ボタンの配置を実行
     }
 
-    function positionButtons() {
-      let centerX = windowWidth / 2;
-      let centerY = windowHeight / 2;
-      let radius = min(windowWidth, windowHeight) * 0.3; // ボタンを配置する円の半径
-      let buttonSize = min(windowWidth, windowHeight) * 0.1; // ボタンのサイズ
-      let emotions = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
-
-      // 角度を使って円形に配置
-      for (let i = 0; i < emotions.length; i++) {
-        let angle = TWO_PI / emotions.length * i;
-        let x = centerX + radius * cos(angle) - buttonSize / 2;
-        let y = centerY + radius * sin(angle) - buttonSize / 2;
-        buttons[emotions[i]].position(x, y).size(buttonSize, buttonSize);
+    function handleEmotionButton(emotion) {
+      // 感情のカウントを増加
+      switch (emotion) {
+        case 'Joy': countJoy++; break;
+        case 'Trust': countTrust++; break;
+        case 'Fear': countFear++; break;
+        case 'Surprise': countSurprise++; break;
+        case 'Sadness': countSadness++; break;
+        case 'Disgust': countDisgust++; break;
+        case 'Anger': countAnger++; break;
+        case 'Anticipation': countAnticipation++; break;
       }
 
-      // Checkボタンを画面の右下に配置
-      buttons.check.position(windowWidth - buttonSize - 20, windowHeight - buttonSize - 20).size(buttonSize, buttonSize);
-      buttons.download.position(windowWidth - buttonSize - 20, windowHeight - (buttonSize * 2) - 40).size(buttonSize, buttonSize);
+      // キラキラを生成
+      createSparkles(emotion);
+    }
+
+    function createSparkles(emotion) {
+      let numSparkles = 20; // キラキラの数
+
+      sparkles = [];
+
+      for (let i = 0; i < numSparkles; i++) {
+        let x = random(width);
+        let y = random(height);
+        let size = random(1, 3);
+
+        sparkles.push({
+          x: x,
+          y: y,
+          size: size,
+          color: emotion === 'Joy' ? '#B50000' :
+                 emotion === 'Trust' ? '#E58351' :
+                 emotion === 'Fear' ? '#FFD036' :
+                 emotion === 'Surprise' ? '#008704'
+                 emotion === 'Sadness' ? '#00699D' :
+                 emotion === 'Disgust' ? '#5D94A6' :
+                 emotion === 'Anger' ? '#36C238' : 
+                 emotion === 'Anticipation' ? '#FF7CC0' : 'white',
+            outlineColor:  emotion === 'Joy' ? '#B50000' :
+                           emotion === 'Trust' ? '#E58351' :
+                           emotion === 'Fear' ? '#FFD036' :
+                           emotion === 'Surprise' ? '#008704'
+                           emotion === 'Sadness' ? '#00699D' :
+                           emotion === 'Disgust' ? '#5D94A6' :
+                           emotion === 'Anger' ? '#36C238' : 
+                           emotion === 'Anticipation' ? '#FF7CC0' : 'black',
+          shape: random(['circle', 'star', 'hexagon', 'diamond']), // 形をランダムに
+          alpha: 255
+        });
+      }
+
+      // 2秒後に消える
+      setTimeout(() => {
+        sparkles = []; // キラキラを消去
+      }, sparkleDuration);
+    }
+
+    function draw() {
+      background(255);
+      drawSparkles();
+    }
+
+    function drawSparkles() {
+      for (let sparkle of sparkles) {
+        fill(sparkle.color);
+        stroke(sparkle.outlineColor);
+        strokeWeight(2);
+        noFill();
+
+        switch (sparkle.shape) {
+          case 'circle':
+            ellipse(sparkle.x, sparkle.y, sparkle.size);
+            break;
+          case 'star':
+            drawStar(sparkle.x, sparkle.y, sparkle.size, sparkle.size * 1.5, 5); // 星の描画
+            break;
+          case 'hexagon':
+            drawPolygon(sparkle.x, sparkle.y, sparkle.size, 6); // 六角形の描画
+            break;
+          case 'diamond':
+            drawPolygon(sparkle.x, sparkle.y, sparkle.size, 4); // ダイヤの描画
+            break;
+        }
+      }
+    }
+
+    // 星を描画する関数
+    function drawStar(x, y, radius1, radius2, npoints) {
+      let angle = TWO_PI / npoints;
+      let halfAngle = angle / 2.0;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius2;
+        let sy = y + sin(a) * radius2;
+        vertex(sx, sy);
+        sx = x + cos(a + halfAngle) * radius1;
+        sy = y + sin(a + halfAngle) * radius1;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    // 多角形を描画する関数
+    function drawPolygon(x, y, radius, npoints) {
+      let angle = TWO_PI / npoints;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius;
+        let sy = y + sin(a) * radius;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    // ボタンの位置とサイズを画面サイズに基づいて調整する関数
+    function positionButtons() {
+      let buttonSize = min(windowWidth, windowHeight) * 0.08; // ボタンの大きさを画面のサイズに応じて調整
+      let buttonMargin = buttonSize * 0.2; // ボタン間のマージン
+      let topMargin = windowHeight * 0.05; // 上からのマージン
+
+      // ボタンの横方向の中心配置
+      let totalWidth = (buttonSize * 5) + (buttonMargin * 4); // 5つのボタン幅と間のマージンの合計
+      let startX = (windowWidth - totalWidth) / 2;  // 画面中央から配置開始
+
+      // 各感情ボタンの位置を設定
+      buttons.enjoyment.position(startX, topMargin).size(buttonSize, buttonSize);
+      buttons.disgust.position(startX + (buttonSize + buttonMargin), topMargin).size(buttonSize, buttonSize);
+      buttons.sadness.position(startX + (buttonSize + buttonMargin) * 2, topMargin).size(buttonSize, buttonSize);
+      buttons.fear.position(startX + (buttonSize + buttonMargin) * 3, topMargin).size(buttonSize, buttonSize);
+      buttons.anger.position(startX + (buttonSize + buttonMargin) * 4, topMargin).size(buttonSize, buttonSize);
+
+      // チェックボタンを画面の右下に配置
+      buttons.check.position(windowWidth - buttonSize - buttonMargin, windowHeight - buttonSize - topMargin).size(buttonSize, buttonSize);
+      buttons.download.position(windowWidth - buttonSize - buttonMargin, windowHeight - (buttonSize * 2) - topMargin).size(buttonSize, buttonSize);
     }
 
     // ウィンドウリサイズ時にキャンバスとボタンの位置を再設定
