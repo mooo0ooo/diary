@@ -116,6 +116,8 @@
     }
 
     function draw() {
+      background(255, 255, 255, 50); // 少しずつ背景をクリアしてキラキラが消えていく効果
+
       // キラキラの描画
       for (let i = particles.length - 1; i >= 0; i--) {
         let p = particles[i];
@@ -141,6 +143,8 @@
       } else if (ratio >= 0.6) {
         selectedBackground = backgroundImages[1];  // 6:4 の比率
       } else if (ratio >= 0.4) {
+       
+
         selectedBackground = backgroundImages[2];  // 4:6 の比率
       } else {
         selectedBackground = backgroundImages[3];  // 0:10 の比率
