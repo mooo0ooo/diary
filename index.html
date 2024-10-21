@@ -17,17 +17,8 @@
     let motifImages = [];
     let countEnjoyment = 0, countDisgust = 0, countSadness = 0, countFear = 0, countAnger = 0;
     let selectedBackground, selectedMotif;
-
+    let sparkles = []; // Sparkle array
     let buttons = {};
-    let sparkles = [];
-    let sparkleDuration = 2000; // キラキラの表示時間
-    let sparkleColors = {
-      'Enjoyment': '#FF4500',
-      'Sadness': '#FFD700',
-      'Disgust': '#006400',
-      'Fear': '#550000',
-      'Anger': '#006699'
-    };
 
     function preload() {
       // 背景画像の読み込み
@@ -46,14 +37,14 @@
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
-      background(255);
+      background(255); // Initial background is white
 
       // 感情のボタンを画像として作成
-      buttons.enjoyment = createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png', 'Enjoyment').mousePressed(() => { handleEmotionButton('Enjoyment'); });
-      buttons.disgust = createImg('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png', 'Disgust').mousePressed(() => { handleEmotionButton('Disgust'); });
-      buttons.sadness = createImg('https://mooo0ooo.github.io/diary/moon-removebg-preview.png', 'Sadness').mousePressed(() => { handleEmotionButton('Sadness'); });
-      buttons.fear = createImg('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png', 'Fear').mousePressed(() => { handleEmotionButton('Fear'); });
-      buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { handleEmotionButton('Anger'); });
+      buttons.enjoyment = createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png', 'Enjoyment').mousePressed(() => { addSparkles('#FF4500'); countEnjoyment++; });
+      buttons.disgust = createImg('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png', 'Disgust').mousePressed(() => { addSparkles('#006400'); countDisgust++; });
+      buttons.sadness = createImg('https://mooo0ooo.github.io/diary/moon-removebg-preview.png', 'Sadness').mousePressed(() => { addSparkles('#FFD700'); countSadness++; });
+      buttons.fear = createImg('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png', 'Fear').mousePressed(() => { addSparkles('#550000'); countFear++; });
+      buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { addSparkles('#006699'); countAnger++; });
 
       // Checkボタンを作成
       buttons.check = createButton('Check').mousePressed(displayArtwork);
@@ -63,45 +54,6 @@
       buttons.download.hide();
 
       positionButtons();  // ボタンの配置を実行
-    }
-
-    function handleEmotionButton(emotion) {
-      // 感情のカウントを増加
-      switch (emotion) {
-        case 'Enjoyment': countEnjoyment++; break;
-        case 'Disgust': countDisgust++; break;
-        case 'Sadness': countSadness++; break;
-        case 'Fear': countFear++; break;
-        case 'Anger': countAnger++; break;
-      }
-
-      // キラキラを生成
-      createSparkles(emotion);
-    }
-
-    function createSparkles(emotion) {
-      let numSparkles = 50; // キラキラの数
-
-      for (let i = 0; i < numSparkles; i++) {
-        let x = random(width);
-        let y = random(height);
-        let size = random(5, 15) / 10; // サイズを10分の1に
-
-        sparkles.push({
-          x: x,
-          y: y,
-          size: size,
-          color: random() < 0.5 ? sparkleColors[emotion] : 'white', // 塗りつぶし色
-          outlineColor: sparkleColors[emotion],
-          shape: random(['circle', 'star', 'hexagon', 'diamond']), // 形をランダムに
-          alpha: 255
-        });
-      }
-
-      // 2秒後に消える
-      setTimeout(() => {
-        sparkles = []; // キラキラを消去
-      }, sparkleDuration);
     }
 
     // ボタンの位置とサイズを画面サイズに基づいて調整する関数
@@ -165,6 +117,9 @@
       // ボタンを隠す
       hideButtons();
       drawArtwork();
+
+      // Downloadボタンを表示
+      buttons.download.show();
     }
 
     function hideButtons() {
@@ -175,15 +130,15 @@
     }
 
     function drawArtwork() {
-      // キャンバス全体を黒で塗りつぶす
-      background(0);
+      // キャンバス全体を白で塗りつぶす
+      background(255);
 
       // 背景をスクエアとして表示
       if (selectedBackground) {
         let backgroundSize = min(width, height) * 0.8;  // 背景のサイズを画面に合わせて調整
         let padding = 20;  // 枠と背景の間のスペース
 
-        // 背景画像を中央に表示（黒背景上に）
+        // 背景画像を中央に表示（白背景上に）
         image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
       }
 
@@ -196,66 +151,96 @@
       }
 
       // キラキラの描画
-      drawSparkles();
+      for (let sparkle of sparkles) {
+        sparkle.update();
+        sparkle.display();
+      }
+
+      // キラキラを2秒後に消す
+      if (millis() - sparkleStartTime > 2000) {
+        sparkles = []; // Clear the sparkles after 2 seconds
+      }
     }
 
-    function drawSparkles() {
-      for (let sparkle of sparkles) {
-        fill(sparkle.color);
-        stroke(sparkle.outlineColor);
-        strokeWeight(2);
-        noFill();
+    let sparkleStartTime; // Start time for sparkle visibility
 
-        switch (sparkle.shape) {
-          case 'circle':
-            ellipse(sparkle.x, sparkle.y, sparkle.size);
-            break;
-          case 'star':
-            drawStar(sparkle.x, sparkle.y, sparkle.size, sparkle.size * 1.5, 5); // 星の描画
-            break;
-          case 'hexagon':
-            drawPolygon(sparkle.x, sparkle.y, sparkle.size, 6); // 六角形の描画
-            break;
-          case 'diamond':
-            drawPolygon(sparkle.x, sparkle.y, sparkle.size, 4); // ダイヤの描画
-            break;
+    function addSparkles(color) {
+      // Create a mix of filled and outlined sparkles
+      for (let i = 0; i < 10; i++) { // Half the amount of sparkles
+        let x = random(width);
+        let y = random(height);
+        let size = random(5, 15); // Size of the sparkles (10x smaller)
+        let type = random(['star', 'hexagon', 'dot', 'diamond']);
+        let filled = random([true, false]);
+
+        sparkles.push(new Sparkle(x, y, size, color, type, filled));
+      }
+      sparkleStartTime = millis(); // Set the time when sparkles are added
+    }
+
+    class Sparkle {
+      constructor(x, y, size, color, type, filled) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.color = color;
+        this.type = type;
+        this.filled = filled;
+      }
+
+      display() {
+        fill(this.filled ? this.color : 'rgba(0, 0, 0, 0)'); // Filled or transparent
+        stroke(this.filled ? 'rgba(0, 0, 0, 0)' : this.color); // Outline color
+
+        if (this.type === 'star') {
+          this.drawStar(this.x, this.y, this.size);
+        } else if (this.type === 'hexagon') {
+          this.drawHexagon(this.x, this.y, this.size);
+        } else if (this.type === 'dot') {
+          ellipse(this.x, this.y, this.size);
+        } else if (this.type === 'diamond') {
+          this.drawDiamond(this.x, this.y, this.size);
         }
       }
-    }
 
-    // 星を描画する関数
-    function drawStar(x, y, radius1, radius2, npoints) {
-      let angle = TWO_PI / npoints;
-      let halfAngle = angle / 2.0;
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius2;
-        let sy = y + sin(a) * radius2;
-        vertex(sx, sy);
-        sx = x + cos(a + halfAngle) * radius1;
-        sy = y + sin(a + halfAngle) * radius1;
-        vertex(sx, sy);
+      drawStar(x, y, radius) {
+        let angle = TWO_PI / 5;
+        beginShape();
+        for (let i = 0; i < 5; i++) {
+          let x1 = x + cos(angle * i) * radius;
+          let y1 = y + sin(angle * i) * radius;
+          vertex(x1, y1);
+          x1 = x + cos(angle * i + angle / 2) * (radius / 2);
+          y1 = y + sin(angle * i + angle / 2) * (radius / 2);
+          vertex(x1, y1);
+        }
+        endShape(CLOSE);
       }
-      endShape(CLOSE);
-    }
 
-    // 多角形を描画する関数
-    function drawPolygon(x, y, radius, npoints) {
-      let angle = TWO_PI / npoints;
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius;
-        let sy = y + sin(a) * radius;
-        vertex(sx, sy);
+      drawHexagon(x, y, radius) {
+        beginShape();
+        for (let i = 0; i < 6; i++) {
+          let x1 = x + cos(PI / 3 * i) * radius;
+          let y1 = y + sin(PI / 3 * i) * radius;
+          vertex(x1, y1);
+        }
+        endShape(CLOSE);
       }
-      endShape(CLOSE);
+
+      drawDiamond(x, y, size) {
+        beginShape();
+        vertex(x, y - size); // Top
+        vertex(x - size, y); // Left
+        vertex(x, y + size); // Bottom
+        vertex(x + size, y); // Right
+        endShape(CLOSE);
+      }
     }
 
     function downloadImage() {
       // キャンバスを保存
       saveCanvas('artwork', 'png'); // 'artwork' という名前でPNG形式で保存
     }
-
   </script>
 </body>
 </html>
