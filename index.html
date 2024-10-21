@@ -41,13 +41,13 @@
 
       // モチーフ画像の読み込み
       motifImages['Joy'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png');
-      motifImages['Trust'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/sun-removebg-preview.png?raw=true'); // タイポを修正
-      motifImages['Fear'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/moon-removebg-preview.png?raw=true');
-      motifImages['Surprise'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/thunder.PNG?raw=true');
-      motifImages['Sadness'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/shooting_star-removebg-preview.png?raw=true');
-      motifImages['Disgust'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/rain.PNG?raw=true');
-      motifImages['Anger'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/star-removebg-preview.png?raw=true');
-      motifImages['Anticipation'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/balloon.PNG?raw=true');
+      motifImages['Trust'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/sun-removebg-preview.png'); // タイポを修正
+      motifImages['Fear'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/moon-removebg-preview.png');
+      motifImages['Surprise'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/thunder.PNG');
+      motifImages['Sadness'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/shooting_star-removebg-preview.png');
+      motifImages['Disgust'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/rain.PNG');
+      motifImages['Anger'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/star-removebg-preview.png');
+      motifImages['Anticipation'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG');
     }
 
     function setup() {
@@ -56,13 +56,13 @@
 
       // 感情のボタンを画像として作成
       buttons.joy = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png', 'Joy').mousePressed(() => { handleEmotionButton('Joy'); });
-      buttons.trust = createImg('https://github.com/mooo0ooo/diary/blob/main/sun-removebg-preview.png?raw=true', 'Trust').mousePressed(() => { handleEmotionButton('Trust'); });
-      buttons.fear = createImg('https://github.com/mooo0ooo/diary/blob/main/moon-removebg-preview.png?raw=true', 'Fear').mousePressed(() => { handleEmotionButton('Fear'); });
-      buttons.surprise = createImg('https://github.com/mooo0ooo/diary/blob/main/thunder.PNG?raw=true', 'Surprise').mousePressed(() => { handleEmotionButton('Surprise'); });
-      buttons.sadness = createImg('https://github.com/mooo0ooo/diary/blob/main/shooting_star-removebg-preview.png?raw=true', 'Sadness').mousePressed(() => { handleEmotionButton('Sadness'); });
-      buttons.disgust = createImg('https://github.com/mooo0ooo/diary/blob/main/rain.PNG?raw=true', 'Disgust').mousePressed(() => { handleEmotionButton('Disgust'); });
-      buttons.anger = createImg('https://github.com/mooo0ooo/diary/blob/main/star-removebg-preview.png?raw=true', 'Anger').mousePressed(() => { handleEmotionButton('Anger'); });
-      buttons.anticipation = createImg('https://github.com/mooo0ooo/diary/blob/main/balloon.PNG?raw=true', 'Anticipation').mousePressed(() => { handleEmotionButton('Anticipation'); });
+      buttons.trust = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/sun-removebg-preview.png', 'Trust').mousePressed(() => { handleEmotionButton('Trust'); });
+      buttons.fear = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/moon-removebg-preview.png', 'Fear').mousePressed(() => { handleEmotionButton('Fear'); });
+      buttons.surprise = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/thunder.PNG', 'Surprise').mousePressed(() => { handleEmotionButton('Surprise'); });
+      buttons.sadness = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/shooting_star-removebg-preview.png', 'Sadness').mousePressed(() => { handleEmotionButton('Sadness'); });
+      buttons.disgust = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/rain.PNG', 'Disgust').mousePressed(() => { handleEmotionButton('Disgust'); });
+      buttons.anger = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/star-removebg-preview.png', 'Anger').mousePressed(() => { handleEmotionButton('Anger'); });
+      buttons.anticipation = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG', 'Anticipation').mousePressed(() => { handleEmotionButton('Anticipation'); });
 
       // Checkボタンを作成
       buttons.check = createButton('Check').mousePressed(displayArtwork);
