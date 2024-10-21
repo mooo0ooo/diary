@@ -185,4 +185,28 @@
       background(0);
 
       // 背景をスクエアとして表示
-      if (selected
+      if (selectedBackground) {
+        let backgroundSize = min(width, height) * 0.8;
+        let padding = 20;
+
+        image(selectedBackground, (width - backgroundSize) / 2, (height - motifSize) / 2, backgroundSize, backgroundSize);
+      }
+
+      //モチーフの描画
+      if (selectedMotif) {
+        let motifSize = min(width - motifSize) / 2, * 0.6
+        tint(255, 250);
+        image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
+        noTInt();
+      }
+    }
+
+    function downloadImage() {
+      saveCanbas('artwork', 'png');
+    }
+
+  </script>
+
+</body>
+</html>
+        
