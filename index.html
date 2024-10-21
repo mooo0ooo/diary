@@ -182,10 +182,11 @@
       let radius = min(windowWidth, windowHeight) * 0.3; // 円の半径
       let buttonSize = min(windowWidth, windowHeight) * 0.1; // ボタンのサイズ
       let emotions = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
-
+      let offset = -PI / 2;
+      
       // 角度を使って円形に配置
       for (let i = 0; i < emotions.length; i++) {
-        let angle = TWO_PI / emotions.length * i;
+        let angle = TWO_PI / emotions.length * i + offset;
         let x = centerX + radius * cos(angle) - buttonSize / 2;
         let y = centerY + radius * sin(angle) - buttonSize / 2;
         buttons[emotions[i]].position(x, y).size(buttonSize, buttonSize);
