@@ -254,7 +254,8 @@
 
         // 背景画像を中央に表示（黒背景上に）
         image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
-      }
+      } else {
+        console.log("Background image not available")
 
       // モチーフの描画
       if (selectedMotif) {
@@ -262,8 +263,8 @@
         tint(255, 250);  // 透過
         image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
         noTint();  // 描画後に透過をリセット
-
-        background(255);
+      } else {
+        console.log("Motif image not available");
       }
     }
 
