@@ -9,6 +9,14 @@
       display: block;
       position: absolute;
     }
+    .emotion-label {
+      font-family: 'Arial', sans-serif; /* 丸みのあるかわいいフォントを設定 */
+      font-size: 16px;
+      text-align: center;
+      color: #333;
+      position: absolute;
+      width: 100px;
+    }
   </style>
 </head>
 <body>
@@ -70,6 +78,17 @@
       // Downloadボタンを作成（初めは非表示）
       buttons.download = createButton('Download Image').mousePressed(downloadImage);
       buttons.download.hide();
+
+      // ラベルの作成
+      labels.joy = createDiv('Joy: 喜び').addClass('emotion-label');
+      labels.trust = createDiv('Trust: 信頼').addClass('emotion-label');
+      labels.fear = createDiv('Fear: 恐れ').addClass('emotion-label');
+      labels.surprise = createDiv('Surprise: 驚き').addClass('emotion-label');
+      labels.sadness = createDiv('Sadness: 悲しみ').addClass('emotion-label');
+      labels.disgust = createDiv('Disgust: 嫌悪').addClass('emotion-label');
+      labels.anger = createDiv('Anger: 怒り').addClass('emotion-label');
+      labels.anticipation = createDiv('Anticipation: 予期').addClass('emotion-label');
+
 
       positionButtons();  // ボタンの配置を実行
     }
@@ -189,6 +208,13 @@
         let x = centerX + radius * cos(angle) - buttonSize / 2;
         let y = centerY + radius * sin(angle) - buttonSize / 2;
         buttons[emotions[i]].position(x, y).size(buttonSize, buttonSize);
+      }
+
+      // ボタンの位置とサイズ設定
+        buttons[emotions[i]].position(x, y).size(buttonSize, buttonSize);
+
+        // ラベルの位置設定（ボタンの下に）
+        labels[emotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20);
       }
 
       // Checkボタンを画面の右下に配置
