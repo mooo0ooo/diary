@@ -19,7 +19,7 @@
     let selectedBackground, selectedMotif;
 
     let buttons = {};
-    let sparkles = []; // キラキラの配列
+    let sparkles = [];
 
     function preload() {
       // 背景画像の読み込み
@@ -41,11 +41,11 @@
       background(255);
 
       // 感情のボタンを画像として作成
-      buttons.enjoyment = createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png', 'Enjoyment').mousePressed(() => { countEnjoyment++; sparkle('#FF4500'); });
-      buttons.disgust = createImg('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png', 'Disgust').mousePressed(() => { countDisgust++; sparkle('#006400'); });
-      buttons.sadness = createImg('https://mooo0ooo.github.io/diary/moon-removebg-preview.png', 'Sadness').mousePressed(() => { countSadness++; sparkle('#FFD700'); });
-      buttons.fear = createImg('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png', 'Fear').mousePressed(() => { countFear++; sparkle('#550000'); });
-      buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { countAnger++; sparkle('#006699'); });
+      buttons.enjoyment = createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png', 'Enjoyment').mousePressed(() => { countEnjoyment++; createSparkles('#FF4500'); });
+      buttons.disgust = createImg('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png', 'Disgust').mousePressed(() => { countDisgust++; createSparkles('#006400'); });
+      buttons.sadness = createImg('https://mooo0ooo.github.io/diary/moon-removebg-preview.png', 'Sadness').mousePressed(() => { countSadness++; createSparkles('#FFD700'); });
+      buttons.fear = createImg('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png', 'Fear').mousePressed(() => { countFear++; createSparkles('#550000'); });
+      buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { countAnger++; createSparkles('#006699'); });
 
       // Checkボタンを作成
       buttons.check = createButton('Check').mousePressed(displayArtwork);
@@ -55,6 +55,100 @@
       buttons.download.hide();
 
       positionButtons();  // ボタンの配置を実行
+    }
+
+    // キラキラを作成する関数
+    function createSparkles(color) {
+      sparkles = []; // 以前のスパークルをクリア
+
+      for (let i = 0; i < 100; i++) {
+        let shapeType = floor(random(0, 4)); // 0:星, 1:六芒星, 2:点, 3:ダイヤ
+        let sparkle = {
+          x: random(width),
+          y: random(height),
+          size: random(5, 15), // サイズを小さくする
+          color: color,
+          shape: shapeType,
+          alpha: 255 // 初期の透明度
+        };
+        sparkles.push(sparkle);
+      }
+
+      setTimeout(() => { sparkles = []; }, 2000); // 2秒後にスパークルを消す
+    }
+
+    function draw() {
+      background(0); // 黒背景で描画
+
+      // キラキラの描画
+      for (let sparkle of sparkles) {
+        noStroke();
+        fill(sparkle.color + hex(sparkle.alpha, 2)); // 透明度を考慮した色
+        drawShape(sparkle.x, sparkle.y, sparkle.size, sparkle.shape);
+        sparkle.alpha -= 5; // 透明度を減少
+      }
+
+      // 透明度が0以下になったらスパークルを削除
+      sparkles = sparkles.filter(sparkle => sparkle.alpha > 0);
+      
+      // その他の描画を行う
+      drawArtwork();
+    }
+
+    // 各形を描画する関数
+    function drawShape(x, y, size, shape) {
+      switch (shape) {
+        case 0: // 星
+          drawStar(x, y, size * 0.5, size, 5);
+          break;
+        case 1: // 六芒星
+          drawHexagon(x, y, size);
+          break;
+        case 2: // 点
+          ellipse(x, y, size);
+          break;
+        case 3: // ダイヤ
+          drawDiamond(x, y, size);
+          break;
+      }
+    }
+
+    // 星を描く関数
+    function drawStar(x, y, radius1, radius2, npoints) {
+      let angle = TWO_PI / npoints;
+      let halfAngle = angle / 2.0;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius2;
+        let sy = y + sin(a) * radius2;
+        vertex(sx, sy);
+        sx = x + cos(a + halfAngle) * radius1;
+        sy = y + sin(a + halfAngle) * radius1;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    // 六芒星を描く関数
+    function drawHexagon(x, y, size) {
+      beginShape();
+      for (let i = 0; i < 6; i++) {
+        let angle = TWO_PI / 6 * i;
+        let sx = x + cos(angle) * size;
+        let sy = y + sin(angle) * size;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    // ダイヤを描く関数
+    function drawDiamond(x, y, size) {
+      beginShape();
+      vertex(x, y - size / 2);
+      vertex(x + size / 2, y);
+      vertex(x, y + size / 2);
+      vertex(x - size / 2, y);
+      endShape(CLOSE);
     }
 
     function positionButtons() {
@@ -79,7 +173,7 @@
     }
 
     function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
+      resizeCanvas(windowWidth,      windowHeight);
       positionButtons();  // ボタンの再配置
     }
 
@@ -116,6 +210,9 @@
       // ボタンを隠す
       hideButtons();
       drawArtwork();
+
+      // Downloadボタンを表示
+      buttons.download.show();
     }
 
     function hideButtons() {
@@ -126,15 +223,12 @@
     }
 
     function drawArtwork() {
-      // キャンバス全体を黒で塗りつぶす
-      background(0);
-
-      // 背景をスクエアとして表示
+      // 背景を描画
       if (selectedBackground) {
         let backgroundSize = min(width, height) * 0.8;  // 背景のサイズを画面に合わせて調整
         let padding = 20;  // 枠と背景の間のスペース
 
-        // 背景画像を中央に表示（黒背景上に） 
+        // 背景画像を中央に表示
         image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
       }
 
@@ -145,110 +239,13 @@
         image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
         noTint();  // 描画後に透過をリセット
       }
-
-      // キラキラを描画
-      for (let sparkle of sparkles) {
-        sparkle.draw();
-      }
-    }
-
-    function sparkle(color) {
-      let count = 50; // 1回のクリックで生成するキラキラの数
-      let duration = 2000; // 表示時間 (ミリ秒)
-      
-      for (let i = 0; i < count; i++) {
-        let shape = random(['star', 'hexagon', 'dot', 'diamond']);
-        let x = random(width);
-        let y = random(height);
-        let size = random(10, 25); // サイズを1/4に調整
-
-        // キラキラのオブジェクトを作成し、色と形状を設定
-        sparkles.push({
-          x: x,
-          y: y,
-          size: size,
-          shape: shape,
-          color: color,
-          alpha: 255,
-          duration: duration,
-          start: millis()
-        });
-      }
-      
-      // 古いキラキラを削除
-      sparkles = sparkles.filter(sparkle => millis() - sparkle.start < sparkle.duration);
-    }
-
-    // キラキラを描画する関数
-    function drawSparkles() {
-      for (let sparkle of sparkles) {
-        fill(sparkle.color);
-        noStroke();
-        
-        // 形状に応じた描画
-        if (sparkle.shape === 'star') {
-          drawStar(sparkle.x, sparkle.y, sparkle.size, sparkle.size * 2, 5);
-        } else if (sparkle.shape === 'hexagon') {
-          drawHexagon(sparkle.x, sparkle.y, sparkle.size);
-        } else if (sparkle.shape === 'dot') {
-          ellipse(sparkle.x, sparkle.y, sparkle.size);
-        } else if (sparkle.shape === 'diamond') {
-          drawDiamond(sparkle.x, sparkle.y, sparkle.size);
-        }
-      }
-    }
-
-    // 星を描く関数
-    function drawStar(x, y, radius1, radius2, npoints) {
-      let angle = TWO_PI / npoints;
-      let halfAngle = angle / 2.0;
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius2;
-        let sy = y + sin(a) * radius2;
-        vertex(sx, sy);
-        sx = x + cos(a + halfAngle) * radius1;
-        sy = y + sin(a + halfAngle) * radius1;
-        vertex(sx, sy);
-      }
-      endShape(CLOSE);
-    }
-
-    // 六芒星を描く関数
-    function drawHexagon(x, y, size) {
-      beginShape();
-      for (let i = 0; i < 6; i++) {
-        let angle = TWO_PI / 6 * i;
-        let sx = x + cos(angle) * size;
-        let sy = y + sin(angle) * size;
-        vertex(sx, sy);
-      }
-      endShape(CLOSE);
-    }
-
-    // ダイヤモンドを描く関数
-    function drawDiamond(x, y, size) {
-      beginShape();
-      vertex(x, y - size);
-      vertex(x + size, y);
-      vertex(x, y + size);
-      vertex(x - size, y);
-      endShape(CLOSE);
     }
 
     function downloadImage() {
       // キャンバスを保存
       saveCanvas('artwork', 'png'); // 'artwork' という名前でPNG形式で保存
     }
-    
-    // draw() 関数を追加
-    function draw() {
-      // 画面を毎フレーム更新
-      if (selectedMotif) {
-        drawArtwork(); // アートワークを描画
-      }
-      drawSparkles(); // キラキラを描画
-    }
   </script>
 </body>
 </html>
+
