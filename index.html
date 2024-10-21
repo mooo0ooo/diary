@@ -80,18 +80,18 @@
     }
 
     function createSparkles(emotion) {
-      let numSparkles = 50; // キラキラの数
+      let numSparkles = 10; // キラキラの数
 
       for (let i = 0; i < numSparkles; i++) {
         let x = random(width);
         let y = random(height);
-        let size = random(5, 15) / 10; // サイズを10分の1に
+        let size = random(1, 3);
 
         sparkles.push({
           x: x,
           y: y,
           size: size,
-          color: random() < 0.5 ? sparkleColors[emotion] : 'white', // 塗りつぶし色
+          color: sparkleColors[emotion],
           outlineColor: sparkleColors[emotion],
           shape: random(['circle', 'star', 'hexagon', 'diamond']), // 形をランダムに
           alpha: 255
