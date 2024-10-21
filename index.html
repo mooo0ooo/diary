@@ -246,7 +246,6 @@
     }
 
     function drawArtwork() {
-      background(255);
 
       // 背景をスクエアとして表示
       if (selectedBackground) {
@@ -263,6 +262,8 @@
         tint(255, 250);  // 透過
         image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
         noTint();  // 描画後に透過をリセット
+
+        background(255);
       }
     }
 
