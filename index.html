@@ -257,6 +257,9 @@
     }
 
     function drawArtwork() {
+      background(255);
+      noLoop();
+      
       // 背景をスクエアとして表示
       if (selectedBackground) {
         let backgroundSize = min(width, height) * 0.8;  // 背景のサイズを画面に合わせて調整
