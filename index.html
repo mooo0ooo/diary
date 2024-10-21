@@ -29,7 +29,7 @@
       'Sadness': '#00699D',
       'Disgust': '#5D94A6',
       'Anger': '#36C238',
-      'Anticipation'; '#FF7CC0'
+      'Anticipation': '#FF7CC0' // セミコロンの誤りを修正
     };
 
     function preload() {
@@ -41,7 +41,7 @@
 
       // モチーフ画像の読み込み
       motifImages['Joy'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/fireworks-removebg-preview.png?raw=true');
-      motifImages['Trusu'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/sun-removebg-preview.png?raw=true');
+      motifImages['Trust'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/sun-removebg-preview.png?raw=true'); // タイポを修正
       motifImages['Fear'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/moon-removebg-preview.png?raw=true');
       motifImages['Surprise'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/thunder.PNG?raw=true');
       motifImages['Sadness'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/shooting_star-removebg-preview.png?raw=true');
@@ -105,22 +105,8 @@
           x: x,
           y: y,
           size: size,
-          color: emotion === 'Joy' ? '#B50000' :
-                 emotion === 'Trust' ? '#E58351' :
-                 emotion === 'Fear' ? '#FFD036' :
-                 emotion === 'Surprise' ? '#008704'
-                 emotion === 'Sadness' ? '#00699D' :
-                 emotion === 'Disgust' ? '#5D94A6' :
-                 emotion === 'Anger' ? '#36C238' : 
-                 emotion === 'Anticipation' ? '#FF7CC0' : 'white',
-            outlineColor:  emotion === 'Joy' ? '#B50000' :
-                           emotion === 'Trust' ? '#E58351' :
-                           emotion === 'Fear' ? '#FFD036' :
-                           emotion === 'Surprise' ? '#008704'
-                           emotion === 'Sadness' ? '#00699D' :
-                           emotion === 'Disgust' ? '#5D94A6' :
-                           emotion === 'Anger' ? '#36C238' : 
-                           emotion === 'Anticipation' ? '#FF7CC0' : 'black',
+          color: sparkleColors[emotion], // 修正
+          outlineColor: sparkleColors[emotion], // 修正
           shape: random(['circle', 'star', 'hexagon', 'diamond']), // 形をランダムに
           alpha: 255
         });
@@ -174,7 +160,7 @@
         sy = y + sin(a + halfAngle) * radius1;
         vertex(sx, sy);
       }
-      endShape(CLOSE);
+            endShape(CLOSE);
     }
 
     // 多角形を描画する関数
@@ -189,26 +175,25 @@
       endShape(CLOSE);
     }
 
-    // ボタンの位置とサイズを画面サイズに基づいて調整する関数
+    // ボタンを円形に配置する関数
     function positionButtons() {
-      let buttonSize = min(windowWidth, windowHeight) * 0.08; // ボタンの大きさを画面のサイズに応じて調整
-      let buttonMargin = buttonSize * 0.2; // ボタン間のマージン
-      let topMargin = windowHeight * 0.05; // 上からのマージン
+      let centerX = windowWidth / 2;
+      let centerY = windowHeight / 2;
+      let radius = min(windowWidth, windowHeight) * 0.3; // 円の半径
+      let buttonSize = min(windowWidth, windowHeight) * 0.1; // ボタンのサイズ
+      let emotions = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
 
-      // ボタンの横方向の中心配置
-      let totalWidth = (buttonSize * 5) + (buttonMargin * 4); // 5つのボタン幅と間のマージンの合計
-      let startX = (windowWidth - totalWidth) / 2;  // 画面中央から配置開始
+      // 角度を使って円形に配置
+      for (let i = 0; i < emotions.length; i++) {
+        let angle = TWO_PI / emotions.length * i;
+        let x = centerX + radius * cos(angle) - buttonSize / 2;
+        let y = centerY + radius * sin(angle) - buttonSize / 2;
+        buttons[emotions[i]].position(x, y).size(buttonSize, buttonSize);
+      }
 
-      // 各感情ボタンの位置を設定
-      buttons.enjoyment.position(startX, topMargin).size(buttonSize, buttonSize);
-      buttons.disgust.position(startX + (buttonSize + buttonMargin), topMargin).size(buttonSize, buttonSize);
-      buttons.sadness.position(startX + (buttonSize + buttonMargin) * 2, topMargin).size(buttonSize, buttonSize);
-      buttons.fear.position(startX + (buttonSize + buttonMargin) * 3, topMargin).size(buttonSize, buttonSize);
-      buttons.anger.position(startX + (buttonSize + buttonMargin) * 4, topMargin).size(buttonSize, buttonSize);
-
-      // チェックボタンを画面の右下に配置
-      buttons.check.position(windowWidth - buttonSize - buttonMargin, windowHeight - buttonSize - topMargin).size(buttonSize, buttonSize);
-      buttons.download.position(windowWidth - buttonSize - buttonMargin, windowHeight - (buttonSize * 2) - topMargin).size(buttonSize, buttonSize);
+      // Checkボタンを画面の右下に配置
+      buttons.check.position(windowWidth - buttonSize - 20, windowHeight - buttonSize - 20).size(buttonSize, buttonSize);
+      buttons.download.position(windowWidth - buttonSize - 20, windowHeight - (buttonSize * 2) - 40).size(buttonSize, buttonSize);
     }
 
     // ウィンドウリサイズ時にキャンバスとボタンの位置を再設定
@@ -218,9 +203,8 @@
     }
 
     function displayArtwork() {
-
       background(255);
-      
+
       console.log("Display Artwork called");
       let totalGroup1 = countJoy + countTrust + countSurprise + countAnticipation; // Group 1: +
       let totalGroup2 = countFear + countSadness + countDisgust + countAnger; // Group 2: -
@@ -246,7 +230,7 @@
       } else if (maxCount === countFear) {
         selectedMotif = motifImages['Fear'];
       } else if (maxCount === countSurprise) {
-        selectedMotif === motifImages['Surprise'];
+        selectedMotif = motifImages['Surprise'];
       } else if (maxCount === countSadness) {
         selectedMotif = motifImages['Sadness'];
       } else if (maxCount === countDisgust) {
@@ -273,17 +257,16 @@
     }
 
     function drawArtwork() {
-
       // 背景をスクエアとして表示
       if (selectedBackground) {
         let backgroundSize = min(width, height) * 0.8;  // 背景のサイズを画面に合わせて調整
         let padding = 20;  // 枠と背景の間のスペース
 
-        // 背景画像を中央に表示（黒背景上に）
+        // 背景画像を中央に表示
         console.log("Drawing background image");
         image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
       } else {
-        console.log("Background image not available")
+        console.log("Background image not available");
       }
 
       console.log("Selected Background:", selectedBackground);
@@ -297,7 +280,6 @@
       } else {
         console.log("Motif image not available");
       }
-
     }
 
     function downloadImage() {
@@ -308,3 +290,5 @@
   </script>
 </body>
 </html>
+
+     
