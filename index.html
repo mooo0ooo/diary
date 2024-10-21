@@ -17,6 +17,8 @@
     let motifImages = [];
     let countEnjoyment = 0, countDisgust = 0, countSadness = 0, countFear = 0, countAnger = 0;
     let selectedBackground, selectedMotif;
+    let particles = []; //キラキラ
+    let particleDuration = 120; //キラキラが表示されるフレーム数
 
     let buttons = {};
 
@@ -54,6 +56,103 @@
       buttons.download.hide();
 
       positionButtons();  // ボタンの配置を実行
+    }
+
+    //キラキラを生成
+    function createParticles(x, y, color) {
+      for (let i = 0; i < 50; i++) {
+        let particle = {
+          x: x + random(-50, 50),
+          y: y + random(-50, 50),
+          size: random(10,30),
+          color: color,
+          lifetime: particleDuration,
+          shape: random(['star', 'hexagon', 'circle', 'diamond']),
+          fillse: random([true, false])
+        };
+        particles.push(particle);
+      }
+    }
+
+    function draw() {
+      background(255);
+
+      //キラキラ描画
+      for (let i = particles.length - 1; i >= 0; i--) {
+        drawParticle(particle);
+
+        //キラキラの寿命を減少させる
+        particle.lifetime--;
+        if (particle.lifetime <= 0) {
+          partiles.splice(i, 0);
+        }
+      }
+
+      positionButtons();
+    }
+
+    //キラキラを描画
+    function drawParticle(particle) {
+      push();
+      translate(particle.x, particle.y);
+      stroke(particle.color);
+      if (particle.filled) {
+        fill(particle.color);
+      } else {
+        noFill();
+      }
+      strokeWeight(2);
+
+      //形状に応じた描画
+      if (particle.shape === 'star') {
+        drawStar(0, 0, particle.size / 2, particle.size, 5); //星
+      } else if (particle.shape === 'hexagon') {
+        drawHexagon(0, 0, particle.size / 2); //六芒星
+      } else if (particle.shape === 'circle') {
+        ellipse(0, 0, particle.size, particle.size); //円
+      } else if (particle.shape === 'diamond') {
+        drawDiamond(0, 0, particle.size); //ダイヤ
+      }
+
+      pop();
+    }
+
+    //星形を描画
+    function drawStae(x, y, radius1, radius2, npoints) {
+      let angle = TWO_PI / npoint;
+      let halfAngle = angle / 2.0;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius2;
+        let sy = y + sin(a) * radius2;
+        vertex(sx, sy);
+        sx = x + cos(a + halfAngle) * radius1;
+        sy = y + sin(a + halfAngle) * radius1;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    //六芒星を描画
+    function drawHexwgon(x, y, radius) {
+      beginShape();
+      for (let i = 0; i < 6; i++) {
+        let angle = TWO_PI / 6 * i;
+        let sx = x + cos(angle) * radius;
+        let sy = y + sin(angle) * radius;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    //ダイヤ形を描画
+    function drawDiamond(x, y, size) {
+      beginShape();
+      vertex(x, y - size / 2);
+      vertex(x + size / 2, y);
+      vertex(x, y + size / 2);
+      vertex(x - size / 2, y);
+      endShape(CLOSE);
     }
 
     // ボタンの位置とサイズを画面サイズに基づいて調整する関数
