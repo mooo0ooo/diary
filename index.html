@@ -262,7 +262,7 @@
       // モチーフの描画
       if (selectedMotif) {
         let motifSize = min(width, height) * 0.6;  // モチーフのサイズを調整
-        //tint(255, 250);  // 透過
+        tint(255, 250);  // 透過
         image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
         noTint();  // 描画後に透過をリセット
       } else {
