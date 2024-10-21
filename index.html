@@ -253,9 +253,13 @@
         let padding = 20;  // 枠と背景の間のスペース
 
         // 背景画像を中央に表示（黒背景上に）
+        console.log("Drawing background image");
         image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
       } else {
         console.log("Background image not available")
+      }
+
+      console.log("Selected Background:", selectedBackground);
 
       // モチーフの描画
       if (selectedMotif) {
@@ -266,6 +270,8 @@
       } else {
         console.log("Motif image not available");
       }
+
+      background(255);
     }
 
     function downloadImage() {
