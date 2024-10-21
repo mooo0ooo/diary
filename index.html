@@ -23,7 +23,7 @@
   <script>
     let backgroundImages = [];
     let motifImages = [];
-    let countJoy = 0, countTrust = 0, countFear = 0, countSurprise = 0, countSadness = 0, countDisgust = 0, countAnger = 0, countAnticipation = 0;
+    let countJoy = 0, countTrust = 0, countFear = 0, countSurprise = 0, countSadness = 0, countDisgust = 0, countAnger = 0, countAnticipation = 0, countEcstasy = 0, countAdoration = 0, countTerror = 0, countAmazement = 0, countGrief = 0, countLoathing = 0, countRage = 0, countVigilance = 0;
     let selectedBackground, selectedMotif;
 
     let buttons = {};
@@ -37,7 +37,15 @@
       'Sadness': '#008704',
       'Disgust': '#5D94A6',
       'Anger': '#00699D',
-      'Anticipation': '#FF7CC0'
+      'Anticipation': '#FF7CC0',
+      'Ecstasy': '#7F0000',
+      'Adoration': '#B2653E',
+      'Terror': '#CCA32A',
+      'Amazement': '#003A00',
+      'Grief': '#00496B',
+      'Loathing': '#406672',
+      'Rage': '#278E27',
+      'Vigilance': '#CC6399'
     };
 
     function preload() {
@@ -56,6 +64,17 @@
       motifImages['Disgust'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/rain.PNG');
       motifImages['Anger'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/star-removebg-preview.png');
       motifImages['Anticipation'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG');
+
+      motifImages['Ecstasy'] = loadImage('https://mooo0ooo.github.io/diary/rose.PNG');
+      motifImages['Adoration'] = loadImage('https://mooo0ooo.github.io/diary/tulip.PNG');
+      motifImages['Terror'] = loadImage('https://mooo0ooo.github.io/diary/yellowFlower.PNG');
+      motifImages['Amazement'] = loadImage('https://mooo0ooo.github.io/diary/clover.PNG');
+      motifImages['Grief'] = loadImage('https://mooo0ooo.github.io/diary/futaba.PNG');
+      motifImages['Loathing'] = loadImage('https://mooo0ooo.github.io/diary/mizuiroFlower.PNG');
+      motifImages['Rage'] = loadImage('https://mooo0ooo.github.io/diary/blueFlower.PNG');
+      motifImages['Vigilance'] = loadImage('https://mooo0ooo.github.io/diary/cherryBlossom.PNG');
+      
+
     }
 
     function setup() {
@@ -71,6 +90,16 @@
       buttons.disgust = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/rain.PNG', 'Disgust').mousePressed(() => { handleEmotionButton('Disgust'); });
       buttons.anger = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/star-removebg-preview.png', 'Anger').mousePressed(() => { handleEmotionButton('Anger'); });
       buttons.anticipation = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG', 'Anticipation').mousePressed(() => { handleEmotionButton('Anticipation'); });
+
+      buttons.ecstasy = createImg('https://mooo0ooo.github.io/diary/rose.PNG', 'Ecstasy').mousePressed(() => { handleEmotionButton('Ecstasy'); });
+      buttons.adoration = createImg('https://mooo0ooo.github.io/diary/tulip.PNG', 'Adoration').mousePressed(() => { handleEmotionButton('Adoration'); });
+      buttons.terror = createImg('https://mooo0ooo.github.io/diary/yellowFlower.PNG', 'Terror').mousePressed(() => { handleEmotionButton('Terror'); });
+      buttons.amazement = createImg('https://mooo0ooo.github.io/diary/clover.PNG', 'Amazement').mousePressed(() => { handleEmotionButton('Amazement'); });
+      buttons.grief = createImg('https://mooo0ooo.github.io/diary/futaba.PNG', 'Grief').mousePressed(() => { handleEmotionButton('Grief'); });
+      buttons.loathing = createImg('https://mooo0ooo.github.io/diary/mizuiroFlower.PNG', 'Loathing').mousePressed(() => { handleEmotionButton('Loathing'); });
+      buttons.rage = createImg('https://mooo0ooo.github.io/diary/blueFlower.PNG', 'Rage').mousePressed(() => { handleEmotionButton('Rage'); });
+      buttons.vigilance = createImg('https://mooo0ooo.github.io/diary/cherryBlossom.PNG', 'Vigilance').mousePressed(() => { handleEmotionButton('Vigilance'); });
+
 
       // Checkボタンを作成
       buttons.check = createButton('Check').mousePressed(displayArtwork);
@@ -89,6 +118,14 @@
       labels.anger = createDiv('Anger: 怒り').addClass('emotion-label');
       labels.anticipation = createDiv('Anticipation: 予期').addClass('emotion-label');
 
+      labels.ecstasy = createDiv('Ecstasy: 恍惚').addClass('emotion-label');
+      labels.adoration = createDiv('Adoration: 敬愛').addClass('emotion-label');
+      labels.terror = createDiv('Terror: 恐怖').addClass('emotion-label');
+      labels.amazement = createDiv('Amazement: 驚嘆').addClass('emotion-label');
+      labels.grief = createDiv('Grief: 悲嘆').addClass('emotion-label');
+      labels.loathing = createDiv('Loathing: 強い嫌悪').addClass('emotion-label');
+      labels.rage = createDiv('Rage: 激怒').addClass('emotion-label');
+      labels.vigilance = createDiv('Vigilance: 警戒').addClass('emotion-label');
 
       positionButtons();  // ボタンの配置を実行
     }
@@ -104,6 +141,14 @@
         case 'Disgust': countDisgust++; break;
         case 'Anger': countAnger++; break;
         case 'Anticipation': countAnticipation++; break;
+        case 'Ecstasy': countEcstasy++; break;
+        case 'Adoration': countAdoration++; break;
+        case 'Terror': countTerror++; break;
+        case 'Amazement': countAmazement++; break;
+        case 'Grief': countGrief++; break;
+        case 'Loathing': countLoathing++; break;
+        case 'Rage': countRage++; break;
+        case 'Vigilance': countVigilance++; break;
       }
 
       // キラキラを生成
@@ -199,7 +244,7 @@
       let centerY = windowHeight / 2;
       let radius = min(windowWidth, windowHeight) * 0.3; // 円の半径
       let buttonSize = min(windowWidth, windowHeight) * 0.1; // ボタンのサイズ
-      let emotions = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
+      let emotions = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation', 'blueFlower', 'cherryBlossom', 'clover', 'futaba', 'mizuiroFlower', 'rose', 'tulip', 'yellowFlower'];
       let offset = -PI / 4;
       
       // 角度を使って円形に配置
@@ -264,7 +309,23 @@
         selectedMotif = motifImages['Anger'];
       } else if (maxCount === countAnticipation) {
         selectedMotif = motifImages['Anticipation'];
-      }
+      } else if (maxCount === countEcstasy) {
+  selectedMotif = motifImages['Ecstasy'];
+} else if (maxCount === countAdoration) {
+  selectedMotif = motifImages['Adoration'];
+} else if (maxCount === countTerror) {
+  selectedMotif = motifImages['Terror'];
+} else if (maxCount === countAmazement) {
+  selectedMotif = motifImages['Amagement'];
+} else if (maxCount === countGrief) {
+  selectedMotif = motifImages['Grief'];
+} else if (maxCount === countLoathing) {
+  selectedMotif = motifImages['Loathig'];
+} else if (maxCount === countRage) {
+  selectedMotif = motifImages['Rage'];
+} else if (maxCount === countVigliance) {
+  selectedMotif = motifImages['Vigliance'];
+}
 
       console.log("Selected Background:", selectedBackground);
       console.log("Selected Motif", selectedMotif);
