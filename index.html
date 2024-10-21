@@ -108,7 +108,11 @@
 
     function draw() {
       background(255);
-      drawSparkles();
+
+      if (!selectedMotif) {
+        drawSparkles();
+      }
+      
       drawArtwork(); 
     }
 
