@@ -82,10 +82,12 @@
     function createSparkles(emotion) {
       let numSparkles = 20; // キラキラの数
 
+      sparkles = [];
+
       for (let i = 0; i < numSparkles; i++) {
         let x = random(width);
         let y = random(height);
-        let size = random(2, 4);
+        let size = random(1, 3);
 
         sparkles.push({
           x: x,
@@ -110,6 +112,11 @@
       setTimeout(() => {
         sparkles = []; // キラキラを消去
       }, sparkleDuration);
+    }
+
+    function draw() {
+      background(255);
+      drawSparkles();
     }
 
     // ボタンの位置とサイズを画面サイズに基づいて調整する関数
@@ -201,9 +208,6 @@
         image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
         noTint();  // 描画後に透過をリセット
       }
-
-      // キラキラの描画
-      drawSparkles();
     }
 
     function drawSparkles() {
@@ -211,10 +215,7 @@
         fill(sparkle.color);
         stroke(sparkle.outlineColor);
         strokeWeight(2);
-
-        if (sparkle.shape !== 'circle') {
-          noFill();
-        }
+        noFill();
 
         switch (sparkle.shape) {
           case 'circle':
