@@ -41,13 +41,13 @@
 
       // モチーフ画像の読み込み
       motifImages['Joy'] = loadImage('dairy/fireworks-removebg-preview.png');
-      motifImages['Trust'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/sun-removebg-preview');
-      motifImages['Fear'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/moon-removebg-preview.png?raw=true');
-      motifImages['Surprise'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/thunder.PNG?raw=true');
-      motifImages['Sadness'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/shooting_star-removebg-preview.png?raw=true');
-      motifImages['Disgust'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/rain.PNG?raw=true');
-      motifImages['Anger'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/star-removebg-preview.png?raw=true');
-      motifImages['Anticipation'] = loadImage('https://github.com/mooo0ooo/diary/blob/main/balloon.PNG?raw=true');
+      motifImages['Trust'] = loadImage('dairy/sun-removebg-preview.png');
+      motifImages['Fear'] = loadImage('dairy/moon-removebg-preview.png');
+      motifImages['Surprise'] = loadImage('dairy/thunder.PNG');
+      motifImages['Sadness'] = loadImage('dairy/shooting_star-removebg-preview.png');
+      motifImages['Disgust'] = loadImage('dairy/rain.PNG');
+      motifImages['Anger'] = loadImage('dairy/star-removebg-preview.png');
+      motifImages['Anticipation'] = loadImage('dairy/balloon.PNG');
     }
 
     function setup() {
@@ -55,7 +55,7 @@
       background(255);
 
       // 感情のボタンを画像として作成
-      buttons.joy = createImg('https://github.com/mooo0ooo/diary/blob/main/fireworks-removebg-preview.png?raw=true', 'Joy').mousePressed(() => { handleEmotionButton('Joy'); });
+      buttons.joy = createImg('dairy/fireworks-removebg-preview.png', 'Joy').mousePressed(() => { handleEmotionButton('Joy'); });
       buttons.trust = createImg('https://github.com/mooo0ooo/diary/blob/main/sun-removebg-preview.png?raw=true', 'Trust').mousePressed(() => { handleEmotionButton('Trust'); });
       buttons.fear = createImg('https://github.com/mooo0ooo/diary/blob/main/moon-removebg-preview.png?raw=true', 'Fear').mousePressed(() => { handleEmotionButton('Fear'); });
       buttons.surprise = createImg('https://github.com/mooo0ooo/diary/blob/main/thunder.PNG?raw=true', 'Surprise').mousePressed(() => { handleEmotionButton('Surprise'); });
