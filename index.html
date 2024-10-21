@@ -3,12 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-  <title>p5.js Responsive Example</title>
+  <title>p5.js Particle Effect Example</title>
   <style>
-    img {
-      display: block;
-      position: absolute;
-    }
     .button {
       border: none;
       background: transparent;
@@ -18,62 +14,46 @@
 </head>
 <body>
   <script>
-    let backgroundImages = [];
-    let motifImages = [];
-    let countEnjoyment = 0, countDisgust = 0, countSadness = 0, countFear = 0, countAnger = 0;
-    let selectedBackground, selectedMotif;
-    let particles = []; //キラキラ
-    let particleDuration = 120; //キラキラが表示されるフレーム数
+    let particles = []; // キラキラパーティクルを格納する配列
+    let particleDuration = 120; // パーティクルが表示されるフレーム数 (2秒間)
 
     let buttons = {};
-
-    function preload() {
-      // 背景画像の読み込み
-      backgroundImages[0] = loadImage('https://mooo0ooo.github.io/diary/background1.png');
-      backgroundImages[1] = loadImage('https://mooo0ooo.github.io/diary/background2.png');
-      backgroundImages[2] = loadImage('https://mooo0ooo.github.io/diary/background3.png');
-      backgroundImages[3] = loadImage('https://mooo0ooo.github.io/diary/background4.png');
-
-      // モチーフ画像の読み込み
-      motifImages['Enjoyment'] = loadImage('https://mooo0ooo.github.io/diary/sun-removebg-preview.png');
-      motifImages['Disgust'] = loadImage('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png');
-      motifImages['Sadness'] = loadImage('https://mooo0ooo.github.io/diary/moon-removebg-preview.png');
-      motifImages['Fear'] = loadImage('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png');
-      motifImages['Anger'] = loadImage('https://mooo0ooo.github.io/diary/star-removebg-preview.png');
-    }
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
       background(255);
 
-      // 感情のボタンを画像として作成
-      buttons.enjoyment = createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png', 'Enjoyment').mousePressed(() => { countEnjoyment++; });
-      buttons.disgust = createImg('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png', 'Disgust').mousePressed(() => { countDisgust++; });
-      buttons.sadness = createImg('https://mooo0ooo.github.io/diary/moon-removebg-preview.png', 'Sadness').mousePressed(() => { countSadness++; });
-      buttons.fear = createImg('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png', 'Fear').mousePressed(() => { countFear++; });
-      buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { countAnger++; });
+      // 感情のボタンを作成
+      buttons.enjoyment = createButton('Enjoyment').class('button').mousePressed(() => {
+        createParticles(width / 2, height / 2, '#FF4500'); // Enjoymentのキラキラ
+      });
+      buttons.disgust = createButton('Disgust').class('button').mousePressed(() => {
+        createParticles(width / 2, height / 2, '#006400'); // Disgustのキラキラ
+      });
+      buttons.sadness = createButton('Sadness').class('button').mousePressed(() => {
+        createParticles(width / 2, height / 2, '#FFD700'); // Sadnessのキラキラ
+      });
+      buttons.fear = createButton('Fear').class('button').mousePressed(() => {
+        createParticles(width / 2, height / 2, '#550000'); // Fearのキラキラ
+      });
+      buttons.anger = createButton('Anger').class('button').mousePressed(() => {
+        createParticles(width / 2, height / 2, '#006699'); // Angerのキラキラ
+      });
 
-      // Checkボタンを作成
-      buttons.check = createButton('Check').mousePressed(displayArtwork);
-
-      // Downloadボタンを作成（初めは非表示）
-      buttons.download = createButton('Download Image').mousePressed(downloadImage);
-      buttons.download.hide();
-
-      positionButtons();  // ボタンの配置を実行
+      positionButtons();
     }
 
-    //キラキラを生成
+    // キラキラパーティクルを生成する関数
     function createParticles(x, y, color) {
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 50; i++) { // 50個のキラキラを生成
         let particle = {
-          x: x + random(-50, 50),
-          y: y + random(-50, 50),
-          size: random(10,30),
+          x: random(0, width), // ランダムな位置
+          y: random(0, height), // ランダムな位置
+          size: random(10, 30),
           color: color,
-          lifetime: particleDuration,
-          shape: random(['star', 'hexagon', 'circle', 'diamond']),
-          fillse: random([true, false])
+          lifetime: particleDuration, // 表示される残り時間
+          shape: random(['star', 'hexagon', 'circle', 'diamond']), // ランダムな形状
+          filled: random([true, false]) // 塗りつぶしあり/なしをランダムに設定
         };
         particles.push(particle);
       }
@@ -82,22 +62,22 @@
     function draw() {
       background(255);
 
-      //キラキラ描画
+      // パーティクルの描画
       for (let i = particles.length - 1; i >= 0; i--) {
         let particle = particles[i];
         drawParticle(particle);
 
-        //キラキラの寿命を減少させる
+        // パーティクルの寿命を減少させる
         particle.lifetime--;
         if (particle.lifetime <= 0) {
-          particles.splice(i, 1);
+          particles.splice(i, 1); // 寿命が尽きたパーティクルを削除
         }
       }
 
       positionButtons();
     }
 
-    //キラキラを描画
+    // パーティクルを描画する関数
     function drawParticle(particle) {
       push();
       translate(particle.x, particle.y);
@@ -109,23 +89,23 @@
       }
       strokeWeight(2);
 
-      //形状に応じた描画
+      // 形状に応じた描画
       if (particle.shape === 'star') {
-        drawStar(0, 0, particle.size / 2, particle.size, 5); //星
+        drawStar(0, 0, particle.size / 2, particle.size, 5); // 星
       } else if (particle.shape === 'hexagon') {
-        drawHexagon(0, 0, particle.size / 2); //六芒星
+        drawHexagon(0, 0, particle.size / 2); // 六芒星
       } else if (particle.shape === 'circle') {
-        ellipse(0, 0, particle.size, particle.size); //円
+        ellipse(0, 0, particle.size, particle.size); // 円
       } else if (particle.shape === 'diamond') {
-        drawDiamond(0, 0, particle.size); //ダイヤ
+        drawDiamond(0, 0, particle.size); // ダイヤ
       }
 
       pop();
     }
 
-    //星形を描画
-    function drawStae(x, y, radius1, radius2, npoints) {
-      let angle = TWO_PI / npoint;
+    // 星形を描画する関数
+    function drawStar(x, y, radius1, radius2, npoints) {
+      let angle = TWO_PI / npoints;
       let halfAngle = angle / 2.0;
       beginShape();
       for (let a = 0; a < TWO_PI; a += angle) {
@@ -139,8 +119,8 @@
       endShape(CLOSE);
     }
 
-    //六芒星を描画
-    function drawHexwgon(x, y, radius) {
+    // 六芒星を描画する関数
+    function drawHexagon(x, y, radius) {
       beginShape();
       for (let i = 0; i < 6; i++) {
         let angle = TWO_PI / 6 * i;
@@ -151,7 +131,7 @@
       endShape(CLOSE);
     }
 
-    //ダイヤ形を描画
+    // ダイヤ形を描画する関数
     function drawDiamond(x, y, size) {
       beginShape();
       vertex(x, y - size / 2);
@@ -177,88 +157,12 @@
       buttons.sadness.position(startX + (buttonSize + buttonMargin) * 2, topMargin).size(buttonSize, buttonSize);
       buttons.fear.position(startX + (buttonSize + buttonMargin) * 3, topMargin).size(buttonSize, buttonSize);
       buttons.anger.position(startX + (buttonSize + buttonMargin) * 4, topMargin).size(buttonSize, buttonSize);
-
-      // チェックボタンを画面の右下に配置
-      buttons.check.position(windowWidth - buttonSize - buttonMargin, windowHeight - buttonSize - topMargin).size(buttonSize, buttonSize);
-      buttons.download.position(windowWidth - buttonSize - buttonMargin, windowHeight - (buttonSize * 2) - topMargin).size(buttonSize, buttonSize);
     }
 
     // ウィンドウリサイズ時にキャンバスとボタンの位置を再設定
     function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
       positionButtons();  // ボタンの再配置
-    }
-
-    function displayArtwork() {
-      let totalGroup1 = countEnjoyment; // Group 1: Enjoyment
-      let totalGroup2 = countDisgust + countSadness + countFear + countAnger; // Group 2: 他の感情
-
-      // 背景の決定
-      let ratio = totalGroup1 / (totalGroup1 + totalGroup2);  // Group 1 と Group 2 の比率
-      if (ratio >= 1) {
-        selectedBackground = backgroundImages[0];  // 10:0 の比率
-      } else if (ratio >= 0.6) {
-        selectedBackground = backgroundImages[1];  // 6:4 の比率
-      } else if (ratio >= 0.4) {
-        selectedBackground = backgroundImages[2];  // 4:6 の比率
-      } else {
-        selectedBackground = backgroundImages[3];  // 0:10 の比率
-      }
-
-      // モチーフの決定（最も多く押された感情）
-      let maxCount = Math.max(countEnjoyment, countDisgust, countSadness, countFear, countAnger);
-      if (maxCount === countEnjoyment) {
-        selectedMotif = motifImages['Enjoyment'];
-      } else if (maxCount === countDisgust) {
-        selectedMotif = motifImages['Disgust'];
-      } else if (maxCount === countSadness) {
-        selectedMotif = motifImages['Sadness'];
-      } else if (maxCount === countFear) {
-        selectedMotif = motifImages['Fear'];
-      } else if (maxCount === countAnger) {
-        selectedMotif = motifImages['Anger'];
-      }
-
-      // ボタンを隠す
-      hideButtons();
-      drawArtwork();
-
-      // Downloadボタンを表示
-      buttons.download.show();
-    }
-
-    function hideButtons() {
-      // すべてのボタンを非表示に
-      for (let key in buttons) {
-        buttons[key].hide();
-      }
-    }
-
-    function drawArtwork() {
-      // キャンバス全体を黒で塗りつぶす
-      background(0);
-
-      // 背景をスクエアとして表示
-      if (selectedBackground) {
-        let backgroundSize = min(width, height) * 0.8;  // 背景のサイズを画面に合わせて調整
-        let padding = 20;  // 枠と背景の間のスペース
-
-        // 背景画像を中央に表示（黒背景上に）
-        image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
-      }
-
-      // モチーフの描画
-      if (selectedMotif) {
-        let motifSize = min(width, height) * 0.6;  // モチーフのサイズを調整
-        tint(255, 250);  // 透過
-        image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
-        noTint();  // 描画後に透過をリセット
-      }
-    }
-
-    function downloadImage() {
-      // キャンバスを保存
-      saveCanvas('artwork', 'png'); // 'artwork' という名前でPNG形式で保存
     }
 
   </script>
