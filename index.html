@@ -107,8 +107,9 @@
         let particle = {
           x: random(width), // ランダムな位置
           y: random(height),
-          size: random(10, 30),
+          size: random(5, 15),
           color: color,
+          shape: random(['circle', 'star', 'hexagon', 'diamond']), // ランダムな形を選択
           lifetime: particleDuration // 2秒間表示
         };
         particles.push(particle);
@@ -123,13 +124,61 @@
         let p = particles[i];
         fill(p.color);
         noStroke();
-        ellipse(p.x, p.y, p.size); // キラキラを円として描画
+
+        //形状に応じた描画
+        if (p.shape === 'circle') {
+          ellipse(p.x, p.y, p.size); //円
+        } else if {
+          drawStar(p.x, p.y, p.size / 2, p.size, 5); //星
+        } else if {
+          drawHexagon(p.x, p.y, p.size); //六芒星
+        } else if {
+          drawDiamond(p.x, p.y, p.size); //ダイアモンド
+        }
 
         p.lifetime--; // 残り時間を減少
         if (p.lifetime <= 0) {
           particles.splice(i, 1); // 寿命が尽きたパーティクルを削除
         }
       }
+    }
+
+    // 星形を描画する関数
+    function drawStar(x, y, radius1, radius2, npoints) {
+      let angle = TWO_PI / npoints;
+      let halfAngle = angle / 2.0;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius2;
+        let sy = y + sin(a) * radius2;
+        vertex(sx, sy);
+        sx = x + cos(a + halfAngle) * radius1;
+        sy = y + sin(a + halfAngle) * radius1;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    // 六芒星を描画する関数
+    function drawHexagon(x, y, radius) {
+      beginShape();
+      for (let i = 0; i < 6; i++) {
+        let angle = TWO_PI / 6 * i;
+        let sx = x + cos(angle) * radius;
+        let sy = y + sin(angle) * radius;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    // ダイヤ形を描画する関数
+    function drawDiamond(x, y, size) {
+      beginShape();
+      vertex(x, y - size / 2);
+      vertex(x + size / 2, y);
+      vertex(x, y + size / 2);
+      vertex(x - size / 2, y);
+      endShape(CLOSE);
     }
 
     function displayArtwork() {
