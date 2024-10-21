@@ -259,6 +259,10 @@
     function drawArtwork() {
       background(255);
       noLoop();
+
+      console.log("Drawing background image");
+image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
+
       
       // 背景をスクエアとして表示
       if (selectedBackground) {
