@@ -44,23 +44,23 @@
       // 感情のボタンを画像として作成
       buttons.enjoyment = createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png', 'Enjoyment').mousePressed(() => { 
         countEnjoyment++;
-        createParticles('#FF4500'); // キラキラ追加 (Enjoyment)
+        createParticles(color(255, 69, 0)); // キラキラ追加 (Enjoyment)
       });
       buttons.disgust = createImg('https://mooo0ooo.github.io/diary/shooting_star-removebg-preview.png', 'Disgust').mousePressed(() => { 
         countDisgust++;
-        createParticles('#006400'); // キラキラ追加 (Disgust)
+        createParticles(color(0, 100, 0)); // キラキラ追加 (Disgust)
       });
       buttons.sadness = createImg('https://mooo0ooo.github.io/diary/moon-removebg-preview.png', 'Sadness').mousePressed(() => { 
         countSadness++;
-        createParticles('#FFD700'); // キラキラ追加 (Sadness)
+        createParticles(color(255, 215, 0)); // キラキラ追加 (Sadness)
       });
       buttons.fear = createImg('https://mooo0ooo.github.io/diary/fireworks-removebg-preview.png', 'Fear').mousePressed(() => { 
         countFear++;
-        createParticles('#550000'); // キラキラ追加 (Fear)
+        createParticles(color(85, 0, 0)); // キラキラ追加 (Fear)
       });
       buttons.anger = createImg('https://mooo0ooo.github.io/diary/star-removebg-preview.png', 'Anger').mousePressed(() => { 
         countAnger++;
-        createParticles('#006699'); // キラキラ追加 (Anger)
+        createParticles(color(0, 102, 153)); // キラキラ追加 (Anger)
       });
 
       // Checkボタンを作成
@@ -107,9 +107,9 @@
         let particle = {
           x: random(width), // ランダムな位置
           y: random(height),
-          size: random(5, 15),
+          size: random(5, 10), // サイズを5から10に変更（最大サイズを小さく）
           color: color,
-          shape: random(['circle', 'star', 'hexagon', 'diamond']), // ランダムな形を選択
+          shape: random(['circle', 'star', 'hexagon', 'diamond', 'circle-outline', 'star-outline', 'hexagon-outline', 'diamond-outline']), // ランダムな形を選択
           lifetime: particleDuration // 2秒間表示
         };
         particles.push(particle);
@@ -125,25 +125,51 @@
         fill(p.color);
         noStroke();
 
-        //形状に応じた描画
-        if (p.shape === 'circle') {
-          ellipse(p.x, p.y, p.size); //円
-        } else if {
-          drawStar(p.x, p.y, p.size / 2, p.size, 5); //星
-        } else if {
-          drawHexagon(p.x, p.y, p.size); //六芒星
-        } else if {
-          drawDiamond(p.x, p.y, p.size); //ダイアモンド
+        // 形状に応じた描画
+        if (p.shape === 'circle' || p.shape === 'circle-outline') {
+          ellipse(p.x, p.y, p.size); // 円を描画
+          if (p.shape === 'circle-outline') {
+            noFill();
+            stroke(0); // 線の色
+            ellipse(p.x, p.y, p.size); // 外枠の円を描画
+          }
+        } else if (p.shape === 'star' || p.shape === 'star-outline') {
+          if (p.shape === 'star-outline') {
+            noFill();
+            stroke(0); // 線の色
+            drawStar(p.x, p.y, p.size / 2, p.size, 5); // 外枠の星を描画
+          } else {
+            fill(p.color);
+            drawStar(p.x, p.y, p.size / 2, p.size, 5); // 星を描画
+          }
+        } else if (p.shape === 'hexagon' || p.shape === 'hexagon-outline') {
+          if (p.shape === 'hexagon-outline') {
+            noFill();
+            stroke(0); // 線の色
+            drawHexagon(p.x, p.y, p.size); // 外枠の六角形を描画
+          } else {
+            fill(p.color);
+            drawHexagon(p.x, p.y, p.size); // 六角形を描画
+          }
+        } else if (p.shape === 'diamond' || p.shape === 'diamond-outline') {
+          if (p.shape === 'diamond-outline') {
+            noFill();
+            stroke(0); // 線の色
+            drawDiamond(p.x, p.y, p.size); // 外枠のダイヤモンドを描画
+          } else {
+            fill(p.color);
+            drawDiamond(p.x, p.y, p.size); // ダイヤモンドを描画
+          }
         }
 
-        p.lifetime--; // 残り時間を減少
+        p.lifetime--; // 寿命を減少させる
         if (p.lifetime <= 0) {
-          particles.splice(i, 1); // 寿命が尽きたパーティクルを削除
+          particles.splice(i, 1); // 寿命が切れたパーティクルを削除
         }
       }
     }
 
-    // 星形を描画する関数
+    // 星を描画する関数
     function drawStar(x, y, radius1, radius2, npoints) {
       let angle = TWO_PI / npoints;
       let halfAngle = angle / 2.0;
@@ -159,25 +185,25 @@
       endShape(CLOSE);
     }
 
-    // 六芒星を描画する関数
-    function drawHexagon(x, y, radius) {
+    // 六角形を描画する関数
+    function drawHexagon(x, y, size) {
       beginShape();
       for (let i = 0; i < 6; i++) {
         let angle = TWO_PI / 6 * i;
-        let sx = x + cos(angle) * radius;
-        let sy = y + sin(angle) * radius;
+        let sx = x + cos(angle) * size;
+        let sy = y + sin(angle) * size;
         vertex(sx, sy);
       }
       endShape(CLOSE);
     }
 
-    // ダイヤ形を描画する関数
+    // ダイヤモンドを描画する関数
     function drawDiamond(x, y, size) {
       beginShape();
-      vertex(x, y - size / 2);
-      vertex(x + size / 2, y);
-      vertex(x, y + size / 2);
-      vertex(x - size / 2, y);
+      vertex(x, y - size); // 上頂点
+      vertex(x + size, y); // 右頂点
+      vertex(x, y + size); // 下頂点
+      vertex(x - size, y); // 左頂点
       endShape(CLOSE);
     }
 
@@ -192,15 +218,13 @@
       } else if (ratio >= 0.6) {
         selectedBackground = backgroundImages[1];  // 6:4 の比率
       } else if (ratio >= 0.4) {
-       
-
         selectedBackground = backgroundImages[2];  // 4:6 の比率
       } else {
         selectedBackground = backgroundImages[3];  // 0:10 の比率
       }
 
-      // モチーフの決定（最も多く押された感情
-　　　let maxCount = Math.max(countEnjoyment, countDisgust, countSadness, countFear, countAnger);
+      // モチーフの決定（最も多く押された感情）
+      let maxCount = Math.max(countEnjoyment, countDisgust, countSadness, countFear, countAnger);
       if (maxCount === countEnjoyment) {
         selectedMotif = motifImages['Enjoyment'];
       } else if (maxCount === countDisgust) {
@@ -243,7 +267,7 @@
 
       // モチーフの描画
       if (selectedMotif) {
-        let motifSize = min(width, height) * 0.6;  // モチーフのサイズを調整
+        let motifSize = min(width, height) * 0.4;  // モチーフのサイズを調整（小さく）
         tint(255, 250);  // 透過
         image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
         noTint();  // 描画後に透過をリセット
@@ -258,4 +282,4 @@
   </script>
 
 </body>
-</html> 
+</html>
