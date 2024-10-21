@@ -184,7 +184,7 @@
       // 各感情ボタンの位置を設定
       buttons.enjoyment.position(startX, topMargin).size(buttonSize, buttonSize);
       buttons.disgust.position(startX + (buttonSize + buttonMargin), topMargin).size(buttonSize, buttonSize);
-      buttons.sadness.position(startX + (buttonSize + buttonMargin) * 2, topMargin).size(buttonSize, buttonSize);
+            buttons.sadness.position(startX + (buttonSize + buttonMargin) * 2, topMargin).size(buttonSize, buttonSize);
       buttons.fear.position(startX + (buttonSize + buttonMargin) * 3, topMargin).size(buttonSize, buttonSize);
       buttons.anger.position(startX + (buttonSize + buttonMargin) * 4, topMargin).size(buttonSize, buttonSize);
 
@@ -231,6 +231,8 @@
 
       // ボタンを隠す
       hideButtons();
+      
+      // アートワークを描画
       drawArtwork();
     }
 
@@ -242,8 +244,6 @@
     }
 
     function drawArtwork() {
-      background(255);
-
       // 背景をスクエアとして表示
       if (selectedBackground) {
         let backgroundSize = min(width, height) * 0.8;  // 背景のサイズを画面に合わせて調整
@@ -266,7 +266,7 @@
       // キャンバスを保存
       saveCanvas('artwork', 'png'); // 'artwork' という名前でPNG形式で保存
     }
-
   </script>
 </body>
 </html>
+
