@@ -200,6 +200,9 @@
     }
 
     function displayArtwork() {
+
+      background(255);
+      
       console.log("Display Artwork called");
       let totalGroup1 = countEnjoyment; // Group 1: Enjoyment
       let totalGroup2 = countDisgust + countSadness + countFear + countAnger; // Group 2: 他の感情
@@ -271,7 +274,6 @@
         console.log("Motif image not available");
       }
 
-      background(255);
     }
 
     function downloadImage() {
