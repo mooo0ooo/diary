@@ -80,19 +80,27 @@
     }
 
     function createSparkles(emotion) {
-      let numSparkles = 50; // キラキラの数
+      let numSparkles = 20; // キラキラの数
 
       for (let i = 0; i < numSparkles; i++) {
         let x = random(width);
         let y = random(height);
-        let size = random(5,15);
+        let size = random(2, 4);
 
         sparkles.push({
           x: x,
           y: y,
           size: size,
-          color: sparkleColors[emotion],
-          outlineColor: sparkleColors[emotion],
+          color: emotion === 'Enjoyment' ? '#FF4500' :
+                   emotion === 'Sadness' ? '#FFD700' :
+                   emotion === 'Disgust' ? '#006400' :
+                   emotion === 'Fear' ? '#550000' :
+                   emotion === 'Anger' ? '#006699' : 'white',
+            outlineColor: emotion === 'Enjoyment' ? '#FF4500' :
+                          emotion === 'Sadness' ? '#FFD700' :
+                          emotion === 'Disgust' ? '#006400' :
+                          emotion === 'Fear' ? '#550000' :
+                          emotion === 'Anger' ? '#006699' : 'black',
           shape: random(['circle', 'star', 'hexagon', 'diamond']), // 形をランダムに
           alpha: 255
         });
@@ -203,7 +211,10 @@
         fill(sparkle.color);
         stroke(sparkle.outlineColor);
         strokeWeight(2);
-        noFill();
+
+        if (sparkle.shape !== 'circle') {
+          noFill();
+        }
 
         switch (sparkle.shape) {
           case 'circle':
