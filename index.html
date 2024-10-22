@@ -25,7 +25,14 @@
     let motifImages = [];
     let countJoy = 0, countTrust = 0, countFear = 0, countSurprise = 0, countSadness = 0, countDisgust = 0, countAnger = 0, countAnticipation = 0, countEcstasy = 0, countAdoration = 0, countTerror = 0, countAmazement = 0, countGrief = 0, countLoathing = 0, countRage = 0, countVigilance = 0;
     let countSerenity = 0, countAcceptance = 0, countApprehension = 0, countDistraction = 0, countPensiveness = 0, countBoredom = 0, countAnnoyance = 0, countInterest = 0;
+
+    let emotionsA = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
+    let emotionsB = ['ecstasy', 'adoration', 'terror', 'amazement', 'grief', 'loathing', 'rage', 'vigilance'];
+    let emotionsC = ['serenity', 'acceptance', 'apprehension', 'distraction', 'pensiveness', 'boredom', 'annoyance', 'interest'];
     
+    let radiusA, radiusB, radiusC;
+    let emotionSize;
+
     let selectedBackground, selectedMotif;
     let buttons = {};
     let labels = {};
@@ -98,7 +105,7 @@
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
-      background(255); // 背景を白に設定
+      calculateSizes();
 
       // 感情のボタンを画像として作成
       buttons.joy = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png', 'Joy').mousePressed(() => { handleEmotionButton('Joy'); });
@@ -153,6 +160,11 @@
     function draw() {
       clear();
       background(255); // 白背景
+      translate(width / 2, height / 2);
+
+      drawEmotionCircle(emotionsA, radiusA);
+      drawEmotionCircle(emotionsB, radiusB);
+      drawEmotionCircle(emotionsC, radiusC);
 
       // キラキラ効果の描画
       for (let i = sparkles.length - 1; i >= 0; i--) {
@@ -173,6 +185,36 @@
         image(selectedMotif, windowWidth / 2 - 100, windowHeight / 2 - 100, 200, 200);
       }
     }
+
+    function drawEmotionCircle(emotions, radius) {
+  let angleStep = TWO_PI / emotions.length;
+
+  for (let i = 0; i < emotions.length; i++) {
+    let angle = i * angleStep;
+    let x = cos(angle) * radius;
+    let y = sin(angle) * radius;
+    
+    // ラベルの表示
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textSize(emotionSize);
+    text(emotions[i], x, y - emotionSize / 2);
+    
+    // 丸の画像の代わりに円を描画
+    fill(200);
+    ellipse(x, y, emotionSize, emotionSize);
+  }
+}
+
+function calculateSizes() {
+  // デバイスに基づくサイズ調整
+  let minDim = min(windowWidth, windowHeight);
+  
+  radiusA = minDim * 0.15; // 内側の円
+  radiusB = minDim * 0.3;  // 中間の円
+  radiusC = minDim * 0.45; // 外側の円
+  emotionSize = minDim * 0.05; // 感情ラベルと円のサイズ
+}
 
     function handleEmotionButton(emotion) {
       // 背景画像とモチーフ画像の設定
@@ -252,6 +294,7 @@
 
     function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
+      calculateSizes();
     }
   </script>
 </body>
