@@ -258,6 +258,82 @@ function handleEmotionButton(emotion) {
   createSparkles(emotion);
 }
 
+    function createSparkles(emotion) {
+      let sparkleColor = sparkleColors[emotion] || '#FFFFFF'; // デフォルト色は白
+      let sparkleCount = 10; // 表示するキラキラの数を半減
+      for (let i = 0; i < sparkleCount; i++) {
+        let x = random(0, width);
+        let y = random(0, height);
+        let size = random(5, 20); // サイズを小さく調整
+        let shape = random(['circle', 'star', 'hexagon', 'diamond']); // 形をランダムに選択
+        let filled = random([true, false]); // 塗りつぶしかアウトラインかをランダムに
+        let sparkle = { x, y, size, color: sparkleColor, shape, filled, startTime: millis() };
+        sparkles.push(sparkle);
+      }
+    }
+
+    function draw() {
+      // キラキラの描画
+      for (let i = sparkles.length - 1; i >= 0; i--) {
+        let sparkle = sparkles[i];
+        let elapsedTime = millis() - sparkle.startTime;
+        if (elapsedTime > sparkleDuration) {
+          sparkles.splice(i, 1); // 指定時間を過ぎたキラキラを削除
+        } else {
+          // キラキラの描画
+          stroke(sparkle.color);
+          if (sparkle.filled) {
+            fill(sparkle.color);
+          } else {
+            noFill();
+          }
+          drawShape(sparkle.shape, sparkle.x, sparkle.y, sparkle.size);
+        }
+      }
+    }
+
+    function drawShape(shape, x, y, size) {
+      switch (shape) {
+        case 'circle':
+          ellipse(x, y, size);
+          break;
+        case 'star':
+          drawStar(x, y, size * 0.5, size); // 星のサイズをさらに小さく調整
+          break;
+        case 'hexagon':
+          drawPolygon(x, y, size, 6); // 六角形
+          break;
+        case 'diamond':
+          drawPolygon(x, y, size, 4); // 四角形
+          break;
+      }
+    }
+
+    function drawStar(x, y, radius1, radius2, npoints = 5) {
+      let angle = TWO_PI / npoints;
+      let halfAngle = angle / 2.0;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius2;
+        let sy = y + sin(a) * radius2;
+        vertex(sx, sy);
+        sx = x + cos(a + halfAngle) * radius1;
+        sy = y + sin(a + halfAngle) * radius1;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    function drawPolygon(x, y, radius, npoints) {
+      let angle = TWO_PI / npoints;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius;
+        let sy = y + sin(a) * radius;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
 
     function displayArtwork() {
       console.log("Display Artwork called");
