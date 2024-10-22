@@ -243,39 +243,50 @@
 function positionButtons() {
   let centerX = windowWidth / 2;
   let centerY = windowHeight / 2;
-  let outerRadius = min(windowWidth, windowHeight) * 0.4; // 外側の円の半径を少し大きく
-  let innerRadius = min(windowWidth, windowHeight) * 0.25; // 内側の円の半径も調整
-  let buttonSize = min(windowWidth, windowHeight) * 0.08; // ボタンのサイズを少し小さく
+  
+  // 外側の円の半径と内側の円の半径を画面サイズに応じて調整
+  let outerRadius = min(windowWidth, windowHeight) * 0.35; // 外側の円の半径
+  let innerRadius = min(windowWidth, windowHeight) * 0.2;  // 内側の円の半径
+  
+  // ボタンのサイズをデバイスに依存して調整
+  let buttonSize = min(windowWidth, windowHeight) * 0.08; // ボタンのサイズ
+  
+  // 外側の感情に対応するボタン
   let outerEmotions = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
+  
+  // 内側の感情に対応するボタン
   let innerEmotions = ['ecstasy', 'adoration', 'terror', 'amazement', 'grief', 'loathing', 'rage', 'vigilance'];
   
-  // 外側のボタンを配置
-  let outerOffset = -PI / 2; // Joyを上にするためのオフセット
+  // 外側のボタンを円周上に配置
+  let outerOffset = -PI / 2; // Joyを上に配置するためのオフセット
   for (let i = 0; i < outerEmotions.length; i++) {
     let angle = TWO_PI / outerEmotions.length * i + outerOffset;
     let x = centerX + outerRadius * cos(angle) - buttonSize / 2;
     let y = centerY + outerRadius * sin(angle) - buttonSize / 2;
+    
+    // ボタンを配置
     buttons[outerEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-
-    // ラベルの位置設定（ボタンの下に）
+    
+    // ラベルをボタンの下に配置
     labels[outerEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20);
   }
 
-  // 内側のボタンを配置
-  let innerOffset = -PI / 2; // Ecstasyを上にするためのオフセット
+  // 内側のボタンを円周上に配置
+  let innerOffset = -PI / 2; // Ecstasyを上に配置するためのオフセット
   for (let i = 0; i < innerEmotions.length; i++) {
     let angle = TWO_PI / innerEmotions.length * i + innerOffset;
     let x = centerX + innerRadius * cos(angle) - buttonSize / 2;
     let y = centerY + innerRadius * sin(angle) - buttonSize / 2;
+    
+    // ボタンを配置
     buttons[innerEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-
-    // ラベルの位置設定（ボタンの下に）
+    
+    // ラベルをボタンの下に配置
     labels[innerEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20);
   }
 
-  // Checkボタンを画面の右下に配置
+  // Checkボタンを画面右下に配置
   buttons.check.position(windowWidth - buttonSize - 20, windowHeight - buttonSize - 20).size(buttonSize, buttonSize);
-  buttons.download.position(windowWidth - buttonSize - 20, windowHeight - (buttonSize * 2) - 40).size(buttonSize, buttonSize);
 }
 
 
@@ -323,22 +334,22 @@ function positionButtons() {
       } else if (maxCount === countAnticipation) {
         selectedMotif = motifImages['Anticipation'];
       } else if (maxCount === countEcstasy) {
-  selectedMotif = motifImages['Ecstasy'];
-} else if (maxCount === countAdoration) {
-  selectedMotif = motifImages['Adoration'];
-} else if (maxCount === countTerror) {
-  selectedMotif = motifImages['Terror'];
-} else if (maxCount === countAmazement) {
-  selectedMotif = motifImages['Amagement'];
-} else if (maxCount === countGrief) {
-  selectedMotif = motifImages['Grief'];
-} else if (maxCount === countLoathing) {
-  selectedMotif = motifImages['Loathing'];
-} else if (maxCount === countRage) {
-  selectedMotif = motifImages['Rage'];
-} else if (maxCount === countVigilance) {
-  selectedMotif = motifImages['Vigilance'];
-}
+        selectedMotif = motifImages['Ecstasy'];
+      } else if (maxCount === countAdoration) {
+        selectedMotif = motifImages['Adoration'];
+      } else if (maxCount === countTerror) {
+        selectedMotif = motifImages['Terror'];
+      } else if (maxCount === countAmazement) {
+        selectedMotif = motifImages['Amagement'];
+      } else if (maxCount === countGrief) {
+        selectedMotif = motifImages['Grief'];
+      } else if (maxCount === countLoathing) {
+        selectedMotif = motifImages['Loathing'];
+      } else if (maxCount === countRage) {
+        selectedMotif = motifImages['Rage'];
+      } else if (maxCount === countVigilance) {
+        selectedMotif = motifImages['Vigilance'];
+      }
 
       console.log("Selected Background:", selectedBackground);
       console.log("Selected Motif", selectedMotif);
