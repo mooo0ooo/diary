@@ -23,7 +23,8 @@
     let emotionsC = ['serenity', 'acceptance', 'apprehension', 'distraction', 'pensiveness', 'boredom', 'annoyance', 'interest'];
     let radiusA, radiusB, radiusC;
     let emotionSize;
-    let buttons = {}; // ボタンのオブジェクト
+    let buttons = {}; // 感情ボタンのオブジェクト
+    let checkButton;  // 中央のCheckボタン
 
     function preload() {
       // 背景画像やモチーフ画像の読み込み
@@ -64,6 +65,13 @@
 
       // 感情のボタンを作成
       createEmotionButtons();
+
+      // 中央にCheckボタンを作成
+      checkButton = createButton('Check');
+      checkButton.position(windowWidth / 2 - 50, windowHeight / 2 - 20);
+      checkButton.mousePressed(() => {
+        alert('Checkボタンが押されました！');
+      });
     }
 
     function draw() {
@@ -74,6 +82,9 @@
       drawEmotionCircle(emotionsA, radiusA);
       drawEmotionCircle(emotionsB, radiusB);
       drawEmotionCircle(emotionsC, radiusC);
+
+      // 中央のCheckボタンの位置を更新
+      checkButton.position(windowWidth / 2 - 50, windowHeight / 2 - 20);
     }
 
     function drawEmotionCircle(emotions, radius) {
@@ -90,33 +101,38 @@
     }
 
     function createEmotionButtons() {
-      // ボタンの作成と初期設定
-      buttons['joy'] = createButton('Joy').mousePressed(() => handleEmotionButton('Joy'));
-      buttons['trust'] = createButton('Trust').mousePressed(() => handleEmotionButton('Trust'));
-      buttons['fear'] = createButton('Fear').mousePressed(() => handleEmotionButton('Fear'));
-      buttons['surprise'] = createButton('Surprise').mousePressed(() => handleEmotionButton('Surprise'));
-      buttons['sadness'] = createButton('Sadness').mousePressed(() => handleEmotionButton('Sadness'));
-      buttons['disgust'] = createButton('Disgust').mousePressed(() => handleEmotionButton('Disgust'));
-      buttons['anger'] = createButton('Anger').mousePressed(() => handleEmotionButton('Anger'));
-      buttons['anticipation'] = createButton('Anticipation').mousePressed(() => handleEmotionButton('Anticipation'));
+      // 感情ごとのモチーフ画像をボタンとして作成
+      buttons['joy'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png').mousePressed(() => handleEmotionButton('Joy'));
+      buttons['trust'] = createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png').mousePressed(() => handleEmotionButton('Trust'));
+      buttons['fear'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/moon-removebg-preview.png').mousePressed(() => handleEmotionButton('Fear'));
+      buttons['surprise'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/thunder.PNG').mousePressed(() => handleEmotionButton('Surprise'));
+      buttons['sadness'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/shooting_star-removebg-preview.png').mousePressed(() => handleEmotionButton('Sadness'));
+      buttons['disgust'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/rain.PNG').mousePressed(() => handleEmotionButton('Disgust'));
+      buttons['anger'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/star-removebg-preview.png').mousePressed(() => handleEmotionButton('Anger'));
+      buttons['anticipation'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG').mousePressed(() => handleEmotionButton('Anticipation'));
 
-      buttons['ecstasy'] = createButton('Ecstasy').mousePressed(() => handleEmotionButton('Ecstasy'));
-      buttons['adoration'] = createButton('Adoration').mousePressed(() => handleEmotionButton('Adoration'));
-      buttons['terror'] = createButton('Terror').mousePressed(() => handleEmotionButton('Terror'));
-      buttons['amazement'] = createButton('Amazement').mousePressed(() => handleEmotionButton('Amazement'));
-      buttons['grief'] = createButton('Grief').mousePressed(() => handleEmotionButton('Grief'));
-      buttons['loathing'] = createButton('Loathing').mousePressed(() => handleEmotionButton('Loathing'));
-      buttons['rage'] = createButton('Rage').mousePressed(() => handleEmotionButton('Rage'));
-      buttons['vigilance'] = createButton('Vigilance').mousePressed(() => handleEmotionButton('Vigilance'));
+      buttons['ecstasy'] = createImg('https://mooo0ooo.github.io/diary/rose.PNG').mousePressed(() => handleEmotionButton('Ecstasy'));
+      buttons['adoration'] = createImg('https://mooo0ooo.github.io/diary/tulip.PNG').mousePressed(() => handleEmotionButton('Adoration'));
+      buttons['terror'] = createImg('https://mooo0ooo.github.io/diary/yellowFlower.PNG').mousePressed(() => handleEmotionButton('Terror'));
+      buttons['amazement'] = createImg('https://mooo0ooo.github.io/diary/clover.PNG').mousePressed(() => handleEmotionButton('Amazement'));
+      buttons['grief'] = createImg('https://mooo0ooo.github.io/diary/futaba.PNG').mousePressed(() => handleEmotionButton('Grief'));
+      buttons['loathing'] = createImg('https://mooo0ooo.github.io/diary/mizuiroFlower.PNG').mousePressed(() => handleEmotionButton('Loathing'));
+      buttons['rage'] = createImg('https://mooo0ooo.github.io/diary/blueFlower.PNG').mousePressed(() => handleEmotionButton('Rage'));
+      buttons['vigilance'] = createImg('https://mooo0ooo.github.io/diary/cherryBlossom.PNG').mousePressed(() => handleEmotionButton('Vigilance'));
 
-      buttons['serenity'] = createButton('Serenity').mousePressed(() => handleEmotionButton('Serenity'));
-      buttons['acceptance'] = createButton('Acceptance').mousePressed(() => handleEmotionButton('Acceptance'));
-      buttons['apprehension'] = createButton('Apprehension').mousePressed(() => handleEmotionButton('Apprehension'));
-      buttons['distraction'] = createButton('Distraction').mousePressed(() => handleEmotionButton('Distraction'));
-      buttons['pensiveness'] = createButton('Pensiveness').mousePressed(() => handleEmotionButton('Pensiveness'));
-      buttons['boredom'] = createButton('Boredom').mousePressed(() => handleEmotionButton('Boredom'));
-      buttons['annoyance'] = createButton('Annoyance').mousePressed(() => handleEmotionButton('Annoyance'));
-      buttons['interest'] = createButton('Interest').mousePressed(() => handleEmotionButton('Interest'));
+      buttons['serenity'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/apple.PNG').mousePressed(() => handleEmotionButton('Serenity'));
+      buttons['acceptance'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/carrot.PNG').mousePressed(() => handleEmotionButton('Acceptance'));
+      buttons['apprehension'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/egg.PNG').mousePressed(() => handleEmotionButton('Apprehension'));
+      buttons['distraction'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/avocado.PNG').mousePressed(() => handleEmotionButton('Distraction'));
+      buttons['pensiveness'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/broccoli.PNG').mousePressed(() => handleEmotionButton('Pensiveness'));
+      buttons['boredom'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/turnip.PNG').mousePressed(() => handleEmotionButton('Boredom'));
+      buttons['annoyance'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fork.PNG').mousePressed(() => handleEmotionButton('Annoyance'));
+      buttons['interest'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG').mousePressed(() => handleEmotionButton('Interest'));
+
+      // ボタンのサイズを設定
+      for (let key in buttons) {
+        buttons[key].size(emotionSize, emotionSize);
+      }
     }
 
     function calculateSizes() {
