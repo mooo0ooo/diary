@@ -86,7 +86,7 @@
       motifImages['Vigilance'] = loadImage('https://mooo0ooo.github.io/diary/cherryBlossom.PNG');
 
       motifImages['Serenity'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/apple.PNG');  
-      motifImages['Acceptance'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/carrot.PNG'); 
+    　motifImages['Acceptance'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/carrot.PNG'); 
       motifImages['Apprehension'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/egg.PNG');
       motifImages['Distraction'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/avocado.PNG');
       motifImages['Pensiveness'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/broccoli.PNG');
@@ -98,7 +98,7 @@
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
-      background(255);
+      background(255); // 背景を白に設定
 
       // 感情のボタンを画像として作成
       buttons.joy = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png', 'Joy').mousePressed(() => { handleEmotionButton('Joy'); });
@@ -119,345 +119,141 @@
       buttons.rage = createImg('https://mooo0ooo.github.io/diary/blueFlower.PNG', 'Rage').mousePressed(() => { handleEmotionButton('Rage'); });
       buttons.vigilance = createImg('https://mooo0ooo.github.io/diary/cherryBlossom.PNG', 'Vigilance').mousePressed(() => { handleEmotionButton('Vigilance'); });
 
-      motifImages['Serenity'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/apple.PNG');  
-    　motifImages['Acceptance'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/carrot.PNG'); 
-      motifImages['Apprehension'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/egg.PNG');
-      motifImages['Distraction'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/avocado.PNG');
-      motifImages['Pensiveness'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/broccoli.PNG');
-      motifImages['Boredom'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/turnip.PNG');
-      motifImages['Annoyance'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/fork.PNG');
-      motifImages['Interest'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG');
+      buttons.serenity = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/apple.PNG', 'Serenity').mousePressed(() => { handleEmotionButton('Serenity'); });
+      buttons.acceptance = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/carrot.PNG', 'Acceptance').mousePressed(() => { handleEmotionButton('Acceptance'); });
+      buttons.apprehension = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/egg.PNG', 'Apprehension').mousePressed(() => { handleEmotionButton('Apprehension'); });
+      buttons.distraction = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/avocado.PNG', 'Distraction').mousePressed(() => { handleEmotionButton('Distraction'); });
+      buttons.pensiveness = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/broccoli.PNG', 'Pensiveness').mousePressed(() => { handleEmotionButton('Pensiveness'); });
+      buttons.boredom = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/turnip.PNG', 'Boredom').mousePressed(() => { handleEmotionButton('Boredom'); });
+      buttons.annoyance = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fork.PNG', 'Annoyance').mousePressed(() => { handleEmotionButton('Annoyance'); });
+      buttons.interest = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG', 'Interest').mousePressed(() => { handleEmotionButton('Interest'); });
+      
+      // 各ボタンの位置とラベルの設定
+      let xOffset = 20;
+      let yOffset = 20;
+      let buttonSize = 80;
+      let gap = 10;
 
+      for (let emotion in buttons) {
+        buttons[emotion].size(buttonSize, buttonSize);
+        buttons[emotion].position(xOffset, yOffset);
 
-      // Checkボタンを作成
-      buttons.check = createButton('Check').mousePressed(displayArtwork);
+        labels[emotion] = createDiv(emotion);
+        labels[emotion].position(xOffset, yOffset + buttonSize);
+        labels[emotion].class('emotion-label');
 
-      // Downloadボタンを作成（初めは非表示）
-      buttons.download = createButton('Download Image').mousePressed(downloadImage);
-      buttons.download.hide();
-
-      // ラベルの作成
-
-      labels.joy = createDiv('Joy: 喜び').addClass('emotion-label');
-      labels.trust = createDiv('Trust: 信頼').addClass('emotion-label');
-      labels.fear = createDiv('Fear: 恐れ').addClass('emotion-label');
-      labels.surprise = createDiv('Surprise: 驚き').addClass('emotion-label');
-      labels.sadness = createDiv('Sadness: 悲しみ').addClass('emotion-label');
-      labels.disgust = createDiv('Disgust: 嫌悪').addClass('emotion-label');
-      labels.anger = createDiv('Anger: 怒り').addClass('emotion-label');
-      labels.anticipation = createDiv('Anticipation: 予期').addClass('emotion-label');
-
-      labels.ecstasy = createDiv('Ecstasy: 恍惚').addClass('emotion-label');
-      labels.adoration = createDiv('Adoration: 敬愛').addClass('emotion-label');
-      labels.terror = createDiv('Terror: 恐怖').addClass('emotion-label');
-      labels.amazement = createDiv('Amazement: 驚嘆').addClass('emotion-label');
-      labels.grief = createDiv('Grief: 悲嘆').addClass('emotion-label');
-      labels.loathing = createDiv('Loathing: 強い嫌悪').addClass('emotion-label');
-      labels.rage = createDiv('Rage: 激怒').addClass('emotion-label');
-      labels.vigilance = createDiv('Vigilance: 警戒').addClass('emotion-label');
-
-      // 新しい感情のラベルを作成
-      labels.serenity = createDiv('Serenity: 平静').addClass('emotion-label');
-      labels.acceptance = createDiv('Acceptance: 容認').addClass('emotion-label');
-      labels.apprehension = createDiv('Apprehension: 不安').addClass('emotion-label');
-      labels.distraction = createDiv('Distraction: 放心').addClass('emotion-label');
-      labels.pensiveness = createDiv('Pensiveness: 哀愁').addClass('emotion-label');
-      labels.boredom = createDiv('Boredom: うんざり').addClass('emotion-label');
-      labels.annoyance = createDiv('Annoyance: いらだち').addClass('emotion-label');
-      labels.interest = createDiv('Interest: 関心').addClass('emotion-label');
-
-      positionButtons();  // ボタンの配置を実行
-    }
-
-function positionButtons() {
-  let centerX = windowWidth / 2;
-  let centerY = windowHeight / 2;
-
-  // ボタンとラベルのサイズを画面に応じて調整
-  let buttonSize = min(windowWidth, windowHeight) * 0.1; // 画面サイズに対して10%の大きさ
-  let outerRadius = min(windowWidth, windowHeight) * 0.35; // 外側の円の半径
-  let innerRadius = min(windowWidth, windowHeight) * 0.2;  // 内側の円の半径
-  let extraRadius = outerRadius * 1.5;  // さらに外側の円
-
-  let outerEmotions = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
-  let innerEmotions = ['ecstasy', 'adoration', 'terror', 'amazement', 'grief', 'loathing', 'rage', 'vigilance'];
-  let extraEmotions = ['serenity', 'acceptance', 'apprehension', 'distraction', 'pensiveness', 'boredom', 'annoyance', 'interest'];
-
-  let outerOffset = -PI / 2;  // 上に配置するためのオフセット
-
-  // 外側の円にボタンとラベルを配置
-  for (let i = 0; i < outerEmotions.length; i++) {
-    let angle = TWO_PI / outerEmotions.length * i + outerOffset;
-    let x = centerX + outerRadius * cos(angle) - buttonSize / 2;
-    let y = centerY + outerRadius * sin(angle) - buttonSize / 2;
-
-    buttons[outerEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-    labels[outerEmotions[i]].position(x, y + buttonSize + 5).style('font-size', '12px'); // ボタンの下にラベルを配置、フォントサイズ小さめ
-  }
-
-  // 内側の円にボタンとラベルを配置
-  for (let i = 0; i < innerEmotions.length; i++) {
-    let angle = TWO_PI / innerEmotions.length * i + outerOffset;
-    let x = centerX + innerRadius * cos(angle) - buttonSize / 2;
-    let y = centerY + innerRadius * sin(angle) - buttonSize / 2;
-
-    buttons[innerEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-    labels[innerEmotions[i]].position(x, y + buttonSize + 5).style('font-size', '12px'); // ボタンの下にラベルを配置、フォントサイズ小さめ
-  }
-
-  // さらに外側の円に新しい感情ボタンを配置
-  for (let i = 0; i < extraEmotions.length; i++) {
-    let angle = TWO_PI / extraEmotions.length * i + outerOffset;
-    let x = centerX + extraRadius * cos(angle) - buttonSize / 2;
-    let y = centerY + extraRadius * sin(angle) - buttonSize / 2;
-
-    buttons[extraEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-    labels[extraEmotions[i]].position(x, y + buttonSize + 5).style('font-size', '12px'); // ボタンの下にラベルを配置、フォントサイズ小さめ
-  }
-
-  // Checkボタンを画面の右下に配置
-  buttons.check.position(windowWidth - buttonSize - 20, windowHeight - buttonSize - 20).size(buttonSize, buttonSize);
-}
-
-// ウィンドウリサイズ時に再配置
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  positionButtons();  // ボタンの再配置
-}
-
-function handleEmotionButton(emotion) {
-  // 感情のカウントを増加
-  switch (emotion) {
-    case 'Joy': countJoy++; break;
-    case 'Trust': countTrust++; break;
-    case 'Fear': countFear++; break;
-    case 'Surprise': countSurprise++; break;
-    case 'Sadness': countSadness++; break;
-    case 'Disgust': countDisgust++; break;
-    case 'Anger': countAnger++; break;
-    case 'Anticipation': countAnticipation++; break;
-    case 'Ecstasy': countEcstasy++; break;
-    case 'Adoration': countAdoration++; break;
-    case 'Terror': countTerror++; break;
-    case 'Amazement': countAmazement++; break;
-    case 'Grief': countGrief++; break;
-    case 'Loathing': countLoathing++; break;
-    case 'Rage': countRage++; break;
-    case 'Vigilance': countVigilance++; break;
-    case 'Serenity': countSerenity++; break;
-    case 'Acceptance': countAcceptance++; break;
-    case 'Apprehension': countApprehension++; break;
-    case 'Distraction': countDistraction++; break;
-    case 'Pensiveness': countPensiveness++; break;
-    case 'Boredom': countBoredom++; break;
-    case 'Annoyance': countAnnoyance++; break;
-    case 'Interest': countInterest++; break;
-  }
-
-  // キラキラを生成
-  createSparkles(emotion);
-}
-
-    function createSparkles(emotion) {
-      let sparkleColor = sparkleColors[emotion] || '#FFFFFF'; // デフォルト色は白
-      let sparkleCount = 10; // 表示するキラキラの数を半減
-      for (let i = 0; i < sparkleCount; i++) {
-        let x = random(0, width);
-        let y = random(0, height);
-        let size = random(5, 20); // サイズを小さく調整
-        let shape = random(['circle', 'star', 'hexagon', 'diamond']); // 形をランダムに選択
-        let filled = random([true, false]); // 塗りつぶしかアウトラインかをランダムに
-        let sparkle = { x, y, size, color: sparkleColor, shape, filled, startTime: millis() };
-        sparkles.push(sparkle);
-      }
-    }
-
-    function draw() {
-      // キラキラの描画
-      for (let i = sparkles.length - 1; i >= 0; i--) {
-        let sparkle = sparkles[i];
-        let elapsedTime = millis() - sparkle.startTime;
-        if (elapsedTime > sparkleDuration) {
-          sparkles.splice(i, 1); // 指定時間を過ぎたキラキラを削除
-        } else {
-          // キラキラの描画
-          stroke(sparkle.color);
-          if (sparkle.filled) {
-            fill(sparkle.color);
-          } else {
-            noFill();
-          }
-          drawShape(sparkle.shape, sparkle.x, sparkle.y, sparkle.size);
+        xOffset += buttonSize + gap;
+        if (xOffset > windowWidth - buttonSize) {
+          xOffset = 20;
+          yOffset += buttonSize + 40;
         }
       }
     }
 
-    function drawShape(shape, x, y, size) {
-      switch (shape) {
+    function draw() {
+      clear();
+      background(255); // 白背景
+
+      // キラキラ効果の描画
+      for (let i = sparkles.length - 1; i >= 0; i--) {
+        let sparkle = sparkles[i];
+        if (millis() - sparkle.startTime > sparkleDuration) {
+          sparkles.splice(i, 1); // キラキラが2秒以上経ったら消去
+        } else {
+          drawSparkle(sparkle);
+        }
+      }
+
+      // 選択された背景画像とモチーフ画像の表示
+      if (selectedBackground) {
+        image(selectedBackground, 0, 0, windowWidth, windowHeight);
+      }
+
+      if (selectedMotif) {
+        image(selectedMotif, windowWidth / 2 - 100, windowHeight / 2 - 100, 200, 200);
+      }
+    }
+
+    function handleEmotionButton(emotion) {
+      // 背景画像とモチーフ画像の設定
+      selectedBackground = random(backgroundImages);
+      selectedMotif = motifImages[emotion];
+
+      // キラキラ効果の生成
+      for (let i = 0; i < 10; i++) { // キラキラの数を減らした
+        sparkles.push(createSparkle(emotion));
+      }
+    }
+
+    function createSparkle(emotion) {
+      return {
+        x: random(windowWidth),
+        y: random(windowHeight),
+        size: random(5, 20), // サイズを1/10に縮小
+        color: sparkleColors[emotion],
+        filled: random() > 0.5, // ランダムに塗りつぶしあり/なし
+        shape: random(['circle', 'star', 'hexagon', 'diamond']), // ランダムな形
+        startTime: millis()
+      };
+    }
+
+    function drawSparkle(sparkle) {
+      push();
+      noStroke();
+      fill(sparkle.color);
+      if (!sparkle.filled) {
+        noFill();
+        stroke(sparkle.color); // アウトラインの色を変更
+      }
+
+      translate(sparkle.x, sparkle.y);
+      let halfSize = sparkle.size / 2;
+
+      // 各形状を描画
+      switch (sparkle.shape) {
         case 'circle':
-          ellipse(x, y, size);
+          ellipse(0, 0, sparkle.size);
           break;
         case 'star':
-          drawStar(x, y, size * 0.5, size); // 星のサイズをさらに小さく調整
+          drawStar(halfSize, halfSize * 0.5);
           break;
         case 'hexagon':
-          drawPolygon(x, y, size, 6); // 六角形
+          drawPolygon(6, halfSize);
           break;
         case 'diamond':
-          drawPolygon(x, y, size, 4); // 四角形
+          rotate(PI / 4);
+          rect(0, 0, sparkle.size, sparkle.size);
           break;
       }
+      pop();
     }
 
-    function drawStar(x, y, radius1, radius2, npoints = 5) {
-      let angle = TWO_PI / npoints;
-      let halfAngle = angle / 2.0;
+    function drawStar(radius1, radius2) {
       beginShape();
-      for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius2;
-        let sy = y + sin(a) * radius2;
-        vertex(sx, sy);
-        sx = x + cos(a + halfAngle) * radius1;
-        sy = y + sin(a + halfAngle) * radius1;
+      for (let i = 0; i < 10; i++) {
+        let angle = TWO_PI / 10 * i;
+        let r = i % 2 === 0 ? radius1 : radius2;
+        let x = cos(angle) * r;
+        let y = sin(angle) * r;
+        vertex(x, y);
+      }
+      endShape(CLOSE);
+    }
+
+    function drawPolygon(npoints, radius) {
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += TWO_PI / npoints) {
+        let sx = cos(a) * radius;
+        let sy = sin(a) * radius;
         vertex(sx, sy);
       }
       endShape(CLOSE);
     }
 
-    function drawPolygon(x, y, radius, npoints) {
-      let angle = TWO_PI / npoints;
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius;
-        let sy = y + sin(a) * radius;
-        vertex(sx, sy);
-      }
-      endShape(CLOSE);
-    }
-
-    function displayArtwork() {
-      console.log("Display Artwork called");
-      let totalGroup1 = countJoy + countTrust + countSurprise + countAnticipation + countSerenity + countAcceptance + countInterest; // Group 1: +
-      let totalGroup2 = countFear + countSadness + countDisgust + countAnger + countApprehension + countDistraction + countPensiveness + countBoredom + countAnnoyance; // Group 2: -
-
-      // 背景の決定
-      let ratio = totalGroup1 / (totalGroup1 + totalGroup2);  // Group 1 と Group 2 の比率
-      if (ratio >= 1) {
-        selectedBackground = backgroundImages[0];  // 10:0 の比率
-      } else if (ratio >= 0.6) {
-        selectedBackground = backgroundImages[1];  // 6:4 の比率
-      } else if (ratio >= 0.4) {
-        selectedBackground = backgroundImages[2];  // 4:6 の比率
-      } else {
-        selectedBackground = backgroundImages[3];  // 0:10 の比率
-      }
-
-      // モチーフの決定（最も多く押された感情）
-      let maxCount = Math.max(
-        countJoy, countTrust, countFear, countSurprise, countSadness, countDisgust, countAnger, countAnticipation,
-        countEcstasy, countAdoration, countTerror, countAmazement, countGrief, countLoathing, countRage, countVigilance,
-        countSerenity, countAcceptance, countApprehension, countDistraction, countPensiveness, countBoredom, countAnnoyance, countInterest
-      );
-
-      if (maxCount === countJoy) {
-        selectedMotif = motifImages['Joy'];
-      } else if (maxCount === countTrust) {
-        selectedMotif = motifImages['Trust'];
-      } else if (maxCount === countFear) {
-        selectedMotif = motifImages['Fear'];
-      } else if (maxCount === countSurprise) {
-        selectedMotif = motifImages['Surprise'];
-      } else if (maxCount === countSadness) {
-        selectedMotif = motifImages['Sadness'];
-      } else if (maxCount === countDisgust) {
-        selectedMotif = motifImages['Disgust'];
-      } else if (maxCount === countAnger) {
-        selectedMotif = motifImages['Anger'];
-      } else if (maxCount === countAnticipation) {
-        selectedMotif = motifImages['Anticipation'];
-      } else if (maxCount === countEcstasy) {
-        selectedMotif = motifImages['Ecstasy'];
-      } else if (maxCount === countAdoration) {
-        selectedMotif = motifImages['Adoration'];
-      } else if (maxCount === countTerror) {
-        selectedMotif = motifImages['Terror'];
-      } else if (maxCount === countAmazement) {
-        selectedMotif = motifImages['Amazement'];
-      } else if (maxCount === countGrief) {
-        selectedMotif = motifImages['Grief'];
-      } else if (maxCount === countLoathing) {
-        selectedMotif = motifImages['Loathing'];
-      } else if (maxCount === countRage) {
-        selectedMotif = motifImages['Rage'];
-      } else if (maxCount === countVigilance) {
-        selectedMotif = motifImages['Vigilance'];
-      } else if (maxCount === countSerenity) {
-        selectedMotif = motifImages['Serenity'];
-      } else if (maxCount === countAcceptance) {
-        selectedMotif = motifImages['Acceptance'];
-      } else if (maxCount === countApprehension) {
-        selectedMotif = motifImages['Apprehension'];
-      } else if (maxCount === countDistraction) {
-        selectedMotif = motifImages['Distraction'];
-      } else if (maxCount === countPensiveness) {
-        selectedMotif = motifImages['Pensiveness'];
-      } else if (maxCount === countBoredom) {
-        selectedMotif = motifImages['Boredom'];
-      } else if (maxCount === countAnnoyance) {
-        selectedMotif = motifImages['Annoyance'];
-      } else if (maxCount === countInterest) {
-        selectedMotif = motifImages['Interest'];
-      }
-
-      console.log("Selected Background:", selectedBackground);
-      console.log("Selected Motif", selectedMotif);
-
-      // ボタンを隠す
-      hideButtons();
-      drawArtwork();
-    }
-
-    function hideButtons() {
-      // すべてのボタンを非表示に
-      for (let key in buttons) {
-        buttons[key].hide();
-      }
-    }
-
-    function drawArtwork() {
-      background(255);
-
-      // 背景をスクエアとして表示
-      if (selectedBackground) {
-        let backgroundSize = min(width, height) * 0.8;  // 背景のサイズを画面に合わせて調整
-        let padding = 20;  // 枠と背景の間のスペース
-
-        // 背景画像を中央に表示
-        image(selectedBackground, (width - backgroundSize) / 2, (height - backgroundSize) / 2, backgroundSize, backgroundSize);
-      } else {
-        console.log("Background image not available");
-      }
-
-      // モチーフの描画
-      if (selectedMotif) {
-        let motifSize = min(width, height) * 0.6;  // モチーフのサイズを調整
-        tint(255, 250);  // 透過
-        image(selectedMotif, (width - motifSize) / 2, (height - motifSize) / 2, motifSize, motifSize);
-        noTint();  // 描画後に透過をリセット
-      } else {
-        console.log("Motif image not available");
-      }
-
-      // Downloadボタンを表示
-      buttons.download.show();
-    }
-
-    function downloadImage() {
-      // キャンバスを保存
-      saveCanvas('artwork', 'png'); // 'artwork' という名前でPNG形式で保存
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
     }
   </script>
 </body>
 </html>
-
 
