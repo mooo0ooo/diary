@@ -9,21 +9,14 @@
       display: block;
       position: absolute;
     }
-    .emotion-label {
-      font-family: 'Arial', sans-serif; 
-      font-size: 16px;
-      text-align: center;
-      color: #333;
-      position: absolute;
-      width: 100px;
-    }
   </style>
 </head>
 <body>
   <script>
     let backgroundImages = [];
     let motifImages = [];
-    let countJoy = 0, countTrust = 0, countFear = 0, countSurprise = 0, countSadness = 0, countDisgust = 0, countAnger = 0, countAnticipation = 0, countEcstasy = 0, countAdoration = 0, countTerror = 0, countAmazement = 0, countGrief = 0, countLoathing = 0, countRage = 0, countVigilance = 0;
+    let countJoy = 0, countTrust = 0, countFear = 0, countSurprise = 0, countSadness = 0, countDisgust = 0, countAnger = 0, 
+    let countAnticipation = 0, countEcstasy = 0, countAdoration = 0, countTerror = 0, countAmazement = 0, countGrief = 0, countLoathing = 0, countRage = 0, countVigilance = 0;
     let countSerenity = 0, countAcceptance = 0, countApprehension = 0, countDistraction = 0, countPensiveness = 0, countBoredom = 0, countAnnoyance = 0, countInterest = 0;
 
     let emotionsA = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
@@ -35,36 +28,6 @@
 
     let selectedBackground, selectedMotif;
     let buttons = {};
-    let labels = {};
-    
-    let sparkles = [];
-    let sparkleDuration = 2000; // キラキラの表示時間
-    let sparkleColors = {
-      'Joy': '#B50000',
-      'Trust': '#E58351',
-      'Fear': '#FFD036',
-      'Surprise': '#36C238',
-      'Sadness': '#008704',
-      'Disgust': '#5D94A6',
-      'Anger': '#00699D',
-      'Anticipation': '#FF7CC0',
-      'Ecstasy': '#7F0000',
-      'Adoration': '#B2653E',
-      'Terror': '#CCA32A',
-      'Amazement': '#003A00',
-      'Grief': '#00496B',
-      'Loathing': '#406672',
-      'Rage': '#278E27',
-      'Vigilance': '#CC6399',
-      'Serenity': '#E50000',
-      'Acceptance': '#FF7F3F',
-      'Apprehension': '#FF8F00',
-      'Distraction': '#00BA03',
-      'Pensiveness': '#008ED1',
-      'Boredom': '#7FCBE2',
-      'Annoyance': '#B2E4B2',
-      'Interest': '#FF7CC0'
-    };
 
     function preload() {
       // 背景画像の読み込み
@@ -165,15 +128,6 @@
       drawEmotionCircle(emotionsA, radiusA);
       drawEmotionCircle(emotionsB, radiusB);
       drawEmotionCircle(emotionsC, radiusC);
-
-      // キラキラ効果の描画
-      for (let i = sparkles.length - 1; i >= 0; i--) {
-        let sparkle = sparkles[i];
-        if (millis() - sparkle.startTime > sparkleDuration) {
-          sparkles.splice(i, 1); // キラキラが2秒以上経ったら消去
-        } else {
-          drawSparkle(sparkle);
-        }
       }
 
       // 選択された背景画像とモチーフ画像の表示
@@ -220,77 +174,8 @@ function calculateSizes() {
       // 背景画像とモチーフ画像の設定
       selectedBackground = random(backgroundImages);
       selectedMotif = motifImages[emotion];
-
-      // キラキラ効果の生成
-      for (let i = 0; i < 10; i++) { // キラキラの数を減らした
-        sparkles.push(createSparkle(emotion));
-      }
     }
 
-    function createSparkle(emotion) {
-      return {
-        x: random(windowWidth),
-        y: random(windowHeight),
-        size: random(5, 20), // サイズを1/10に縮小
-        color: sparkleColors[emotion],
-        filled: random() > 0.5, // ランダムに塗りつぶしあり/なし
-        shape: random(['circle', 'star', 'hexagon', 'diamond']), // ランダムな形
-        startTime: millis()
-      };
-    }
-
-    function drawSparkle(sparkle) {
-      push();
-      noStroke();
-      fill(sparkle.color);
-      if (!sparkle.filled) {
-        noFill();
-        stroke(sparkle.color); // アウトラインの色を変更
-      }
-
-      translate(sparkle.x, sparkle.y);
-      let halfSize = sparkle.size / 2;
-
-      // 各形状を描画
-      switch (sparkle.shape) {
-        case 'circle':
-          ellipse(0, 0, sparkle.size);
-          break;
-        case 'star':
-          drawStar(halfSize, halfSize * 0.5);
-          break;
-        case 'hexagon':
-          drawPolygon(6, halfSize);
-          break;
-        case 'diamond':
-          rotate(PI / 4);
-          rect(0, 0, sparkle.size, sparkle.size);
-          break;
-      }
-      pop();
-    }
-
-    function drawStar(radius1, radius2) {
-      beginShape();
-      for (let i = 0; i < 10; i++) {
-        let angle = TWO_PI / 10 * i;
-        let r = i % 2 === 0 ? radius1 : radius2;
-        let x = cos(angle) * r;
-        let y = sin(angle) * r;
-        vertex(x, y);
-      }
-      endShape(CLOSE);
-    }
-
-    function drawPolygon(npoints, radius) {
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += TWO_PI / npoints) {
-        let sx = cos(a) * radius;
-        let sy = sin(a) * radius;
-        vertex(sx, sy);
-      }
-      endShape(CLOSE);
-    }
 
     function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
