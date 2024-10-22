@@ -169,7 +169,7 @@
       positionButtons();  // ボタンの配置を実行
     }
 
-  function positionButtons() {
+function positionButtons() {
   let centerX = windowWidth / 2;
   let centerY = windowHeight / 2;
 
@@ -192,7 +192,7 @@
     let y = centerY + outerRadius * sin(angle) - buttonSize / 2;
 
     buttons[outerEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-    labels[outerEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20); // ボタンの下にラベルを配置
+    labels[outerEmotions[i]].position(x, y + buttonSize + 5).style('font-size', '12px'); // ボタンの下にラベルを配置、フォントサイズ小さめ
   }
 
   // 内側の円にボタンとラベルを配置
@@ -202,7 +202,7 @@
     let y = centerY + innerRadius * sin(angle) - buttonSize / 2;
 
     buttons[innerEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-    labels[innerEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20); // ボタンの下にラベルを配置
+    labels[innerEmotions[i]].position(x, y + buttonSize + 5).style('font-size', '12px'); // ボタンの下にラベルを配置、フォントサイズ小さめ
   }
 
   // さらに外側の円に新しい感情ボタンを配置
@@ -212,7 +212,7 @@
     let y = centerY + extraRadius * sin(angle) - buttonSize / 2;
 
     buttons[extraEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-    labels[extraEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20); // ボタンの下にラベルを配置
+    labels[extraEmotions[i]].position(x, y + buttonSize + 5).style('font-size', '12px'); // ボタンの下にラベルを配置、フォントサイズ小さめ
   }
 
   // Checkボタンを画面の右下に配置
@@ -225,44 +225,39 @@ function windowResized() {
   positionButtons();  // ボタンの再配置
 }
 
-    // ウィンドウリサイズ時にキャンバスとボタンの位置を再設定
-    function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
-      positionButtons();  // ボタンの再配置
-    }
+function handleEmotionButton(emotion) {
+  // 感情のカウントを増加
+  switch (emotion) {
+    case 'Joy': countJoy++; break;
+    case 'Trust': countTrust++; break;
+    case 'Fear': countFear++; break;
+    case 'Surprise': countSurprise++; break;
+    case 'Sadness': countSadness++; break;
+    case 'Disgust': countDisgust++; break;
+    case 'Anger': countAnger++; break;
+    case 'Anticipation': countAnticipation++; break;
+    case 'Ecstasy': countEcstasy++; break;
+    case 'Adoration': countAdoration++; break;
+    case 'Terror': countTerror++; break;
+    case 'Amazement': countAmazement++; break;
+    case 'Grief': countGrief++; break;
+    case 'Loathing': countLoathing++; break;
+    case 'Rage': countRage++; break;
+    case 'Vigilance': countVigilance++; break;
+    case 'Serenity': countSerenity++; break;
+    case 'Acceptance': countAcceptance++; break;
+    case 'Apprehension': countApprehension++; break;
+    case 'Distraction': countDistraction++; break;
+    case 'Pensiveness': countPensiveness++; break;
+    case 'Boredom': countBoredom++; break;
+    case 'Annoyance': countAnnoyance++; break;
+    case 'Interest': countInterest++; break;
+  }
 
-    function handleEmotionButton(emotion) {
-      // 感情のカウントを増加
-      switch (emotion) {
-        case 'Joy': countJoy++; break;
-        case 'Trust': countTrust++; break;
-        case 'Fear': countFear++; break;
-        case 'Surprise': countSurprise++; break;
-        case 'Sadness': countSadness++; break;
-        case 'Disgust': countDisgust++; break;
-        case 'Anger': countAnger++; break;
-        case 'Anticipation': countAnticipation++; break;
-        case 'Ecstasy': countEcstasy++; break;
-        case 'Adoration': countAdoration++; break;
-        case 'Terror': countTerror++; break;
-        case 'Amazement': countAmazement++; break;
-        case 'Grief': countGrief++; break;
-        case 'Loathing': countLoathing++; break;
-        case 'Rage': countRage++; break;
-        case 'Vigilance': countVigilance++; break;
-        case 'Serenity': countSerenity++; break;
-        case 'Acceptance': countAcceptance++; break;
-        case 'Apprehension': countApprehension++; break;
-        case 'Distraction': countDistraction++; break;
-        case 'Pensiveness': countPensiveness++; break;
-        case 'Boredom': countBoredom++; break;
-        case 'Annoyance': countAnnoyance++; break;
-        case 'Interest': countInterest++; break;
-      }
+  // キラキラを生成
+  createSparkles(emotion);
+}
 
-      // キラキラを生成
-      createSparkles(emotion);
-    }
 
     function displayArtwork() {
       console.log("Display Artwork called");
