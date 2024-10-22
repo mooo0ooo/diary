@@ -170,54 +170,54 @@
     }
 
   function positionButtons() {
-    let centerX = windowWidth / 2;
-    let centerY = windowHeight / 2;
-  
-    // ボタンとラベルのサイズを画面に応じて調整
-    let buttonSize = min(windowWidth, windowHeight) * 0.1; // 画面サイズに対して10%の大きさ
-    let outerRadius = min(windowWidth, windowHeight) * 0.35; // 外側の円の半径
-    let innerRadius = min(windowWidth, windowHeight) * 0.2;  // 内側の円の半径
-    let extraRadius = outerRadius * 1.5;  // さらに外側の円
-  
-    let outerEmotions = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
-    let innerEmotions = ['ecstasy', 'adoration', 'terror', 'amazement', 'grief', 'loathing', 'rage', 'vigilance'];
-    let extraEmotions = ['serenity', 'acceptance', 'apprehension', 'distraction', 'pensiveness', 'boredom', 'annoyance', 'interest'];
-  
-    let outerOffset = -PI / 2;  // 上に配置するためのオフセット
-  
-    // 外側の円にボタンとラベルを配置
-    for (let i = 0; i < outerEmotions.length; i++) {
-      let angle = TWO_PI / outerEmotions.length * i + outerOffset;
-      let x = centerX + outerRadius * cos(angle) - buttonSize / 2;
-      let y = centerY + outerRadius * sin(angle) - buttonSize / 2;
-  
-      buttons[outerEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-      labels[outerEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20); // ボタンの下にラベルを配置
-    }
-  
-    // 内側の円にボタンとラベルを配置
-    for (let i = 0; i < innerEmotions.length; i++) {
-      let angle = TWO_PI / innerEmotions.length * i + outerOffset;
-      let x = centerX + innerRadius * cos(angle) - buttonSize / 2;
-      let y = centerY + innerRadius * sin(angle) - buttonSize / 2;
-  
-      buttons[innerEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-      labels[innerEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20); // ボタンの下にラベルを配置
-    }
-  
-    // さらに外側の円に新しい感情ボタンを配置
-    for (let i = 0; i < extraEmotions.length; i++) {
-      let angle = TWO_PI / extraEmotions.length * i + outerOffset;
-      let x = centerX + extraRadius * cos(angle) - buttonSize / 2;
-      let y = centerY + extraRadius * sin(angle) - buttonSize / 2;
-  
-      buttons[extraEmotions[i]].position(x, y).size(buttonSize, buttonSize);
-      labels[extraEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20); // ボタンの下にラベルを配置
-    }
-  
-    // Checkボタンを画面の右下に配置
-    buttons.check.position(windowWidth - buttonSize - 20, windowHeight - buttonSize - 20).size(buttonSize, buttonSize);
+  let centerX = windowWidth / 2;
+  let centerY = windowHeight / 2;
+
+  // ボタンとラベルのサイズを画面に応じて調整
+  let buttonSize = min(windowWidth, windowHeight) * 0.1; // 画面サイズに対して10%の大きさ
+  let outerRadius = min(windowWidth, windowHeight) * 0.35; // 外側の円の半径
+  let innerRadius = min(windowWidth, windowHeight) * 0.2;  // 内側の円の半径
+  let extraRadius = outerRadius * 1.5;  // さらに外側の円
+
+  let outerEmotions = ['joy', 'trust', 'fear', 'surprise', 'sadness', 'disgust', 'anger', 'anticipation'];
+  let innerEmotions = ['ecstasy', 'adoration', 'terror', 'amazement', 'grief', 'loathing', 'rage', 'vigilance'];
+  let extraEmotions = ['serenity', 'acceptance', 'apprehension', 'distraction', 'pensiveness', 'boredom', 'annoyance', 'interest'];
+
+  let outerOffset = -PI / 2;  // 上に配置するためのオフセット
+
+  // 外側の円にボタンとラベルを配置
+  for (let i = 0; i < outerEmotions.length; i++) {
+    let angle = TWO_PI / outerEmotions.length * i + outerOffset;
+    let x = centerX + outerRadius * cos(angle) - buttonSize / 2;
+    let y = centerY + outerRadius * sin(angle) - buttonSize / 2;
+
+    buttons[outerEmotions[i]].position(x, y).size(buttonSize, buttonSize);
+    labels[outerEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20); // ボタンの下にラベルを配置
   }
+
+  // 内側の円にボタンとラベルを配置
+  for (let i = 0; i < innerEmotions.length; i++) {
+    let angle = TWO_PI / innerEmotions.length * i + outerOffset;
+    let x = centerX + innerRadius * cos(angle) - buttonSize / 2;
+    let y = centerY + innerRadius * sin(angle) - buttonSize / 2;
+
+    buttons[innerEmotions[i]].position(x, y).size(buttonSize, buttonSize);
+    labels[innerEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20); // ボタンの下にラベルを配置
+  }
+
+  // さらに外側の円に新しい感情ボタンを配置
+  for (let i = 0; i < extraEmotions.length; i++) {
+    let angle = TWO_PI / extraEmotions.length * i + outerOffset;
+    let x = centerX + extraRadius * cos(angle) - buttonSize / 2;
+    let y = centerY + extraRadius * sin(angle) - buttonSize / 2;
+
+    buttons[extraEmotions[i]].position(x, y).size(buttonSize, buttonSize);
+    labels[extraEmotions[i]].position(x, y + buttonSize + 5).size(buttonSize, 20); // ボタンの下にラベルを配置
+  }
+
+  // Checkボタンを画面の右下に配置
+  buttons.check.position(windowWidth - buttonSize - 20, windowHeight - buttonSize - 20).size(buttonSize, buttonSize);
+}
 
 // ウィンドウリサイズ時に再配置
 function windowResized() {
