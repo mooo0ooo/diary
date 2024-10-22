@@ -250,7 +250,7 @@ function positionButtons() {
   let innerEmotions = ['ecstasy', 'adoration', 'terror', 'amazement', 'grief', 'loathing', 'rage', 'vigilance'];
   
   // 外側のボタンを配置
-  let outerOffset = -PI / 8; // Joyを上にするためのオフセット
+  let outerOffset = -PI / 2; // Joyを上にするためのオフセット
   for (let i = 0; i < outerEmotions.length; i++) {
     let angle = TWO_PI / outerEmotions.length * i + outerOffset;
     let x = centerX + outerRadius * cos(angle) - buttonSize / 2;
@@ -262,7 +262,7 @@ function positionButtons() {
   }
 
   // 内側のボタンを配置
-  let innerOffset = -PI / 8; // Ecstasyを上にするためのオフセット
+  let innerOffset = -PI / 2; // Ecstasyを上にするためのオフセット
   for (let i = 0; i < innerEmotions.length; i++) {
     let angle = TWO_PI / innerEmotions.length * i + innerOffset;
     let x = centerX + innerRadius * cos(angle) - buttonSize / 2;
