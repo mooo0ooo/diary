@@ -34,6 +34,7 @@
     let negativeCount = 0;
     let selectedEmotionCounts = {};  // 各感情のクリック数
     let mostSelectedEmotion = '';    // 最も多くクリックされた感情
+    let selectedBackground;          // 選択された背景画像
 
     function preload() {
       // 背景画像やモチーフ画像の読み込み
@@ -90,12 +91,17 @@
 
     function draw() {
       clear();
-      background(255); // 白背景
-      translate(width / 2, height / 2);
+      if (selectedBackground) {
+        // 背景画像を表示
+        image(selectedBackground, 0, 0, width, height);
+      } else {
+        background(255); // 白背景
+        translate(width / 2, height / 2);
 
-      drawEmotionCircle(emotionsA, radiusA);
-      drawEmotionCircle(emotionsB, radiusB);
-      drawEmotionCircle(emotionsC, radiusC);
+        drawEmotionCircle(emotionsA, radiusA);
+        drawEmotionCircle(emotionsB, radiusB);
+        drawEmotionCircle(emotionsC, radiusC);
+      }
     }
 
     function drawEmotionCircle(emotions, radius) {
@@ -114,11 +120,11 @@
     function createEmotionButtons() {
       // 感情ごとのモチーフ画像をボタンとして作成
       for (let emotion of positiveEmotions) {
-        buttons[emotion.toLowerCase()] = createImg(motifImages[emotion].url).mousePressed(() => handleEmotionButton(emotion));
+        buttons[emotion] = createImg(motifImages[emotion].url).mousePressed(() => handleEmotionButton(emotion));
       }
 
       for (let emotion of negativeEmotions) {
-        buttons[emotion.toLowerCase()] = createImg(motifImages[emotion].url).mousePressed(() => handleEmotionButton(emotion));
+        buttons[emotion] = createImg(motifImages[emotion].url).mousePressed(() => handleEmotionButton(emotion));
       }
 
       // ボタンのサイズを設定
@@ -127,7 +133,7 @@
       }
     }
 
-    function calculateSizes() {
+        function calculateSizes() {
       // デバイスに基づくサイズ調整
       let minDim = min(windowWidth, windowHeight);
       radiusA = minDim * 0.15;  // 内側の円
@@ -170,9 +176,6 @@
         selectedBackground = backgroundImages[3];  // ＋:－ = 0:10
       }
 
-      // 背景画像を描画
-      background(selectedBackground);
-
       // 最も多く押された感情のモチーフ画像を中央に表示
       let motif = motifImages[mostSelectedEmotion];
       image(motif, width / 2 - 100, height / 2 - 100, 200, 200);  // 200x200の正方形で表示
@@ -186,4 +189,3 @@
   </script>
 </body>
 </html>
-
