@@ -12,7 +12,7 @@
     .emotion-label {
       text-align: center;
       color: black;
-      font-size: 12px; 
+      font-size: 12px;  /* フォントサイズを調整 */
       position: absolute;
     }
     #download-btn {
@@ -314,8 +314,22 @@
         emotionsC = emotionsC_en;
         select('#language-btn').html('Japanese');  // ボタンをJapaneseに変更
       }
-      // 再描画
+      // ラベルの再設定
+      updateEmotionLabels();
       draw();
+    }
+
+    // ラベルを再設定する関数
+    function updateEmotionLabels() {
+      for (let i = 0; i < emotionsA.length; i++) {
+        labels[emotionsA_en[i]].html(emotionsA[i]);  // 英語キーに対応するラベルを日本語/英語に更新
+      }
+      for (let i = 0; i < emotionsB.length; i++) {
+        labels[emotionsB_en[i]].html(emotionsB[i]);
+      }
+      for (let i = 0; i < emotionsC.length; i++) {
+        labels[emotionsC_en[i]].html(emotionsC[i]);
+      }
     }
 
     function windowResized() {
