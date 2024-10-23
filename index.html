@@ -109,9 +109,20 @@
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);  // Checkボタンの位置を調整
     }
 
-    // 横に8つずつ並べる関数
+    // 画面幅に基づいて列数を調整する関数
+    function getColCount() {
+      if (windowWidth > 1200) {
+        return 8;  // デスクトップ画面では1行に8つ並べる
+      } else if (windowWidth > 800) {
+        return 6;  // タブレット画面では1行に6つ並べる
+      } else {
+        return 4;  // スマートフォンでは1行に4つ並べる
+      }
+    }
+
+    // 感情ボタンをデバイスに応じた列数で並べる関数
     function drawEmotionGrid(emotions, row) {
-      let colCount = 8;  // 1行に並べるボタンの数
+      let colCount = getColCount();  // 画面幅に基づいて列数を取得
       let xOffset = 20;  // 横方向の余白
       let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
 
@@ -120,7 +131,7 @@
         let y = row * (emotionSize + yOffset) + yOffset;
         
         buttons[emotions[i]].position(x, y);
-        labels[emotions[i]].position(x + emotionSize/ 2 - 20, y + emotionSize + 5);  // ラベルの位置をボタンの中央に揃える
+        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央に揃える
       }
     }
 
@@ -243,7 +254,7 @@
 
       let imgWidth, imgHeight;
 
-      if(imgAspect > canvasAspect) {
+      if (imgAspect > canvasAspect) {
         imgWidth = width;
         imgHeight = width / imgAspect;
       } else {
@@ -271,5 +282,3 @@
   </script>
 </body>
 </html>
-
-
