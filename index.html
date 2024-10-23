@@ -116,7 +116,23 @@
       }
     }
 
-    function drawEmotionGrid(emotions, row) {
+// 画面幅に基づいて列数を調整する関数
+function getColCount() {
+  let colCount;
+  if (windowWidth > 1200) {
+    colCount = 8;  // デスクトップ画面では1行に8つ並べる
+  } else if (windowWidth > 800) {
+    colCount = 6;  // タブレット画面では1行に6つ並べる
+  } else if (windowWidth > 600) {
+    colCount = 4;  // スマートフォンでも幅が広い画面では4つ
+  } else {
+    colCount = 2;  // 画面幅が小さい場合は2列に制限
+  }
+  return colCount;
+}
+    
+   // 感情ボタンをデバイスに応じた列数で並べる関数
+function drawEmotionGrid(emotions, row) {
   let colCount = getColCount();  // 画面幅に基づいて列数を取得
   let xOffset = 20;  // 横方向の余白
   let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
@@ -135,7 +151,6 @@
     labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央に揃える
   }
 }
-
     function createEmotionButtons() {
       buttons['Joy'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png', 'Joy').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Joy'));
       labels['Joy'] = createDiv('Joy').addClass('emotion-label');
