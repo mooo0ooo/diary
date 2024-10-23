@@ -31,14 +31,31 @@
 </head>
 <body>
   <button id="download-btn">画像をダウンロード</button>
+  <button id="language-btn" style="position: absolute; top: 50px; left: 50%; transform: translateX(-50%); padding: 10px 20px; background-color: #2196F3; color: white; border: none; cursor: pointer;">Japanese</button>
+  
   <script>
     let backgroundImages = [];
     let motifImages = [];
-    let emotionsA = ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'];
-    let emotionsB = ['Ecstasy', 'Adoration', 'Terror', 'Amazement', 'Grief', 'Loathing', 'Rage', 'Vigilance'];
-    let emotionsC = ['Serenity', 'Acceptance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance', 'Interest'];
+
+    // 感情ラベルの英語と日本語
+    let emotionsA_en = ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'];
+    let emotionsA_ja = ['喜び', '信頼', '恐れ', '驚き', '悲しみ', '嫌悪', '怒り', '期待'];
+    let emotionsB_en = ['Ecstasy', 'Adoration', 'Terror', 'Amazement', 'Grief', 'Loathing', 'Rage', 'Vigilance'];
+    let emotionsB_ja = ['狂喜', '崇拝', '恐怖', '驚愕', '深い悲しみ', '嫌悪感', '激怒', '警戒'];
+    let emotionsC_en = ['Serenity', 'Acceptance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance', 'Interest'];
+    let emotionsC_ja = ['静けさ', '受け入れ', '不安', '気晴らし', '瞑想', '退屈', '苛立ち', '関心'];
+
+    // 現在の言語モード（デフォルトは英語）
+    let currentLanguage = 'en';
+
+    // 感情の配列（初期値は英語）
+    let emotionsA = emotionsA_en;
+    let emotionsB = emotionsB_en;
+    let emotionsC = emotionsC_en;
+
     let positiveEmotions = ['Joy', 'Trust', 'Surprise', 'Anticipation', 'Ecstasy', 'Adoration', 'Amazement', 'Serenity', 'Acceptance', 'Interest'];
     let negativeEmotions = ['Fear', 'Sadness', 'Disgust', 'Anger', 'Terror', 'Grief', 'Loathing', 'Rage', 'Vigilance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance'];
+
     let selectedEmotions = {};  // 各感情の選択回数を保存するオブジェクト
     let selectedMotif = []; // 押されたモチーフを保存する配列
     let positiveCount = 0;
@@ -92,6 +109,9 @@
       checkButton = createButton('Check');
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
       checkButton.mousePressed(displayResult);
+
+      // 言語切り替えボタンのイベントリスナーを設定
+      select('#language-btn').mousePressed(toggleLanguage);
     }
 
     function draw() {
@@ -275,6 +295,27 @@
       downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
 
       isResultDisplayed = true;
+    }
+
+    // 言語切り替えの関数
+    function toggleLanguage() {
+      if (currentLanguage === 'en') {
+        // 日本語に切り替え
+        currentLanguage = 'ja';
+        emotionsA = emotionsA_ja;
+        emotionsB = emotionsB_ja;
+        emotionsC = emotionsC_ja;
+        select('#language-btn').html('English');  // ボタンをEnglishに変更
+      } else {
+        // 英語に切り替え
+        currentLanguage = 'en';
+        emotionsA = emotionsA_en;
+        emotionsB = emotionsB_en;
+        emotionsC = emotionsC_en;
+        select('#language-btn').html('Japanese');  // ボタンをJapaneseに変更
+      }
+      // 再描画
+      draw();
     }
 
     function windowResized() {
