@@ -237,18 +237,72 @@
     }
 
     function displayResult() {
-      let totalCount = positiveCount + negativeCount;
-      let positiveRatio = totalCount > 0 ? positiveCount / totalCount : 0;
+  let totalCount = positiveCount + negativeCount;
+  let positiveRatio = totalCount > 0 ? positiveCount / totalCount : 0;
 
-      if (positiveRatio === 1) {
-        backgroundChoice = 0;
-      } else if (positiveRatio >= 0.6) {
-        backgroundChoice = 1;
-      } else if (positiveRatio >= 0.4) {
-        backgroundChoice = 2;
-      } else {
-        backgroundChoice = 3;
-      }
+  // 背景の選択ロジック
+  if (positiveRatio === 1) {
+    backgroundChoice = 0;
+  } else if (positiveRatio >= 0.6) {
+    backgroundChoice = 1;
+  } else if (positiveRatio >= 0.4) {
+    backgroundChoice = 2;
+  } else {
+    backgroundChoice = 3;
+  }
+
+  // 選択されたモチーフの決定
+  let motifCounts = selectedMotif.reduce((acc, motif) => {
+    acc[motif] = (acc[motif] || 0) + 1;
+    return acc;
+  }, {});
+
+  motifChoice = selectedMotif.length > 0 ? 
+    Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b) : 
+    'Joy';
+
+  clear();  // キャンバスをクリア
+
+  // 背景画像の表示
+  let img = backgroundImages[backgroundChoice];
+  let imgAspect = img.width / img.height;
+  let canvasAspect = width / height;
+
+  let imgWidth, imgHeight;
+
+  // 背景画像をキャンバス全体に表示するロジック
+  if (imgAspect > canvasAspect) {
+    imgWidth = width;
+    imgHeight = width / imgAspect;
+  } else {
+    imgHeight = height;
+    imgWidth = height * imgAspect;
+  }
+
+  image(img, 0, 0, imgWidth, imgHeight);  // 背景画像の描画
+
+  // モチーフ画像を中央に配置
+  let motifImg = motifImages[motifChoice];
+  image(motifImg, (width - motifImg.width) / 2, (height - motifImg.height) / 2);
+
+  // ボタンとラベルを非表示にする
+  hideUI();  // UIを隠す関数を呼び出す
+
+  let downloadBtn = select('#download-btn');
+  downloadBtn.style('display', 'block');
+  downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
+
+  isResultDisplayed = true;
+}
+
+function hideUI() {
+  for (let key in buttons) {
+    buttons[key].hide();  // ボタンを非表示
+    labels[key].hide();   // ラベルを非表示
+  }
+  checkButton.hide();  // Checkボタンを非表示
+}
+
 
       let motifCounts = selectedMotif.reduce((acc, motif) => {
         acc[motif] = (acc[motif] || 0) + 1;
