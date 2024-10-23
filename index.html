@@ -90,7 +90,7 @@
 
       // 中央にCheckボタンを作成
       checkButton = createButton('Check');
-      checkButton.position(windowWidth / 2 - 50, windowHeight / 2 - 20);
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
       checkButton.mousePressed(displayResult);
     }
 
@@ -113,14 +113,14 @@
     function drawEmotionGrid(emotions, row) {
       let colCount = 8;  // 1行に並べるボタンの数
       let xOffset = 20;  // 横方向の余白
-      let yOffset = 80;  // 縦方向の余白
+      let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
 
       for (let i = 0; i < emotions.length; i++) {
         let x = (i % colCount) * (emotionSize + xOffset) + xOffset;
         let y = row * (emotionSize + yOffset) + yOffset;
         
         buttons[emotions[i]].position(x, y);
-        labels[emotions[i]].position(x, y + emotionSize + 5);
+        labels[emotions[i]].position(x + emotionSize / 2 - 10, y + emotionSize + 5);  // ボタンの中心にラベルがくるように調整
       }
     }
 
@@ -263,7 +263,8 @@
     }
 
     function calculateSizes() {
-      emotionSize = max(min(windowWidth, windowHeight) / 12, 40); 
+      // ボタンのサイズを少し小さく調整
+      emotionSize = max(min(windowWidth, windowHeight) / 15, 30); 
     }
 
     function windowResized() {
