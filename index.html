@@ -267,6 +267,9 @@
       Object.values(labels).forEach(label => label.hide());
       checkButton.hide();
 
+      let languageBtn = select('#language-btn');
+    　languageBtn.hide();
+      
       // Display background
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
@@ -283,7 +286,6 @@
 
       image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
       
-      // Display motif in the center
       image(motifImages[motifChoice], width / 2 - motifImages[motifChoice].width / 2, height / 2 - motifImages[motifChoice].height / 2);
 
       let downloadBtn = select('#download-btn');
