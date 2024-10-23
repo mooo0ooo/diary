@@ -12,7 +12,7 @@
     .emotion-label {
       text-align: center;
       color: black;
-      font-size: 12px;  /* フォントサイズを調整 */
+      font-size: 16px;  
       position: absolute;
     }
     #download-btn {
@@ -37,19 +37,17 @@
     let emotionsA = ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'];
     let emotionsB = ['Ecstasy', 'Adoration', 'Terror', 'Amazement', 'Grief', 'Loathing', 'Rage', 'Vigilance'];
     let emotionsC = ['Serenity', 'Acceptance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance', 'Interest'];
-    let positiveEmotions = ['Joy', 'Trust', 'Surprise', 'Anticipation', 'Ecstasy', 'Adoration', 'Amazement', 'Serenity', 'Acceptance', 'Interest'];
-    let negativeEmotions = ['Fear', 'Sadness', 'Disgust', 'Anger', 'Terror', 'Grief', 'Loathing', 'Rage', 'Vigilance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance'];
-    let selectedEmotions = {};  // 各感情の選択回数を保存するオブジェクト
-    let selectedMotif = []; // 押されたモチーフを保存する配列
+    let selectedEmotions = {};
+    let selectedMotif = [];
     let positiveCount = 0;
     let negativeCount = 0;
     let backgroundChoice = 0;
     let motifChoice = '';
-    let emotionSize = 80;  // ボタンサイズを固定
-    let buttons = {};  // 感情ボタンのオブジェクト
-    let labels = {};   // 感情名ラベルのオブジェクト
-    let checkButton;   // 中央のCheckボタン
-    let isResultDisplayed = false;  // 結果表示状態を管理
+    let buttons = {};
+    let labels = {};
+    let checkButton;
+    let isResultDisplayed = false;
+    let emotionSize = 80;
 
     function preload() {
       // 背景画像やモチーフ画像の読み込み
@@ -84,54 +82,51 @@
       motifImages['Interest'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG');
     }
 
-    function setup() {
+        function setup() {
       createCanvas(windowWidth, windowHeight);
       createEmotionButtons();
 
-      // 中央にCheckボタンを作成
       checkButton = createButton('Check');
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
       checkButton.mousePressed(displayResult);
     }
 
     function draw() {
-      if (isResultDisplayed) {
-        return; // 結果が表示された後はdraw()で何もしない
-      }
-      
-      background(255); // 白背景
+      if (isResultDisplayed) return;
+      background(255);
       clear();
 
       drawEmotionGrid(emotionsA, 0);
       drawEmotionGrid(emotionsB, 1);
       drawEmotionGrid(emotionsC, 2);
 
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);  // Checkボタンの位置を調整
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
     }
 
-    // 画面幅に基づいて列数を調整する関数
     function getColCount() {
       if (windowWidth > 1200) {
-        return 8;  // デスクトップ画面では1行に8つ並べる
+        emotionSize = 80;
+        return 8;
       } else if (windowWidth > 800) {
-        return 6;  // タブレット画面では1行に6つ並べる
+        emotionSize = 70;
+        return 6;
       } else {
-        return 4;  // スマートフォンでは1行に4つ並べる
+        emotionSize = 60;
+        return 4;
       }
     }
 
-    // 感情ボタンをデバイスに応じた列数で並べる関数
     function drawEmotionGrid(emotions, row) {
-      let colCount = getColCount();  // 画面幅に基づいて列数を取得
-      let xOffset = 20;  // 横方向の余白
-      let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
+      let colCount = getColCount();
+      let xOffset = 20;
+      let yOffset = 120;
 
       for (let i = 0; i < emotions.length; i++) {
         let x = (i % colCount) * (emotionSize + xOffset) + xOffset;
         let y = row * (emotionSize + yOffset) + yOffset;
         
-        buttons[emotions[i]].position(x, y);
-        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央に揃える
+        buttons[emotions[i]].size(emotionSize, emotionSize).position(x, y);
+        labels[emotions[i]].style('font-size', `${emotionSize / 6}px`).position(x + emotionSize / 2 - 20, y + emotionSize + 5);
       }
     }
 
@@ -218,7 +213,7 @@
 
       if (positiveEmotions.includes(emotion)) {
         positiveCount++;
-      } else if (negativeEmotions.includes(emotion)) {
+      } else {
         negativeCount++;
       }
     }
@@ -237,17 +232,7 @@
         backgroundChoice = 3;
       }
 
-      let motifCounts = selectedMotif.reduce((acc, motif) => {
-        acc[motif] = (acc[motif] || 0) + 1;
-        return acc;
-      }, {});
-
-      motifChoice = selectedMotif.length > 0 ? 
-        Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b) : 
-        'Joy';
-
       clear();
-
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
       let canvasAspect = width / height;
@@ -263,7 +248,7 @@
       }
 
       image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
-      
+
       image(motifImages[motifChoice], width / 2 - motifImages[motifChoice].width / 2, height / 2 - motifImages[motifChoice].height / 2);
 
       let downloadBtn = select('#download-btn');
