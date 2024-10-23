@@ -120,14 +120,18 @@
       }
     }
 
-    // 感情ボタンをデバイスに応じた列数で並べる関数
+    // 感情ボタンをデバイスに応じた列数で並べ、中央揃えにする関数
     function drawEmotionGrid(emotions, row) {
       let colCount = getColCount();  // 画面幅に基づいて列数を取得
       let xOffset = 20;  // 横方向の余白
       let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
+      
+      // ボタン全体の幅を計算し、中央に揃えるためのxオフセット
+      let totalRowWidth = (colCount * emotionSize) + ((colCount - 1) * xOffset);
+      let startX = (windowWidth - totalRowWidth) / 2;  // 左からのオフセット（中央揃え）
 
       for (let i = 0; i < emotions.length; i++) {
-        let x = (i % colCount) * (emotionSize + xOffset) + xOffset;
+        let x = startX + (i % colCount) * (emotionSize + xOffset);
         let y = row * (emotionSize + yOffset) + yOffset;
         
         buttons[emotions[i]].position(x, y);
@@ -282,4 +286,3 @@
   </script>
 </body>
 </html>
-
