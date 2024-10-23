@@ -117,18 +117,24 @@
     }
 
     function drawEmotionGrid(emotions, row) {
-      let colCount = getColCount();
-      let xOffset = 20;
-      let yOffset = 120;
+  let colCount = getColCount();  // 画面幅に基づいて列数を取得
+  let xOffset = 20;  // 横方向の余白
+  let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
 
-      for (let i = 0; i < emotions.length; i++) {
-        let x = (i % colCount) * (emotionSize + xOffset) + xOffset;
-        let y = row * (emotionSize + yOffset) + yOffset;
-        
-        buttons[emotions[i]].size(emotionSize, emotionSize).position(x, y);
-        labels[emotions[i]].style('font-size', `${emotionSize / 6}px`).position(x + emotionSize / 2 - 20, y + emotionSize + 5);
-      }
-    }
+  // ボタンが配置される幅を計算
+  let rowWidth = colCount * (emotionSize + xOffset) - xOffset;
+
+  // 行全体を中央に配置するためのオフセットを計算
+  let startX = (windowWidth - rowWidth) / 2;
+
+  for (let i = 0; i < emotions.length; i++) {
+    let x = startX + (i % colCount) * (emotionSize + xOffset);
+    let y = row * (emotionSize + yOffset) + yOffset;
+    
+    buttons[emotions[i]].position(x, y);
+    labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央に揃える
+  }
+}
 
     function createEmotionButtons() {
       buttons['Joy'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png', 'Joy').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Joy'));
