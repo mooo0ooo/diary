@@ -120,31 +120,23 @@ label {
   drawEmotionGrid(emotions, row);  // 列数を再計算して再描画
 });
 
-    function getColCount() {
-      if (windowWidth > 1200) {
-        emotionSize = 80;
-        return 8;
-      } else if (windowWidth > 800) {
-        emotionSize = 70;
-        return 6;
-      } else {
-        emotionSize = 60;
-        return 4;
-      }
-    }
-
-// 画面幅に基づいて列数を調整する関数
+    // 画面幅に基づいて列数を調整する関数
 function getColCount() {
   if (windowWidth > 1200) {
-    return 8;  // デスクトップでは8列
+    emotionSize = 80;
+    return 8;
   } else if (windowWidth > 800) {
-    return 6;  // タブレットでは6列
+    emotionSize = 70;
+    return 6;
   } else if (windowWidth > 600) {
-    return 4;  // 横幅の広いスマホでは4列
+    emotionSize = 60;
+    return 4;
   } else {
-    return 2;  // スマホでは2列
+    emotionSize = 50; // 必要なら調整
+    return 2;
   }
 }
+
     
    // 感情ボタンをデバイスに応じた列数で並べる関数
 function drawEmotionGrid(emotions, row) {
@@ -161,7 +153,8 @@ function drawEmotionGrid(emotions, row) {
     let y = row * (emotionSize + yOffset) + yOffset;
     
     buttons[emotions[i]].position(x, y);  // ボタンの位置を更新
-    labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央揃え
+    labels[emotions[i]].position(x + emotionSize / 2 - labels[emotions[i]].width / 2, y + emotionSize + 5);
+  // ラベルを中央揃え
   }
 }
     function createEmotionButtons() {
@@ -293,11 +286,13 @@ function drawEmotionGrid(emotions, row) {
     }
 
     function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
-    }
+  windowWidth = window.innerWidth;
+  resizeCanvas(windowWidth, windowHeight);
+  drawEmotionGrid(emotionsA, 0);
+  drawEmotionGrid(emotionsB, 1);
+  drawEmotionGrid(emotionsC, 2);
+}
+
   </script>
 </body>
 </html>
