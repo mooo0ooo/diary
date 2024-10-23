@@ -12,9 +12,8 @@
     .emotion-label {
       text-align: center;
       color: black;
-      font-size: 16px;  
-      position: relative;
-      display: block;
+      font-size: 12px;  /* フォントサイズを調整 */
+      position: absolute;
     }
     #download-btn {
       display: none;
@@ -28,36 +27,6 @@
       border: none;
       cursor: pointer;
     }
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;  /* ボタン間の隙間 */
-    }
-
-    button, label {
-      flex-basis: calc(25% - 10px); /* 4列分のボタン */
-      text-align: center;
-    }
-
-    @media (max-width: 800px) {
-      button, label {
-        flex-basis: calc(33.33% - 10px); /* 3列分のボタン */
-      }
-    }
-
-    @media (max-width: 600px) {
-      button, label {
-        flex-basis: calc(50% - 10px); /* 2列分のボタン */
-      }
-    }
-
-    label {
-      text-align: center;  /* ラベルのテキストを中央揃え */
-      width: auto;  /* ラベルの幅を自動調整 */
-      display: block;
-    }
-
   </style>
 </head>
 <body>
@@ -68,18 +37,19 @@
     let emotionsA = ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'];
     let emotionsB = ['Ecstasy', 'Adoration', 'Terror', 'Amazement', 'Grief', 'Loathing', 'Rage', 'Vigilance'];
     let emotionsC = ['Serenity', 'Acceptance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance', 'Interest'];
-    let selectedEmotions = {};
-    let selectedMotif = [];
+    let positiveEmotions = ['Joy', 'Trust', 'Surprise', 'Anticipation', 'Ecstasy', 'Adoration', 'Amazement', 'Serenity', 'Acceptance', 'Interest'];
+    let negativeEmotions = ['Fear', 'Sadness', 'Disgust', 'Anger', 'Terror', 'Grief', 'Loathing', 'Rage', 'Vigilance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance'];
+    let selectedEmotions = {};  // 各感情の選択回数を保存するオブジェクト
+    let selectedMotif = []; // 押されたモチーフを保存する配列
     let positiveCount = 0;
     let negativeCount = 0;
     let backgroundChoice = 0;
     let motifChoice = '';
-    let buttons = {};
-    let labels = {};
-    let checkButton;
-    let isResultDisplayed = false;
-    let emotionSize = 80;
-    let windowWidth = window.innerWidth;
+    let emotionSize = 80;  // ボタンサイズを固定
+    let buttons = {};  // 感情ボタンのオブジェクト
+    let labels = {};   // 感情名ラベルのオブジェクト
+    let checkButton;   // 中央のCheckボタン
+    let isResultDisplayed = false;  // 結果表示状態を管理
 
     function preload() {
       // 背景画像やモチーフ画像の読み込み
@@ -118,59 +88,50 @@
       createCanvas(windowWidth, windowHeight);
       createEmotionButtons();
 
+      // 中央にCheckボタンを作成
       checkButton = createButton('Check');
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
       checkButton.mousePressed(displayResult);
     }
 
     function draw() {
-      if (isResultDisplayed) return;
-      background(255);
+      if (isResultDisplayed) {
+        return; // 結果が表示された後はdraw()で何もしない
+      }
+      
+      background(255); // 白背景
       clear();
 
       drawEmotionGrid(emotionsA, 0);
       drawEmotionGrid(emotionsB, 1);
       drawEmotionGrid(emotionsC, 2);
 
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);  // Checkボタンの位置を調整
     }
 
-    window.addEventListener('resize', function() {
-      windowWidth = window.innerWidth;
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
-    });
-
+    // 画面幅に基づいて列数を調整する関数
     function getColCount() {
       if (windowWidth > 1200) {
-        emotionSize = 80;
-        return 8;
+        return 8;  // デスクトップ画面では1行に8つ並べる
       } else if (windowWidth > 800) {
-        emotionSize = 70;
-        return 6;
-      } else if (windowWidth > 600) {
-        emotionSize = 60;
-        return 4;
+        return 6;  // タブレット画面では1行に6つ並べる
       } else {
-        emotionSize = 50;
-        return 2;
+        return 4;  // スマートフォンでは1行に4つ並べる
       }
     }
 
+    // 感情ボタンをデバイスに応じた列数で並べる関数
     function drawEmotionGrid(emotions, row) {
-      let colCount = getColCount();
-      let xOffset = 20;
-      let yOffset = 120;
-      let rowWidth = colCount * (emotionSize + xOffset) - xOffset;
-      let startX = (windowWidth - rowWidth) / 2;
+      let colCount = getColCount();  // 画面幅に基づいて列数を取得
+      let xOffset = 20;  // 横方向の余白
+      let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
 
-            for (let i = 0; i < emotions.length; i++) {
-        let x = startX + (i % colCount) * (emotionSize + xOffset);
+      for (let i = 0; i < emotions.length; i++) {
+        let x = (i % colCount) * (emotionSize + xOffset) + xOffset;
         let y = row * (emotionSize + yOffset) + yOffset;
-
-        buttons[emotions[i]].position(x, y);  // ボタンの位置を更新
-        labels[emotions[i]].position(x + emotionSize / 2 - labels[emotions[i]].width / 2, y + emotionSize + 5);  // ラベルを中央揃え
+        
+        buttons[emotions[i]].position(x, y);
+        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央に揃える
       }
     }
 
@@ -199,7 +160,53 @@
       buttons['Anticipation'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG', 'Anticipation').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Anticipation'));
       labels['Anticipation'] = createDiv('Anticipation').addClass('emotion-label');
 
-      // 省略: 他のボタンのセットアップも同様に追加
+      buttons['Ecstasy'] = createImg('https://mooo0ooo.github.io/diary/rose.PNG', 'Ecstasy').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Ecstasy'));
+      labels['Ecstasy'] = createDiv('Ecstasy').addClass('emotion-label');
+
+      buttons['Adoration'] = createImg('https://mooo0ooo.github.io/diary/tulip.PNG', 'Adoration').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Adoration'));
+      labels['Adoration'] = createDiv('Adoration').addClass('emotion-label');
+
+      buttons['Terror'] = createImg('https://mooo0ooo.github.io/diary/yellowFlower.PNG', 'Terror').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Terror'));
+      labels['Terror'] = createDiv('Terror').addClass('emotion-label');
+
+      buttons['Amazement'] = createImg('https://mooo0ooo.github.io/diary/clover.PNG', 'Amazement').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Amazement'));
+      labels['Amazement'] = createDiv('Amazement').addClass('emotion-label');
+
+      buttons['Grief'] = createImg('https://mooo0ooo.github.io/diary/futaba.PNG', 'Grief').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Grief'));
+      labels['Grief'] = createDiv('Grief').addClass('emotion-label');
+
+      buttons['Loathing'] = createImg('https://mooo0ooo.github.io/diary/mizuiroFlower.PNG', 'Loathing').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Loathing'));
+      labels['Loathing'] = createDiv('Loathing').addClass('emotion-label');
+
+      buttons['Rage'] = createImg('https://mooo0ooo.github.io/diary/blueFlower.PNG', 'Rage').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Rage'));
+      labels['Rage'] = createDiv('Rage').addClass('emotion-label');
+
+      buttons['Vigilance'] = createImg('https://mooo0ooo.github.io/diary/cherryBlossom.PNG', 'Vigilance').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Vigilance'));
+      labels['Vigilance'] = createDiv('Vigilance').addClass('emotion-label');
+
+      buttons['Serenity'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/apple.PNG', 'Serenity').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Serenity'));
+      labels['Serenity'] = createDiv('Serenity').addClass('emotion-label');
+
+      buttons['Acceptance'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/carrot.PNG', 'Acceptance').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Acceptance'));
+      labels['Acceptance'] = createDiv('Acceptance').addClass('emotion-label');
+
+      buttons['Apprehension'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/egg.PNG', 'Apprehension').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Apprehension'));
+      labels['Apprehension'] = createDiv('Apprehension').addClass('emotion-label');
+
+      buttons['Distraction'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/avocado.PNG', 'Distraction').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Distraction'));
+      labels['Distraction'] = createDiv('Distraction').addClass('emotion-label');
+
+      buttons['Pensiveness'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/broccoli.PNG', 'Pensiveness').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Pensiveness'));
+      labels['Pensiveness'] = createDiv('Pensiveness').addClass('emotion-label');
+
+      buttons['Boredom'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/turnip.PNG', 'Boredom').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Boredom'));
+      labels['Boredom'] = createDiv('Boredom').addClass('emotion-label');
+
+      buttons['Annoyance'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fork.PNG', 'Annoyance').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Annoyance'));
+      labels['Annoyance'] = createDiv('Annoyance').addClass('emotion-label');
+
+      buttons['Interest'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG', 'Interest').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Interest'));
+      labels['Interest'] = createDiv('Interest').addClass('emotion-label');
     }
 
     function handleEmotionButton(emotion) {
@@ -209,12 +216,9 @@
       selectedEmotions[emotion]++;
       selectedMotif.push(motifImages[emotion]);
 
-      let positiveEmotions = ['Joy', 'Trust', 'Surprise', 'Anticipation', 'Ecstasy', 'Adoration', 'Amazement', 'Vigilance', 'Serenity', 'Acceptance', 'Interest'];
-      let negativeEmotions = ['Fear', 'Sadness', 'Disgust', 'Anger', 'Terror', 'Grief', 'Loathing', 'Rage', 'Apprehension', 'Pensiveness', 'Boredom', 'Annoyance'];
-
       if (positiveEmotions.includes(emotion)) {
         positiveCount++;
-      } else {
+      } else if (negativeEmotions.includes(emotion)) {
         negativeCount++;
       }
     }
@@ -233,7 +237,17 @@
         backgroundChoice = 3;
       }
 
+      let motifCounts = selectedMotif.reduce((acc, motif) => {
+        acc[motif] = (acc[motif] || 0) + 1;
+        return acc;
+      }, {});
+
+      motifChoice = selectedMotif.length > 0 ? 
+        Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b) : 
+        'Joy';
+
       clear();
+
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
       let canvasAspect = width / height;
@@ -249,12 +263,8 @@
       }
 
       image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
-
-      if (selectedMotif.length > 0) {
-        for (let i = 0; i < selectedMotif.length; i++) {
-          image(selectedMotif[i], width / 2 - selectedMotif[i].width / 2, height / 2 - selectedMotif[i].height / 2);
-        }
-      }
+      
+      image(motifImages[motifChoice], width / 2 - motifImages[motifChoice].width / 2, height / 2 - motifImages[motifChoice].height / 2);
 
       let downloadBtn = select('#download-btn');
       downloadBtn.style('display', 'block');
@@ -264,7 +274,6 @@
     }
 
     function windowResized() {
-      windowWidth = window.innerWidth;
       resizeCanvas(windowWidth, windowHeight);
       drawEmotionGrid(emotionsA, 0);
       drawEmotionGrid(emotionsB, 1);
