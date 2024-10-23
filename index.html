@@ -261,6 +261,12 @@
 
       motifChoice = Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b);
 
+      if (selectedMotif.length > 0) {
+        motifChoice = Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b);
+      } else {
+        motifChoice = 'Joy';  
+      }
+
       // 画面をクリアして結果を表示
       clear();
       background(backgroundImages[backgroundChoice]);
@@ -268,7 +274,7 @@
 
       // ダウンロードボタンを表示
       let downloadBtn = select('#download-btn');
-      downloadBtn.show();
+      downloadBtn.style('display', 'block');
       downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
 
       isResultDisplayed = true;
