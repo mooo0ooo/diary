@@ -101,33 +101,34 @@
       motifImages['Interest'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG');
     }
 
-    function setup() {
-      createCanvas(windowWidth, windowHeight);
-      createEmotionButtons();
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  createEmotionButtons();
 
-      // 中央にCheckボタンを作成
-      checkButton = createButton('Check');
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
-      checkButton.mousePressed(displayResult);
+  // Checkボタンを正しく作成し、イベントを設定
+  checkButton = createButton('Check');
+  checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+  checkButton.mousePressed(displayResult);  // displayResult() が呼び出されるように設定
 
-      // 言語切り替えボタンのイベントリスナーを設定
-      select('#language-btn').mousePressed(toggleLanguage);
-    }
+  // 言語切り替えボタンのイベント設定
+  select('#language-btn').mousePressed(toggleLanguage);
+}
 
-    function draw() {
-      if (isResultDisplayed) {
-        return; // 結果が表示された後はdraw()で何もしない
-      }
-      
-      background(255); // 白背景
-      clear();
 
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
+function draw() {
+  if (isResultDisplayed) {
+    return; // 結果が表示された後はdraw()で何もしない
+  }
+  
+  clear();  // clear() で描画をリセット
+  
+  drawEmotionGrid(emotionsA, 0);
+  drawEmotionGrid(emotionsB, 1);
+  drawEmotionGrid(emotionsC, 2);
 
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);  // Checkボタンの位置を調整
-    }
+  checkButton.position(windowWidth / 2 - 50, windowHeight - 100);  // Checkボタンの位置を調整
+}
+
 
     // 画面幅に基づいて列数を調整する関数
     function getColCount() {
