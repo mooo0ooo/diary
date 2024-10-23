@@ -291,15 +291,15 @@ function displayResult() {
   
   image(motifImages[motifChoice], width / 2 - motifImages[motifChoice].width / 2, height / 2 - motifImages[motifChoice].height / 2);
 
-  // 全ての感情ボタンとラベルを非表示にする
+  // 感情ボタンとラベルを非表示にする
   for (let key in buttons) {
-    buttons[key].style('display', 'none');
-    labels[key].style('display', 'none');
+    buttons[key].style('display', 'none');  // ボタンを非表示
+    labels[key].style('display', 'none');   // ラベルを非表示
   }
 
-  // Checkボタンと言語切り替えボタンを非表示にする
-  checkButton.style('display', 'none');
-  select('#language-btn').style('display', 'none');
+  // Checkボタンと言語切り替えボタンも非表示にする
+  checkButton.hide();  // p5.jsのボタン非表示メソッドを使用
+  select('#language-btn').style('display', 'none');  // 言語切り替えボタンを非表示
 
   // ダウンロードボタンを表示
   let downloadBtn = select('#download-btn');
@@ -308,6 +308,7 @@ function displayResult() {
 
   isResultDisplayed = true;
 }
+
 
 
 
