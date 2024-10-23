@@ -120,7 +120,7 @@
         let y = sin(angle) * radius;
 
         buttons[emotions[i]].position(width / 2 + x - emotionSize / 2, height / 2 + y - emotionSize / 2);
-        labels[emotions[i]].position(width / 2 + x - emotionSize / 2, height / 2 + y + emotionSize / 2);
+        labels[emotions[i]].position(width / 2 + x - emotionSize / 2, height / 2 + y + emotionSize / 2 + 10);
       }
     }
 
@@ -282,22 +282,23 @@
     }
 
     function calculateSizes() {
-      // デバイスに基づくサイズ調整
       let smallestDimension = min(windowWidth, windowHeight);
-      radiusA = smallestDimension / 3;  // 内側の円
-      radiusB = radiusA * 0.75;   // 中間の円
-      radiusC = radiusB * 0.75;  // 外側の円
-      emotionSize = smallestDimension / 12; // ボタンのサイズを決定
+      radiusA = smallestDimension / 3;
+      radiusB = radiusA * 0.75;
+      radiusC = radiusB * 0.75;
+      emotionSize = max(smallestDimension / 12, 40); 
     }
 
+
     function windowResized() {
-      // ウィンドウサイズが変更された際にキャンバスとサイズを調整
       resizeCanvas(windowWidth, windowHeight);
       calculateSizes();
+      // 位置の再計算
       drawEmotionCircle(emotionsA, radiusA);
       drawEmotionCircle(emotionsB, radiusB);
       drawEmotionCircle(emotionsC, radiusC);
     }
+
   </script>
 </body>
 </html>
