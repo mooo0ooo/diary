@@ -235,7 +235,6 @@
       } else if (negativeEmotions.includes(emotion)) {
         negativeCount++;
       }
-      console.log(${emotion} ボタンが押されました);
     }
 
     function displayResult() {
@@ -259,13 +258,11 @@
         return acc;
       }, {});
 
-      motifChoice = Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b);
+      motifChoice = selectedMotif.length > 0 ? 
+    Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b) : 
+    'Joy';
 
-      if (selectedMotif.length > 0) {
-        motifChoice = Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b);
-    } else {
-        motifChoice = 'Joy';  
-    }
+
 
 
       // 画面をクリアして結果を表示
