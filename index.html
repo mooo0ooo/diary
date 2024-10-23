@@ -100,8 +100,8 @@
         return; // 結果が表示された後はdraw()で何もしない
       }
       
-      clear();
       background(255); // 白背景
+      clear();
       translate(width / 2, height / 2);
 
       drawEmotionCircle(emotionsA, radiusA);
@@ -210,10 +210,10 @@
       buttons['Ecstasy'] = createImg('https://mooo0ooo.github.io/diary/rose.PNG').mousePressed(() => handleEmotionButton('Ecstasy', 'rose'));
       buttons['Adoration'] = createImg('https://mooo0ooo.github.io/diary/tulip.PNG').mousePressed(() => handleEmotionButton('Adoration', 'tulip'));
       buttons['Terror'] = createImg('https://mooo0ooo.github.io/diary/yellowFlower.PNG').mousePressed(() => handleEmotionButton('Terror', 'yellowFlower'));
-      buttons['Amazement'] = createImg('https://mooo0ooo.github.io/diary/clover.PNG').mousePressed(() => handleEmotionButton('Amazement', 'clover');
+      buttons['Amazement'] = createImg('https://mooo0ooo.github.io/diary/clover.PNG').mousePressed(() => handleEmotionButton('Amazement', 'clover'));
       buttons['Grief'] = createImg('https://mooo0ooo.github.io/diary/futaba.PNG').mousePressed(() => handleEmotionButton('Grief', 'futaba'));
       buttons['Loathing'] = createImg('https://mooo0ooo.github.io/diary/mizuiroFlower.PNG').mousePressed(() => handleEmotionButton('Loathing', 'mizuiroFlower'));
-      buttons['Rage'] = createImg('https://mooo0ooo.github.io/diary/blueFlower.PNG').mousePressed(() => handleEmotionButton('Rage', blueFlower));
+      buttons['Rage'] = createImg('https://mooo0ooo.github.io/diary/blueFlower.PNG').mousePressed(() => handleEmotionButton('Rage', 'blueFlower'));
       buttons['Vigilance'] = createImg('https://mooo0ooo.github.io/diary/cherryBlossom.PNG').mousePressed(() => handleEmotionButton('Vigilance', 'cherryBlossom'));
       buttons['Serenity'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/apple.PNG').mousePressed(() => handleEmotionButton('Serenity', 'apple'));
       buttons['Acceptance'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/carrot.PNG').mousePressed(() => handleEmotionButton('Acceptance', 'carrot'));
@@ -263,9 +263,10 @@
 
       if (selectedMotif.length > 0) {
         motifChoice = Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b);
-      } else {
+    } else {
         motifChoice = 'Joy';  
-      }
+    }
+
 
       // 画面をクリアして結果を表示
       clear();
