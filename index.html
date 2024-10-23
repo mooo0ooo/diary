@@ -239,6 +239,7 @@
     }
 
     function displayResult() {
+      
       // ポジティブとネガティブの比率から背景を決定
       let totalCount = positiveCount + negativeCount;
       let positiveRatio = totalCount > 0 ? positiveCount / totalCount : 0;
@@ -259,19 +260,21 @@
         return acc;
       }, {});
 
-      motifChoice = Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b);
-
       if (selectedMotif.length > 0) {
         motifChoice = Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b);
-    } else {
+      } else {
         motifChoice = 'Joy';  
-    }
+      }
 
+      for (let emotion in buttons) {
+        buttons[emotion].hide();
+        labels[emotion].hide();
+      }
 
       // 画面をクリアして結果を表示
       clear();
       background(backgroundImages[backgroundChoice]);
-      image(motifImages[motifChoice], width / 2 - motifImages[motifChoice].width / 2, height / 2 - motifImages[motifChoice].height / 2);
+      image(motifImages[motifChoice], 0, 0, width, height);
 
       // ダウンロードボタンを表示
       let downloadBtn = select('#download-btn');
