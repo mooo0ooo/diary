@@ -27,6 +27,16 @@
       border: none;
       cursor: pointer;
     }
+    button, label {
+  position: absolute;  /* 位置を絶対座標で管理 */
+  display: block;  /* ブロック要素として配置 */
+}
+
+label {
+  text-align: center;  /* ラベルのテキストを中央揃え */
+  width: 100px;  /* ラベルの幅を指定（適宜調整） */
+}
+
   </style>
 </head>
 <body>
@@ -48,6 +58,7 @@
     let checkButton;
     let isResultDisplayed = false;
     let emotionSize = 80;
+    let windowWidth = window.innerWidth;
 
     function preload() {
       // 背景画像やモチーフ画像の読み込み
@@ -90,6 +101,7 @@
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
       checkButton.mousePressed(displayResult);
     }
+    
 
     function draw() {
       if (isResultDisplayed) return;
@@ -102,6 +114,11 @@
 
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
     }
+
+    window.addEventListener('resize', function() {
+  windowWidth = window.innerWidth;
+  drawEmotionGrid(emotions, row);  // 列数を再計算して再描画
+});
 
     function getColCount() {
       if (windowWidth > 1200) {
@@ -118,37 +135,33 @@
 
 // 画面幅に基づいて列数を調整する関数
 function getColCount() {
-  let colCount;
   if (windowWidth > 1200) {
-    colCount = 8;  // デスクトップ画面では1行に8つ並べる
+    return 8;  // デスクトップでは8列
   } else if (windowWidth > 800) {
-    colCount = 6;  // タブレット画面では1行に6つ並べる
+    return 6;  // タブレットでは6列
   } else if (windowWidth > 600) {
-    colCount = 4;  // スマートフォンでも幅が広い画面では4つ
+    return 4;  // 横幅の広いスマホでは4列
   } else {
-    colCount = 2;  // 画面幅が小さい場合は2列に制限
+    return 2;  // スマホでは2列
   }
-  return colCount;
 }
     
    // 感情ボタンをデバイスに応じた列数で並べる関数
 function drawEmotionGrid(emotions, row) {
-  let colCount = getColCount();  // 画面幅に基づいて列数を取得
-  let xOffset = 20;  // 横方向の余白
-  let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
+  let colCount = getColCount();  // 列数を取得
+  let xOffset = 20;  // ボタン間の横スペース
+  let yOffset = 120;  // ボタン間の縦スペース
 
-  // ボタンが配置される幅を計算
+  // ボタンの幅を基に行全体の幅を計算
   let rowWidth = colCount * (emotionSize + xOffset) - xOffset;
-
-  // 行全体を中央に配置するためのオフセットを計算
-  let startX = (windowWidth - rowWidth) / 2;
+  let startX = (windowWidth - rowWidth) / 2;  // ボタンを中央に配置
 
   for (let i = 0; i < emotions.length; i++) {
     let x = startX + (i % colCount) * (emotionSize + xOffset);
     let y = row * (emotionSize + yOffset) + yOffset;
     
-    buttons[emotions[i]].position(x, y);
-    labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央に揃える
+    buttons[emotions[i]].position(x, y);  // ボタンの位置を更新
+    labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央揃え
   }
 }
     function createEmotionButtons() {
