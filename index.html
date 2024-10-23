@@ -118,6 +118,15 @@
     }
 
     function createEmotionButtons() {
+
+    for (let emotion of [...positiveEmotions, ...negativeEmotions]) {
+    if (motifImages[emotion]) {
+      buttons[emotion] = createImg(motifImages[emotion].url).mousePressed(() => handleEmotionButton(emotion));
+    } else {
+      console.error(`モチーフ画像が見つかりません: ${emotion}`);
+    }
+  }
+      
       // 感情ごとのモチーフ画像をボタンとして作成
       for (let emotion of positiveEmotions) {
         buttons[emotion] = createImg(motifImages[emotion].url).mousePressed(() => handleEmotionButton(emotion));
