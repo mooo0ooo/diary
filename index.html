@@ -301,12 +301,14 @@ function displayResult() {
   checkButton.style('display', 'none');
   select('#language-btn').style('display', 'none');
 
+  // ダウンロードボタンを表示
   let downloadBtn = select('#download-btn');
   downloadBtn.style('display', 'block');
   downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
 
   isResultDisplayed = true;
 }
+
 
 
 
