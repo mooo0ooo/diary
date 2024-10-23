@@ -12,7 +12,7 @@
     .emotion-label {
       text-align: center;
       color: black;
-      font-size: 16px;
+      font-size: 12px; /* フォントサイズを小さく */
     }
   </style>
 </head>
@@ -131,6 +131,7 @@
       buttons['anticipation'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG').mousePressed(() => handleEmotionButton('Anticipation'));
       labels['anticipation'] = createDiv('Anticipation').addClass('emotion-label');
 
+      // EmotionsBのボタンとラベルも作成
       buttons['ecstasy'] = createImg('https://mooo0ooo.github.io/diary/rose.PNG').mousePressed(() => handleEmotionButton('Ecstasy'));
       labels['ecstasy'] = createDiv('Ecstasy').addClass('emotion-label');
 
@@ -155,6 +156,7 @@
       buttons['vigilance'] = createImg('https://mooo0ooo.github.io/diary/cherryBlossom.PNG').mousePressed(() => handleEmotionButton('Vigilance'));
       labels['vigilance'] = createDiv('Vigilance').addClass('emotion-label');
 
+      // EmotionsCのボタンとラベルも作成
       buttons['serenity'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/apple.PNG').mousePressed(() => handleEmotionButton('Serenity'));
       labels['serenity'] = createDiv('Serenity').addClass('emotion-label');
 
@@ -178,30 +180,22 @@
 
       buttons['interest'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG').mousePressed(() => handleEmotionButton('Interest'));
       labels['interest'] = createDiv('Interest').addClass('emotion-label');
-
-      // ボタンのサイズを設定
-      for (let key in buttons) {
-        buttons[key].size(emotionSize, emotionSize);
-      }
-    }
-
-    function calculateSizes() {
-      // デバイスに基づくサイズ調整
-      let minDim = min(windowWidth, windowHeight);
-      radiusA = minDim * 0.15;  // 内側の円
-      radiusB = minDim * 0.3;   // 中間の円
-      radiusC = minDim * 0.45;  // 外側の円
-      emotionSize = minDim * 0.1; // ボタンのサイズを決定
     }
 
     function handleEmotionButton(emotion) {
-      // ボタンがクリックされた時の動作
-      selectedBackground = random(backgroundImages);  // ランダムな背景画像を選択
-      selectedMotif = motifImages[emotion];           // 選択された感情に応じたモチーフ画像を選択
+      console.log(`${emotion} ボタンが押されました`);
+      // ここに各感情ボタンが押されたときの処理を追加
+    }
+
+    function calculateSizes() {
+      let smallestDimension = min(windowWidth, windowHeight);
+      radiusA = smallestDimension / 3;
+      radiusB = radiusA * 0.75;
+      radiusC = radiusB * 0.75;
+      emotionSize = smallestDimension / 12;
     }
 
     function windowResized() {
-      // ウィンドウサイズが変更された際にキャンバスとサイズを調整
       resizeCanvas(windowWidth, windowHeight);
       calculateSizes();
     }
