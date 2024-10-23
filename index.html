@@ -112,6 +112,12 @@
         let x = cos(angle) * radius;
         let y = sin(angle) * radius;
 
+         if (buttons[emotions[i]]) {
+      buttons[emotions[i]].position(width / 2 + x - emotionSize / 2, height / 2 + y - emotionSize / 2);
+    } else {
+      console.error(`Button for emotion ${emotions[i]} not found.`);
+    }
+
         // ボタンの位置を更新
         buttons[emotions[i]].position(width / 2 + x - emotionSize / 2, height / 2 + y - emotionSize / 2);
       }
