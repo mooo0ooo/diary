@@ -12,7 +12,7 @@
     .emotion-label {
       text-align: center;
       color: black;
-      font-size: 12px;  /* フォントサイズを調整 */
+      font-size: 12px;
       position: absolute;
     }
     #download-btn {
@@ -37,7 +37,6 @@
     let backgroundImages = [];
     let motifImages = [];
 
-    // 感情ラベルの英語と日本語
     let emotionsA_en = ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'];
     let emotionsA_ja = ['喜び', '信頼', '恐れ', '驚き', '悲しみ', '嫌悪', '怒り', '期待＜予期＞'];
     let emotionsB_en = ['Ecstasy', 'Adoration', 'Terror', 'Amazement', 'Grief', 'Loathing', 'Rage', 'Vigilance'];
@@ -45,10 +44,7 @@
     let emotionsC_en = ['Serenity', 'Acceptance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance', 'Interest'];
     let emotionsC_ja = ['平穏', '容認', '不安', '放心', '哀愁', 'うんざり', '苛立ち', '関心'];
 
-    // 現在の言語モード（デフォルトは英語）
     let currentLanguage = 'en';
-
-    // 感情の配列（初期値は英語）
     let emotionsA = emotionsA_en;
     let emotionsB = emotionsB_en;
     let emotionsC = emotionsC_en;
@@ -56,20 +52,19 @@
     let positiveEmotions = ['Joy', 'Trust', 'Surprise', 'Anticipation', 'Ecstasy', 'Adoration', 'Amazement', 'Serenity', 'Acceptance', 'Interest'];
     let negativeEmotions = ['Fear', 'Sadness', 'Disgust', 'Anger', 'Terror', 'Grief', 'Loathing', 'Rage', 'Vigilance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance'];
 
-    let selectedEmotions = {};  // 各感情の選択回数を保存するオブジェクト
-    let selectedMotif = []; // 押されたモチーフを保存する配列
+    let selectedEmotions = {};
+    let selectedMotif = [];
     let positiveCount = 0;
     let negativeCount = 0;
     let backgroundChoice = 0;
     let motifChoice = '';
-    let emotionSize = 80;  // ボタンサイズを固定
-    let buttons = {};  // 感情ボタンのオブジェクト
-    let labels = {};   // 感情名ラベルのオブジェクト
-    let checkButton;   // 中央のCheckボタン
-    let isResultDisplayed = false;  // 結果表示状態を管理
+    let emotionSize = 80;
+    let buttons = {};
+    let labels = {};
+    let checkButton;
+    let isResultDisplayed = false;
 
     function preload() {
-      // 背景画像やモチーフ画像の読み込み
       backgroundImages[0] = loadImage('https://mooo0ooo.github.io/diary/background1.png');
       backgroundImages[1] = loadImage('https://mooo0ooo.github.io/diary/background2.png');
       backgroundImages[2] = loadImage('https://mooo0ooo.github.io/diary/background3.png');
@@ -105,57 +100,52 @@
       createCanvas(windowWidth, windowHeight);
       createEmotionButtons();
 
-      // 中央にCheckボタンを作成
       checkButton = createButton('Check');
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
       checkButton.mousePressed(displayResult);
 
-      // 言語切り替えボタンのイベントリスナーを設定
       select('#language-btn').mousePressed(toggleLanguage);
     }
 
     function draw() {
       if (isResultDisplayed) {
-        return; // 結果が表示された後はdraw()で何もしない
+        return;
       }
       
-      background(255); // 白背景
+      background(255);
       clear();
 
       drawEmotionGrid(emotionsA, 0);
       drawEmotionGrid(emotionsB, 1);
       drawEmotionGrid(emotionsC, 2);
 
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);  // Checkボタンの位置を調整
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
     }
 
-    // 画面幅に基づいて列数を調整する関数
     function getColCount() {
       if (windowWidth > 1200) {
-        return 8;  // デスクトップ画面では1行に8つ並べる
+        return 8;
       } else if (windowWidth > 800) {
-        return 6;  // タブレット画面では1行に6つ並べる
+        return 6;
       } else {
-        return 4;  // スマートフォンでは1行に4つ並べる
+        return 4;
       }
     }
 
-    // 感情ボタンをデバイスに応じた列数で並べ、中央揃えにする関数
     function drawEmotionGrid(emotions, row) {
-      let colCount = getColCount();  // 画面幅に基づいて列数を取得
-      let xOffset = 20;  // 横方向の余白
-      let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
+      let colCount = getColCount();
+      let xOffset = 20;
+      let yOffset = 120;
       
-      // ボタン全体の幅を計算し、中央に揃えるためのxオフセット
       let totalRowWidth = (colCount * emotionSize) + ((colCount - 1) * xOffset);
-      let startX = (windowWidth - totalRowWidth) / 2;  // 左からのオフセット（中央揃え）
+      let startX = (windowWidth - totalRowWidth) / 2;
 
       for (let i = 0; i < emotions.length; i++) {
         let x = startX + (i % colCount) * (emotionSize + xOffset);
         let y = row * (emotionSize + yOffset) + yOffset;
         
         buttons[emotions[i]].position(x, y);
-        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央に揃える
+        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);
       }
     }
 
@@ -272,12 +262,17 @@
 
       clear();
 
+      // Hide all emotion buttons and labels
+      Object.values(buttons).forEach(button => button.hide());
+      Object.values(labels).forEach(label => label.hide());
+      checkButton.hide();
+
+      // Display background
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
       let canvasAspect = width / height;
 
       let imgWidth, imgHeight;
-
       if (imgAspect > canvasAspect) {
         imgWidth = width;
         imgHeight = width / imgAspect;
@@ -288,6 +283,7 @@
 
       image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
       
+      // Display motif in the center
       image(motifImages[motifChoice], width / 2 - motifImages[motifChoice].width / 2, height / 2 - motifImages[motifChoice].height / 2);
 
       let downloadBtn = select('#download-btn');
@@ -297,32 +293,27 @@
       isResultDisplayed = true;
     }
 
-    // 言語切り替えの関数
     function toggleLanguage() {
       if (currentLanguage === 'en') {
-        // 日本語に切り替え
         currentLanguage = 'ja';
         emotionsA = emotionsA_ja;
         emotionsB = emotionsB_ja;
         emotionsC = emotionsC_ja;
-        select('#language-btn').html('English');  // ボタンをEnglishに変更
+        select('#language-btn').html('English');
       } else {
-        // 英語に切り替え
         currentLanguage = 'en';
         emotionsA = emotionsA_en;
         emotionsB = emotionsB_en;
         emotionsC = emotionsC_en;
-        select('#language-btn').html('Japanese');  // ボタンをJapaneseに変更
+        select('#language-btn').html('Japanese');
       }
-      // ラベルの再設定
       updateEmotionLabels();
       draw();
     }
 
-    // ラベルを再設定する関数
     function updateEmotionLabels() {
       for (let i = 0; i < emotionsA.length; i++) {
-        labels[emotionsA_en[i]].html(emotionsA[i]);  // 英語キーに対応するラベルを日本語/英語に更新
+        labels[emotionsA_en[i]].html(emotionsA[i]);
       }
       for (let i = 0; i < emotionsB.length; i++) {
         labels[emotionsB_en[i]].html(emotionsB[i]);
