@@ -12,7 +12,7 @@
     .emotion-label {
       text-align: center;
       color: black;
-      font-size: 12px;
+      font-size: 12px;  /* フォントサイズを調整 */
       position: absolute;
     }
     #download-btn {
@@ -37,6 +37,7 @@
     let backgroundImages = [];
     let motifImages = [];
 
+    // 感情ラベルの英語と日本語
     let emotionsA_en = ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'];
     let emotionsA_ja = ['喜び', '信頼', '恐れ', '驚き', '悲しみ', '嫌悪', '怒り', '期待＜予期＞'];
     let emotionsB_en = ['Ecstasy', 'Adoration', 'Terror', 'Amazement', 'Grief', 'Loathing', 'Rage', 'Vigilance'];
@@ -44,7 +45,10 @@
     let emotionsC_en = ['Serenity', 'Acceptance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance', 'Interest'];
     let emotionsC_ja = ['平穏', '容認', '不安', '放心', '哀愁', 'うんざり', '苛立ち', '関心'];
 
+    // 現在の言語モード（デフォルトは英語）
     let currentLanguage = 'en';
+
+    // 感情の配列（初期値は英語）
     let emotionsA = emotionsA_en;
     let emotionsB = emotionsB_en;
     let emotionsC = emotionsC_en;
@@ -52,48 +56,20 @@
     let positiveEmotions = ['Joy', 'Trust', 'Surprise', 'Anticipation', 'Ecstasy', 'Adoration', 'Amazement', 'Serenity', 'Acceptance', 'Interest'];
     let negativeEmotions = ['Fear', 'Sadness', 'Disgust', 'Anger', 'Terror', 'Grief', 'Loathing', 'Rage', 'Vigilance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance'];
 
-    let selectedEmotions = {};
-    let selectedMotif = [];
+    let selectedEmotions = {};  // 各感情の選択回数を保存するオブジェクト
+    let selectedMotif = []; // 押されたモチーフを保存する配列
     let positiveCount = 0;
     let negativeCount = 0;
     let backgroundChoice = 0;
     let motifChoice = '';
-    let emotionSize = 80;
-    let buttons = {};
-    let labels = {};
-    let checkButton;
-    let isResultDisplayed = false;
-
-    let sparkles = [];
-    let sparkleDuration = 2000; // キラキラの表示時間
-    let sparkleColors = {
-      'Joy': '#B50000',
-      'Trust': '#E58351',
-      'Fear': '#FFD036',
-      'Surprise': '#36C238',
-      'Sadness': '#008704',
-      'Disgust': '#5D94A6',
-      'Anger': '#00699D',
-      'Anticipation': '#FF7CC0',
-      'Ecstasy': '#7F0000',
-      'Adoration': '#B2653E',
-      'Terror': '#CCA32A',
-      'Amazement': '#003A00',
-      'Grief': '#00496B',
-      'Loathing': '#406672',
-      'Rage': '#278E27',
-      'Vigilance': '#CC6399',
-      'Serenity': '#E50000',
-      'Acceptance': '#FF7F3F',
-      'Apprehension': '#FF8F00',
-      'Distraction': '#00BA03',
-      'Pensiveness': '#008ED1',
-      'Boredom': '#7FCBE2',
-      'Annoyance': '#B2E4B2',
-      'Interest': '#FF7CC0'
-    };
+    let emotionSize = 80;  // ボタンサイズを固定
+    let buttons = {};  // 感情ボタンのオブジェクト
+    let labels = {};   // 感情名ラベルのオブジェクト
+    let checkButton;   // 中央のCheckボタン
+    let isResultDisplayed = false;  // 結果表示状態を管理
 
     function preload() {
+      // 背景画像やモチーフ画像の読み込み
       backgroundImages[0] = loadImage('https://mooo0ooo.github.io/diary/background1.png');
       backgroundImages[1] = loadImage('https://mooo0ooo.github.io/diary/background2.png');
       backgroundImages[2] = loadImage('https://mooo0ooo.github.io/diary/background3.png');
@@ -129,52 +105,57 @@
       createCanvas(windowWidth, windowHeight);
       createEmotionButtons();
 
+      // 中央にCheckボタンを作成
       checkButton = createButton('Check');
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
       checkButton.mousePressed(displayResult);
 
+      // 言語切り替えボタンのイベントリスナーを設定
       select('#language-btn').mousePressed(toggleLanguage);
     }
 
     function draw() {
       if (isResultDisplayed) {
-        return;
+        return; // 結果が表示された後はdraw()で何もしない
       }
       
-      background(255);
+      background(255); // 白背景
       clear();
 
       drawEmotionGrid(emotionsA, 0);
       drawEmotionGrid(emotionsB, 1);
       drawEmotionGrid(emotionsC, 2);
 
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);  // Checkボタンの位置を調整
     }
 
+    // 画面幅に基づいて列数を調整する関数
     function getColCount() {
       if (windowWidth > 1200) {
-        return 8;
+        return 8;  // デスクトップ画面では1行に8つ並べる
       } else if (windowWidth > 800) {
-        return 6;
+        return 6;  // タブレット画面では1行に6つ並べる
       } else {
-        return 4;
+        return 4;  // スマートフォンでは1行に4つ並べる
       }
     }
 
+    // 感情ボタンをデバイスに応じた列数で並べ、中央揃えにする関数
     function drawEmotionGrid(emotions, row) {
-      let colCount = getColCount();
-      let xOffset = 20;
-      let yOffset = 120;
+      let colCount = getColCount();  // 画面幅に基づいて列数を取得
+      let xOffset = 20;  // 横方向の余白
+      let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
       
+      // ボタン全体の幅を計算し、中央に揃えるためのxオフセット
       let totalRowWidth = (colCount * emotionSize) + ((colCount - 1) * xOffset);
-      let startX = (windowWidth - totalRowWidth) / 2;
+      let startX = (windowWidth - totalRowWidth) / 2;  // 左からのオフセット（中央揃え）
 
       for (let i = 0; i < emotions.length; i++) {
         let x = startX + (i % colCount) * (emotionSize + xOffset);
         let y = row * (emotionSize + yOffset) + yOffset;
         
         buttons[emotions[i]].position(x, y);
-        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);
+        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央に揃える
       }
     }
 
@@ -266,85 +247,6 @@
       }
     }
 
-    function createSparkle(emotion) {
-      return {
-        x: random(windowWidth),
-        y: random(windowHeight),
-        size: random(5, 20), // サイズを1/10に縮小
-        color: sparkleColors[emotion],
-        filled: random() > 0.5, // ランダムに塗りつぶしあり/なし
-        shape: random(['circle', 'star', 'hexagon', 'diamond']), // ランダムな形
-        startTime: millis()
-      };
-    }
-
-function drawStar(radius1, radius2) {
-      beginShape();
-      for (let i = 0; i < 10; i++) {
-        let angle = TWO_PI / 10 * i;
-        let r = i % 2 === 0 ? radius1 : radius2;
-        let x = cos(angle) * r;
-        let y = sin(angle) * r;
-        vertex(x, y);
-      }
-      endShape(CLOSE);
-    }
-
-    function drawPolygon(npoints, radius) {
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += TWO_PI / npoints) {
-        let sx = cos(a) * radius;
-        let sy = sin(a) * radius;
-        vertex(sx, sy);
-      }
-      endShape(CLOSE);
-    }
-
-// キラキラ効果の描画
-      for (let i = sparkles.length - 1; i >= 0; i--) {
-        let sparkle = sparkles[i];
-        if (millis() - sparkle.startTime > sparkleDuration) {
-          sparkles.splice(i, 1); // キラキラが2秒以上経ったら消去
-        } else {
-          drawSparkle(sparkle);
-        }
-
-      // キラキラ効果の生成
-      for (let i = 0; i < 10; i++) { // キラキラの数を減らした
-        sparkles.push(createSparkle(emotion));
-      }
-
-    function drawSparkle(sparkle) {
-      push();
-      noStroke();
-      fill(sparkle.color);
-      if (!sparkle.filled) {
-        noFill();
-        stroke(sparkle.color); // アウトラインの色を変更
-      }
-
-      translate(sparkle.x, sparkle.y);
-      let halfSize = sparkle.size / 2;
-
-      // 各形状を描画
-      switch (sparkle.shape) {
-        case 'circle':
-          ellipse(0, 0, sparkle.size);
-          break;
-        case 'star':
-          drawStar(halfSize, halfSize * 0.5);
-          break;
-        case 'hexagon':
-          drawPolygon(6, halfSize);
-          break;
-        case 'diamond':
-          rotate(PI / 4);
-          rect(0, 0, sparkle.size, sparkle.size);
-          break;
-      }
-      pop();
-    }
-
     function displayResult() {
       let totalCount = positiveCount + negativeCount;
       let positiveRatio = totalCount > 0 ? positiveCount / totalCount : 0;
@@ -370,20 +272,12 @@ function drawStar(radius1, radius2) {
 
       clear();
 
-      // Hide all emotion buttons and labels
-      Object.values(buttons).forEach(button => button.hide());
-      Object.values(labels).forEach(label => label.hide());
-      checkButton.hide();
-
-      let languageBtn = select('#language-btn');
-    　languageBtn.hide();
-      
-      // Display background
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
       let canvasAspect = width / height;
 
       let imgWidth, imgHeight;
+
       if (imgAspect > canvasAspect) {
         imgWidth = width;
         imgHeight = width / imgAspect;
@@ -403,27 +297,32 @@ function drawStar(radius1, radius2) {
       isResultDisplayed = true;
     }
 
+    // 言語切り替えの関数
     function toggleLanguage() {
       if (currentLanguage === 'en') {
+        // 日本語に切り替え
         currentLanguage = 'ja';
         emotionsA = emotionsA_ja;
         emotionsB = emotionsB_ja;
         emotionsC = emotionsC_ja;
-        select('#language-btn').html('English');
+        select('#language-btn').html('English');  // ボタンをEnglishに変更
       } else {
+        // 英語に切り替え
         currentLanguage = 'en';
         emotionsA = emotionsA_en;
         emotionsB = emotionsB_en;
         emotionsC = emotionsC_en;
-        select('#language-btn').html('Japanese');
+        select('#language-btn').html('Japanese');  // ボタンをJapaneseに変更
       }
+      // ラベルの再設定
       updateEmotionLabels();
       draw();
     }
 
+    // ラベルを再設定する関数
     function updateEmotionLabels() {
       for (let i = 0; i < emotionsA.length; i++) {
-        labels[emotionsA_en[i]].html(emotionsA[i]);
+        labels[emotionsA_en[i]].html(emotionsA[i]);  // 英語キーに対応するラベルを日本語/英語に更新
       }
       for (let i = 0; i < emotionsB.length; i++) {
         labels[emotionsB_en[i]].html(emotionsB[i]);
