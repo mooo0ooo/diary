@@ -247,55 +247,67 @@
       }
     }
 
-    function displayResult() {
-      let totalCount = positiveCount + negativeCount;
-      let positiveRatio = totalCount > 0 ? positiveCount / totalCount : 0;
+function displayResult() {
+  let totalCount = positiveCount + negativeCount;
+  let positiveRatio = totalCount > 0 ? positiveCount / totalCount : 0;
 
-      if (positiveRatio === 1) {
-        backgroundChoice = 0;
-      } else if (positiveRatio >= 0.6) {
-        backgroundChoice = 1;
-      } else if (positiveRatio >= 0.4) {
-        backgroundChoice = 2;
-      } else {
-        backgroundChoice = 3;
-      }
+  if (positiveRatio === 1) {
+    backgroundChoice = 0;
+  } else if (positiveRatio >= 0.6) {
+    backgroundChoice = 1;
+  } else if (positiveRatio >= 0.4) {
+    backgroundChoice = 2;
+  } else {
+    backgroundChoice = 3;
+  }
 
-      let motifCounts = selectedMotif.reduce((acc, motif) => {
-        acc[motif] = (acc[motif] || 0) + 1;
-        return acc;
-      }, {});
+  let motifCounts = selectedMotif.reduce((acc, motif) => {
+    acc[motif] = (acc[motif] || 0) + 1;
+    return acc;
+  }, {});
 
-      motifChoice = selectedMotif.length > 0 ? 
-        Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b) : 
-        'Joy';
+  motifChoice = selectedMotif.length > 0 ? 
+    Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b) : 
+    'Joy';
 
-      clear();
+  clear();
 
-      let img = backgroundImages[backgroundChoice];
-      let imgAspect = img.width / img.height;
-      let canvasAspect = width / height;
+  let img = backgroundImages[backgroundChoice];
+  let imgAspect = img.width / img.height;
+  let canvasAspect = width / height;
 
-      let imgWidth, imgHeight;
+  let imgWidth, imgHeight;
 
-      if (imgAspect > canvasAspect) {
-        imgWidth = width;
-        imgHeight = width / imgAspect;
-      } else {
-        imgHeight = height;
-        imgWidth = height * imgAspect;
-      }
+  if (imgAspect > canvasAspect) {
+    imgWidth = width;
+    imgHeight = width / imgAspect;
+  } else {
+    imgHeight = height;
+    imgWidth = height * imgAspect;
+  }
 
-      image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
-      
-      image(motifImages[motifChoice], width / 2 - motifImages[motifChoice].width / 2, height / 2 - motifImages[motifChoice].height / 2);
+  image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
+  
+  image(motifImages[motifChoice], width / 2 - motifImages[motifChoice].width / 2, height / 2 - motifImages[motifChoice].height / 2);
 
-      let downloadBtn = select('#download-btn');
-      downloadBtn.style('display', 'block');
-      downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
+  // 全ての感情ボタンとラベルを非表示にする
+  for (let key in buttons) {
+    buttons[key].style('display', 'none');
+    labels[key].style('display', 'none');
+  }
 
-      isResultDisplayed = true;
-    }
+  // Checkボタンと言語切り替えボタンを非表示にする
+  checkButton.style('display', 'none');
+  select('#language-btn').style('display', 'none');
+
+  let downloadBtn = select('#download-btn');
+  downloadBtn.style('display', 'block');
+  downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
+
+  isResultDisplayed = true;
+}
+
+
 
     // 言語切り替えの関数
     function toggleLanguage() {
