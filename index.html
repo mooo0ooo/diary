@@ -34,7 +34,7 @@
     let backgroundImages = [];
     let motifImages = [];
     let emotionsA = ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'];
-    let emotionsB = ['Ecstasy', 'Adoration', 'Terror', 'Amazement', 'Gief', 'Loathing', 'Rage', 'Vigilance'];
+    let emotionsB = ['Ecstasy', 'Adoration', 'Terror', 'Amazement', 'Grief', 'Loathing', 'Rage', 'Vigilance'];
     let emotionsC = ['Serenity', 'Acceptance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance', 'Interest'];
     let positiveEmotions = ['Joy', 'Trust', 'Surprise', 'Anticipation', 'Ecstasy', 'Adoration', 'Amazement', 'Serenity', 'Acceptance', 'Interest'];
     let negativeEmotions = ['Fear', 'Sadness', 'Disgust', 'Anger', 'Terror', 'Grief', 'Loathing', 'Rage', 'Vigilance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance'];
@@ -44,7 +44,6 @@
     let negativeCount = 0;
     let backgroundChoice = 0;
     let motifChoice = '';
-    let radiusA, radiusB, radiusC;
     let emotionSize;
     let buttons = {};  // 感情ボタンのオブジェクト
     let labels = {};   // 感情名ラベルのオブジェクト
@@ -102,25 +101,26 @@
       
       background(255); // 白背景
       clear();
-      translate(width / 2, height / 2);
 
-      drawEmotionCircle(emotionsA, radiusA);
-      drawEmotionCircle(emotionsB, radiusB);
-      drawEmotionCircle(emotionsC, radiusC);
+      drawEmotionGrid(emotionsA, 0);
+      drawEmotionGrid(emotionsB, 1);
+      drawEmotionGrid(emotionsC, 2);
 
-      checkButton.position(windowWidth / 2 - 50, windowHeight / 2 - 20);
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);  // Checkボタンの位置を調整
     }
 
-    function drawEmotionCircle(emotions, radius) {
-      let angleStep = TWO_PI / emotions.length;
+    // 横に8つずつ並べる関数
+    function drawEmotionGrid(emotions, row) {
+      let colCount = 8;  // 1行に並べるボタンの数
+      let xOffset = 20;  // 横方向の余白
+      let yOffset = 80;  // 縦方向の余白
 
       for (let i = 0; i < emotions.length; i++) {
-        let angle = i * angleStep;
-        let x = cos(angle) * radius;
-        let y = sin(angle) * radius;
-
-        buttons[emotions[i]].position(width / 2 + x - emotionSize / 2, height / 2 + y - emotionSize / 2);
-        labels[emotions[i]].position(width / 2 + x - emotionSize / 2, height / 2 + y + emotionSize / 2 + 10);
+        let x = (i % colCount) * (emotionSize + xOffset) + xOffset;
+        let y = row * (emotionSize + yOffset) + yOffset;
+        
+        buttons[emotions[i]].position(x, y);
+        labels[emotions[i]].position(x, y + emotionSize + 5);
       }
     }
 
@@ -198,37 +198,12 @@
       labels['Interest'] = createDiv('Interest').addClass('emotion-label');
     }
 
-    function handleEmotionButton(emotion, motif) {
-      buttons['Joy'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png').mousePressed(() => handleEmotionButton('Joy', 'fireworks'));
-      buttons['Trust'] = createImg('https://mooo0ooo.github.io/diary/sun-removebg-preview.png').mousePressed(() => handleEmotionButton('Trust', 'sun'));
-      buttons['Fear'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/moon-removebg-preview.png').mousePressed(() => handleEmotionButton('Fear', 'moon'));
-      buttons['Surprise'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/thunder.PNG').mousePressed(() => handleEmotionButton('Surprise', 'thunder'));
-      buttons['Sadness'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/shooting_star-removebg-preview.png').mousePressed(() => handleEmotionButton('Sadness', 'shooting_star'));
-      buttons['Disgust'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/rain.PNG').mousePressed(() => handleEmotionButton('Disgust', 'rain'));
-      buttons['Anger'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/star-removebg-preview.png').mousePressed(() => handleEmotionButton('Anger', 'star'));
-      buttons['Anticipation'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG').mousePressed(() => handleEmotionButton('Anticipation', 'balloon'));
-      buttons['Ecstasy'] = createImg('https://mooo0ooo.github.io/diary/rose.PNG').mousePressed(() => handleEmotionButton('Ecstasy', 'rose'));
-      buttons['Adoration'] = createImg('https://mooo0ooo.github.io/diary/tulip.PNG').mousePressed(() => handleEmotionButton('Adoration', 'tulip'));
-      buttons['Terror'] = createImg('https://mooo0ooo.github.io/diary/yellowFlower.PNG').mousePressed(() => handleEmotionButton('Terror', 'yellowFlower'));
-      buttons['Amazement'] = createImg('https://mooo0ooo.github.io/diary/clover.PNG').mousePressed(() => handleEmotionButton('Amazement', 'clover'));
-      buttons['Grief'] = createImg('https://mooo0ooo.github.io/diary/futaba.PNG').mousePressed(() => handleEmotionButton('Grief', 'futaba'));
-      buttons['Loathing'] = createImg('https://mooo0ooo.github.io/diary/mizuiroFlower.PNG').mousePressed(() => handleEmotionButton('Loathing', 'mizuiroFlower'));
-      buttons['Rage'] = createImg('https://mooo0ooo.github.io/diary/blueFlower.PNG').mousePressed(() => handleEmotionButton('Rage', 'blueFlower'));
-      buttons['Vigilance'] = createImg('https://mooo0ooo.github.io/diary/cherryBlossom.PNG').mousePressed(() => handleEmotionButton('Vigilance', 'cherryBlossom'));
-      buttons['Serenity'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/apple.PNG').mousePressed(() => handleEmotionButton('Serenity', 'apple'));
-      buttons['Acceptance'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/carrot.PNG').mousePressed(() => handleEmotionButton('Acceptance', 'carrot'));
-      buttons['Apprehension'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/egg.PNG').mousePressed(() => handleEmotionButton('Apprehension', 'egg'));
-      buttons['Distraction'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/avocado.PNG').mousePressed(() => handleEmotionButton('Distraction', 'avocado'));
-      buttons['Pensiveness'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/broccoli.PNG').mousePressed(() => handleEmotionButton('Pensiveness', 'broccoli'));
-      buttons['Boredom'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/turnip.PNG').mousePressed(() => handleEmotionButton('Boredom', 'turnip'));
-      buttons['Annoyance'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fork.PNG').mousePressed(() => handleEmotionButton('Annoyance', 'fork'));
-      buttons['Interest'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG').mousePressed(() => handleEmotionButton('Interest', 'glove'));
-
+    function handleEmotionButton(emotion) {
       if (!selectedEmotions[emotion]) {
         selectedEmotions[emotion] = 0;
       }
       selectedEmotions[emotion]++;
-      selectedMotif.push(motif);
+      selectedMotif.push(motifImages[emotion]);
 
       if (positiveEmotions.includes(emotion)) {
         positiveCount++;
@@ -238,7 +213,6 @@
     }
 
     function displayResult() {
-      // ポジティブとネガティブの比率から背景を決定
       let totalCount = positiveCount + negativeCount;
       let positiveRatio = totalCount > 0 ? positiveCount / totalCount : 0;
 
@@ -252,29 +226,23 @@
         backgroundChoice = 3;
       }
 
-      // 最も多く押されたモチーフを決定
       let motifCounts = selectedMotif.reduce((acc, motif) => {
         acc[motif] = (acc[motif] || 0) + 1;
         return acc;
       }, {});
 
       motifChoice = selectedMotif.length > 0 ? 
-    Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b) : 
-    'Joy';
+        Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b) : 
+        'Joy';
 
-
-
-
-      // 画面をクリアして結果を表示
       clear();
-      
+
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
       let canvasAspect = width / height;
-      
+
       let imgWidth, imgHeight;
-      
-      // キャンパスのアスペクト比に基づいてサイズを調整
+
       if (imgAspect > canvasAspect) {
         imgWidth = width;
         imgHeight = width / imgAspect;
@@ -282,39 +250,27 @@
         imgHeight = height;
         imgWidth = height * imgAspect;
       }
-      
-      // 中央に表示
+
       image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
       
-      // モチーフ画像を表示
       image(motifImages[motifChoice], width / 2 - motifImages[motifChoice].width / 2, height / 2 - motifImages[motifChoice].height / 2);
-    
-      // ダウンロードボタンを表示
+
       let downloadBtn = select('#download-btn');
       downloadBtn.style('display', 'block');
       downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
-    
+
       isResultDisplayed = true;
     }
 
     function calculateSizes() {
-      let smallestDimension = min(windowWidth, windowHeight);
-      radiusA = smallestDimension / 3;
-      radiusB = radiusA * 0.75;
-      radiusC = radiusB * 0.75;
-      emotionSize = max(smallestDimension / 12, 40); 
+      emotionSize = max(min(windowWidth, windowHeight) / 12, 40); 
     }
-
 
     function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
       calculateSizes();
-      // 位置の再計算
-      drawEmotionCircle(emotionsA, radiusA);
-      drawEmotionCircle(emotionsB, radiusB);
-      drawEmotionCircle(emotionsC, radiusC);
     }
-
   </script>
 </body>
 </html>
+
