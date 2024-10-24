@@ -69,10 +69,10 @@
 
     let backgroundChoice = 0;
     
-    let effectColor = '';
-    let effectShapes = [];
-    let effectStartTime = 0;
     let isEffectActive = false;
+    let effectColor;
+    let effectShapes = [];
+    let effectStartTime;
 
     let selectedEmotions = {};
     let buttons = {};
@@ -80,7 +80,6 @@
     let checkButton;
     let isResultDisplayed = false;
 
-    // Positive and negative emotion classification
     const positiveEmotions = ['喜び', '信頼', '驚き', '期待＜予期＞', '恍惚', '敬愛', '驚嘆', '平穏', '容認', '関心'];
     const negativeEmotions = ['恐れ', '悲しみ', '嫌悪', '怒り', '恐怖', '悲嘆', '強い嫌悪', '激怒', '警戒', '不安', '放心', '哀愁', 'うんざり', '苛立ち'];
 
@@ -270,12 +269,12 @@
     }
 
     function handleEmotionButton(emotionLabel) {
-      let emotion = emotionLabel;
-      if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
-      selectedEmotions[emotion]++;
+  let emotion = emotionLabel;
+  if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+  selectedEmotions[emotion]++;
 
-      startEffect(emotion);
-    }
+  startEffect(emotion);
+}
 
     function startEffect(emotion) {
       effectColor = emotionColors[emotion];
