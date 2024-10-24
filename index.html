@@ -68,6 +68,11 @@
     let emotionSize = 100;
 
     let backgroundChoice = 0;
+    
+    let isEffectActive = false;
+    let effectColor;
+    let effectShapes = [];
+    let effectStartTime;
 
     let selectedEmotions = {};
     let buttons = {};
@@ -77,6 +82,33 @@
 
     const positiveEmotions = ['喜び', '信頼', '驚き', '期待＜予期＞', '恍惚', '敬愛', '驚嘆', '平穏', '容認', '関心'];
     const negativeEmotions = ['恐れ', '悲しみ', '嫌悪', '怒り', '恐怖', '悲嘆', '強い嫌悪', '激怒', '警戒', '不安', '放心', '哀愁', 'うんざり', '苛立ち'];
+
+    const emotionColors = {
+      '喜び': '#B50000',
+      '信頼': '#E58351',
+      '恐れ': '#FFD036',
+      '驚き': '#36C238',
+      '悲しみ': '#008704',
+      '嫌悪': '#5D94A6',
+      '怒り': '#00699D',
+      '期待＜予期＞': '#FF7CC0',
+      '恍惚': '#7F0000',
+      '敬愛': '#B2653E',
+      '恐怖': '#CCA32A',
+      '驚嘆': '#003A00',
+      '悲嘆': '#00496B',
+      '強い嫌悪': '#406672',
+      '激怒': '#278E27',
+      '警戒': '#CC6399',
+      '平穏': '#E50000',
+      '容認': '#FF7F3F',
+      '不安': '#FF8F00',
+      '放心': '#00BA03',
+      '哀愁': '#008ED1',
+      'うんざり': '#7FCBE2',
+      '苛立ち': '#B2E4B2',
+      '関心': '#FF7CC0'
+    };
 
     const randomTexts = [
       '今の気分は？',
@@ -141,6 +173,13 @@
       drawEmotionGrid(emotionsC, 2);
 
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+
+      if (isEffectActive) {
+        drawEffects();
+        if (millis() - effectStartTime > 2000) {
+          isEffectActive = false;
+        }
+      }
     }
 
 
@@ -252,9 +291,83 @@
       let emotion = emotionLabel;
       if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
       selectedEmotions[emotion]++;
+
+      startEffect(emotion);
     }
 
-    
+    function startEffect(emotion) {
+      effectColor = emotionColors[emotion];
+      effectShapes = [];
+      for (let i = 0; i < 50; i++) {
+        effectShapes.push({
+          x: random(width),
+          y: random(height),
+          size: random(3, 12),
+          type: random(['star', 'hexagon', 'diamond', 'circle']),
+          filled: random() > 0.5
+        });
+      }
+      effectStartTime = millis();  
+      isEffectActive = true;
+    }
+
+    function drawEffects() {
+      for (let shape of effectShapes) {
+        if (shape.filled) {
+          fill(effectColor);  
+          noStroke();
+        } else {
+          noFill();
+          stroke(effectColor);
+          strokeWeight(2);
+        }
+
+        push();
+        translate(shape.x, shape.y);
+        switch (shape.type) {
+          case 'star':
+            drawStar(0, 0, shape.size / 2, shape.size, 5);
+            break;
+          case 'hexagon':
+            drawPolygon(0, 0, shape.size / 2, 6);
+            break;
+          case 'diamond':
+            rotate(PI / 4);
+            rect(0, 0, shape.size, shape.size);
+            break;
+          case 'circle':
+            ellipse(0, 0, shape.size);
+            break;
+        }
+        pop();
+      }
+    }
+
+    function drawStar(x, y, radius1, radius2, npoints) {
+      let angle = TWO_PI / npoints;
+      let halfAngle = angle / 2.0;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius2;
+        let sy = y + sin(a) * radius2;
+        vertex(sx, sy);
+        sx = x + cos(a + halfAngle) * radius1;
+        sy = y + sin(a + halfAngle) * radius1;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    function drawPolygon(x, y, radius, npoints) {
+      let angle = TWO_PI / npoints;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius;
+        let sy = y + sin(a) * radius;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
 
     function displayResult() {
       clear();
@@ -335,4 +448,3 @@
 
   </script>
 </body>
-</html>
