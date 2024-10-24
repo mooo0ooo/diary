@@ -42,6 +42,14 @@
     let emotionsB = emotionsB_ja;
     let emotionsC = emotionsC_ja;
 
+    let emotionSize = 100; // 例として100pxを設定
+
+    let backgroundChoice = 0; // 必要な値に変更
+    let effectColor = '';
+    let effectShapes = [];
+    let effectStartTime = 0;
+    let isEffectActive = false;
+
     let selectedEmotions = {};
     let buttons = {};
     let labels = {};
@@ -364,10 +372,12 @@
 
     function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
+      clear();
       drawEmotionGrid(emotionsA, 0);
       drawEmotionGrid(emotionsB, 1);
       drawEmotionGrid(emotionsC, 2);
     }
+
   </script>
 </body>
 </html>
