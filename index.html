@@ -330,6 +330,31 @@
     }
   }
 
+    // 感情ボタンを押したときの処理
+  function handleEmotionButton(emotionLabel) {
+    let emotion = emotionLabel;
+    if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+    selectedEmotions[emotion]++;
+
+    startEffect(emotion);  // ボタンが押されたときにエフェクトを開始
+  }
+
+  // メインの描画関数
+  function draw() {
+    if (!isResultDisplayed) {
+      clear();
+      drawEmotionGrid(emotionsA, 0);
+      drawEmotionGrid(emotionsB, 1);
+      drawEmotionGrid(emotionsC, 2);
+
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+    }
+
+    if (isEffectActive) {
+      drawEffects();  // エフェクトが有効な間、エフェクトを描画
+    }
+  }
+
   function drawStar(x, y, radius1, radius2, npoints) {
     let angle = TWO_PI / npoints;
     let halfAngle = angle / 2.0;
@@ -356,28 +381,6 @@
     endShape(CLOSE);
   }
 
-  function handleEmotionButton(emotionLabel) {
-    let emotion = emotionLabel;
-    if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
-    selectedEmotions[emotion]++;
-
-    startEffect(emotion);  // Start the effect when an emotion button is clicked
-  }
-
-  function draw() {
-    if (!isResultDisplayed) {
-      clear();
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
-
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
-    }
-
-    if (isEffectActive) {
-      drawEffects();  // Draw the effect while it is active
-    }
-  }
     function displayResult() {
       clear();
 
