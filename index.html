@@ -231,9 +231,18 @@ function draw() {
 
 
 function displayResult() {
+      // 一番多く選ばれたモチーフを決定
+      let motifCounts = selectedMotif.reduce((acc, motif) => {
+        acc[motif] = (acc[motif] || 0) + 1;
+        return acc;
+      }, {});
+
+      motifChoice = selectedMotif.length > 0 ? 
+        Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b) : 
+        'Joy';  // デフォルトは'Joy'
+
       clear();
 
-      // 背景とモチーフを描画
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
       let canvasAspect = width / height;
@@ -247,7 +256,11 @@ function displayResult() {
         imgWidth = height * imgAspect;
       }
 
+      // 背景画像を描画
       image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
+
+      // モチーフ画像を中央に描画
+      image(motifChoice, width / 2 - motifChoice.width / 2, height / 2 - motifChoice.height / 2);
 
       // ボタンやラベルを非表示
       for (let key in buttons) {
@@ -255,11 +268,9 @@ function displayResult() {
         labels[key].hide();
       }
 
-      // 言語切り替えボタンとCheckボタンも非表示
       checkButton.hide();
       select('#language-btn').style('display', 'none');
 
-      // ダウンロードボタンを表示
       let downloadBtn = select('#download-btn');
       downloadBtn.style('display', 'block');
       downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
