@@ -163,8 +163,16 @@ function setup() {
       select('#language-btn').mousePressed(toggleLanguage);
     }
 
-    function draw() {
+ function draw() {
+      if (isResultDisplayed) return;
+      
       clear();
+      drawEmotionGrid(emotionsA, 0);
+      drawEmotionGrid(emotionsB, 1);
+      drawEmotionGrid(emotionsC, 2);
+
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+
       if (isEffectActive) {
         drawEffects();
         if (millis() - effectStartTime > 2000) {
