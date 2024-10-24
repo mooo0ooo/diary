@@ -80,6 +80,10 @@
     let checkButton;
     let isResultDisplayed = false;
 
+    // Positive and negative emotion classification
+    const positiveEmotions = ['喜び', '信頼', '驚き', '期待＜予期＞', '恍惚', '敬愛', '驚嘆', '平穏', '容認', '関心'];
+    const negativeEmotions = ['恐れ', '悲しみ', '嫌悪', '怒り', '恐怖', '悲嘆', '強い嫌悪', '激怒', '警戒', '不安', '放心', '哀愁', 'うんざり', '苛立ち'];
+
     const emotionColors = {
       '喜び': '#B50000',
       '信頼': '#E58351',
@@ -369,6 +373,30 @@
 
     function displayResult() {
       clear();
+
+      // Count positive and negative emotions
+      let positiveCount = 0;
+      let negativeCount = 0;
+
+      for (let emotion in selectedEmotions) {
+        if (positiveEmotions.includes(emotion)) {
+          positiveCount += selectedEmotions[emotion];
+        } else if (negativeEmotions.includes(emotion)) {
+          negativeCount += selectedEmotions[emotion];
+        }
+      }
+
+      // Set backgroundChoice based on positive:negative ratio
+      let ratio = positiveCount / (positiveCount + negativeCount);
+      if (ratio === 1) {
+        backgroundChoice = 0;  // 10:0 -> Background 1
+      } else if (ratio >= 0.6) {
+        backgroundChoice = 1;  // 6:4 -> Background 2
+      } else if (ratio >= 0.4) {
+        backgroundChoice = 2;  // 4:6 -> Background 3
+      } else {
+        backgroundChoice = 3;  // 0:10 -> Background 4
+      }
 
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
