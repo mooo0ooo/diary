@@ -26,9 +26,32 @@
       border: 2px solid black;
       cursor: pointer;
     }
+    #landing-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-size: 24px;
+      text-align: center;
+    }
+    #ok-btn {
+      padding: 10px 20px;
+      margin-top: 20px;
+      background-color: black;
+      color: white;
+      cursor: pointer;
+      border: none;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
+  <div id="landing-page">
+    <div id="random-text"></div>
+    <button id="ok-btn">OK</button>
+  </div>
+
   <button id="download-btn">画像をダウンロード</button>
   
   <script>
@@ -42,9 +65,9 @@
     let emotionsB = emotionsB_ja;
     let emotionsC = emotionsC_ja;
 
-    let emotionSize = 100; // 例として100pxを設定
+    let emotionSize = 100;
 
-    let backgroundChoice = 0; // 必要な値に変更
+    let backgroundChoice = 0;
     let effectColor = '';
     let effectShapes = [];
     let effectStartTime = 0;
@@ -82,6 +105,25 @@
       '苛立ち': '#B2E4B2',
       '関心': '#FF7CC0'
     };
+
+    const randomTexts = [
+      '今の気分は？',
+      '締め切りに間に合わなそう！！',
+      '友達とけんかした',
+      '失恋した'
+    ];
+
+    // ランダムなテキストを表示
+    function showRandomText() {
+      const randomIndex = Math.floor(Math.random() * randomTexts.length);
+      document.getElementById('random-text').innerText = randomTexts[randomIndex];
+    }
+
+    document.getElementById('ok-btn').addEventListener('click', () => {
+      // ランディングページを隠して感情選択画面に切り替える
+      document.getElementById('landing-page').style.display = 'none';
+      startEmotionSelection();
+    });
     
     function preload() {
       backgroundImages[0] = loadImage('https://mooo0ooo.github.io/diary/background1.png');
@@ -117,6 +159,10 @@
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
+      showRandomText();  // ランディングページでランダムなテキストを表示
+    }
+
+    function startEmotionSelection() {
       createEmotionButtons();
 
       checkButton = createButton('Check');
