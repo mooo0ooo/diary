@@ -19,11 +19,11 @@
       display: none;
       position: absolute;
       top: 20px;
-      right: 20px; 
+      right: 20px;
       padding: 10px 20px;
-      background-color: white; 
-      color: black; 
-      border: 2px solid black; 
+      background-color: white;
+      color: black;
+      border: 2px solid black;
       cursor: pointer;
     }
   </style>
@@ -253,55 +253,56 @@
     function handleEmotionButton(emotion) {
       if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
       selectedEmotions[emotion]++;
+      startEffect(emotion);
+    }
 
-function startEffect(emotion) {
-  effectColor = emotionColors[emotion];
-  effectShapes = [];
-  for (let i = 0; i < 50; i++) {
-    effectShapes.push({
-      x: random(width),
-      y: random(height),
-      size: random(3, 12),
-      type: random(['star', 'hexagon', 'diamond', 'circle']),  // カンマを追加
-      filled: random() > 0.5  // 塗りつぶし or 線だけ
-    });
-  }
-  effectStartTime = millis();
-  isEffectActive = true;
-}
-
+    function startEffect(emotion) {
+      effectColor = emotionColors[emotion];
+      effectShapes = [];
+      for (let i = 0; i < 50; i++) {
+        effectShapes.push({
+          x: random(width),
+          y: random(height),
+          size: random(3, 12),
+          type: random(['star', 'hexagon', 'diamond', 'circle']),
+          filled: random() > 0.5  // 塗りつぶし or 線だけ
+        });
+      }
+      effectStartTime = millis();
+      isEffectActive = true;
+    }
 
     function drawEffects() {
-  for (let shape of effectShapes) {
-    if (shape.filled) {
-      fill(effectColor);
-      noStroke();
-    } else {
-      noFill();
-      stroke(effectColor);
-      strokeWeight(2);  // 線の太さを調整
-    }
+      for (let shape of effectShapes) {
+        if (shape.filled) {
+          fill(effectColor);
+          noStroke();
+        } else {
+          noFill();
+          stroke(effectColor);
+          strokeWeight(2);
+        }
 
-    push();
-    translate(shape.x, shape.y);
-    switch (shape.type) {
-      case 'star':
-        drawStar(0, 0, shape.size / 2, shape.size, 5);
-        break;
-      case 'hexagon':
-        drawPolygon(0, 0, shape.size / 2, 6);
-        break;
-      case 'diamond':
-        rotate(PI / 4);
-        rect(0, 0, shape.size, shape.size);
-        break;
-      case 'circle':
-        ellipse(0, 0, shape.size);
-        break;
+        push();
+        translate(shape.x, shape.y);
+        switch (shape.type) {
+          case 'star':
+            drawStar(0, 0, shape.size / 2, shape.size, 5);
+            break;
+          case 'hexagon':
+            drawPolygon(0, 0, shape.size / 2, 6);
+            break;
+          case 'diamond':
+            rotate(PI / 4);
+            rect(0, 0, shape.size, shape.size);
+            break;
+          case 'circle':
+            ellipse(0, 0, shape.size);
+            break;
+        }
+        pop();
+      }
     }
-    pop();
-  }
-}
 
     function drawStar(x, y, radius1, radius2, npoints) {
       let angle = TWO_PI / npoints;
@@ -369,7 +370,6 @@ function startEffect(emotion) {
       isResultDisplayed = true;
     }
 
-    // 一番押された感情を取得する関数
     function getMostSelectedEmotion() {
       let maxCount = -1;
       let selectedEmotion = '';
