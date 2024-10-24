@@ -388,17 +388,14 @@
 
       // Calculate positive to negative ratio and set backgroundChoice accordingly
       let total = positiveCount + negativeCount;
-      let ratio = total === 0 ? 0 : positiveCount / total;
 
-      if (ratio === 1) {
-        backgroundChoice = 0;  // 10:0 -> Background 1
-      } else if (ratio >= 0.6) {
-        backgroundChoice = 1;  // 6:4 -> Background 2
-      } else if (ratio >= 0.4) {
-        backgroundChoice = 2;  // 4:6 -> Background 3
-      } else {
-        backgroundChoice = 3;  // 0:10 -> Background 4
-      }
+      if (positiveCount > negativeCount) {
+  // positiveEmotionsが多い場合、背景画像1か2をランダムで選ぶ
+  backgroundChoice = Math.random() < 0.5 ? 0 : 1;  // 0: 背景1, 1: 背景2
+} else {
+  // negativeEmotionsが多い場合、背景画像3か4をランダムで選ぶ
+  backgroundChoice = Math.random() < 0.5 ? 2 : 3;  // 2: 背景3, 3: 背景4
+}
 
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
