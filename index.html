@@ -297,9 +297,10 @@
 
     function startEffect() {
       effects = [];
-      isEffectActive = true;
-      effectStartTime = millis();
+      isEffectActive = true;  
+      effectStartTime = millis();  
 
+  // エフェクトの位置、サイズ、形状をランダムに生成
       for (let i = 0; i < 50; i++) {
         let x = random(windowWidth);
         let y = random(windowHeight);
@@ -307,36 +308,39 @@
         let shape = random(effectShapes); 
         effects.push({ x, y, size, shape });
       }
-    }
+}
 
     function drawEffect() {
-      if (isEffectActive) {
-        let currentTime = millis();
-        if (currentTime - effectStartTime > effectDuration) {
-          isEffectActive = false;
-          return;
-        }
+  if (isEffectActive) {
+    let currentTime = millis();
+    // 一定時間経過後にエフェクトを無効化する
+    if (currentTime - effectStartTime > effectDuration) {
+      isEffectActive = false;
+      return;  // 時間が経過したら描画を終了
+    }
 
-        for (let effect of effects) {
-          fill(effectColor);
-          noStroke();
-          switch (effect.shape) {
-            case 'star':
-              drawStar(effect.x, effect.y, effect.size / 2, effect.size, 5);
-              break;
-            case 'hexagon':
-              drawHexagon(effect.x, effect.y, effect.size);
-              break;
-            case 'diamond':
-              drawDiamond(effect.x, effect.y, effect.size, effect.size * 1.5);
-              break;
-            case 'circle':
-              ellipse(effect.x, effect.y, effect.size);
-              break;
-          }
-        }
+    // 各エフェクトを描画する
+    for (let effect of effects) {
+      fill(effectColor);
+      noStroke();
+      switch (effect.shape) {
+        case 'star':
+          drawStar(effect.x, effect.y, effect.size / 2, effect.size, 5);
+          break;
+        case 'hexagon':
+          drawHexagon(effect.x, effect.y, effect.size);
+          break;
+        case 'diamond':
+          drawDiamond(effect.x, effect.y, effect.size, effect.size * 1.5);
+          break;
+        case 'circle':
+          ellipse(effect.x, effect.y, effect.size);
+          break;
       }
     }
+  }
+}
+
 
     function drawStar(x, y, radius1, radius2, npoints) {
       let angle = TWO_PI / npoints;
