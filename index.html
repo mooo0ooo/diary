@@ -164,23 +164,23 @@
       showRandomText();  
     }
 
-        function draw() {
-      if (isResultDisplayed) return;
-      
-      clear();
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
+       function draw() {
+  if (isResultDisplayed) return;
 
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+  clear();
+  drawEmotionGrid(emotionsA, 0);
+  drawEmotionGrid(emotionsB, 1);
+  drawEmotionGrid(emotionsC, 2);
 
-      if (isEffectActive) {
-        drawEffects();
-        if (millis() - effectStartTime > 2000) {
-          isEffectActive = false;
-        }
-      }
+  checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+
+  if (isEffectActive) {
+    drawEffects();
+    if (millis() - effectStartTime > 2000) {
+      isEffectActive = false;
     }
+  }
+}
 
 
     function startEmotionSelection() {
@@ -291,23 +291,26 @@
   let emotion = emotionLabel;
   if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
   selectedEmotions[emotion]++;
+
+        startEffect(emotion);
 }
 
-    function startEffect(emotion) {
-      effectColor = emotionColors[emotion];
-      effectShapes = [];
-      for (let i = 0; i < 50; i++) {
-        effectShapes.push({
-          x: random(width),
-          y: random(height),
-          size: random(3, 12),
-          type: random(['star', 'hexagon', 'diamond', 'circle']),
-          filled: random() > 0.5  
-        });
-      }
-      effectStartTime = millis();  
-      isEffectActive = true;
-    }
+function startEffect(emotion) {
+  effectColor = emotionColors[emotion];  // 感情に対応する色を設定
+  effectShapes = [];
+  for (let i = 0; i < 50; i++) {
+    effectShapes.push({
+      x: random(width),
+      y: random(height),
+      size: random(3, 12),
+      type: random(['star', 'hexagon', 'diamond', 'circle']),
+      filled: random() > 0.5
+    });
+  }
+  effectStartTime = millis();  
+  isEffectActive = true;
+}
+
 
     function drawEffects() {
         for (let shape of effectShapes) {
