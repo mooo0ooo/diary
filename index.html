@@ -58,39 +58,6 @@
     let labels = {};
     let checkButton;
     let isResultDisplayed = false;
-
-    let effectShapes = [];
-    let effectColor;
-    let effectStartTime = 0;
-    let isEffectActive = false;
-
-    // 色の定義
-    const emotionColors = {
-      'Joy': '#B50000',
-      'Trust': '#E58351',
-      'Fear': '#FFD036',
-      'Surprise': '#36C238',
-      'Sadness': '#008704',
-      'Disgust': '#5D94A6',
-      'Anger': '#00699D',
-      'Anticipation': '#FF7CC0',
-      'Ecstasy': '#7F0000',
-      'Adoration': '#B2653E',
-      'Terror': '#CCA32A',
-      'Amazement': '#003A00',
-      'Grief': '#00496B',
-      'Loathing': '#406672',
-      'Rage': '#278E27',
-      'Vigilance': '#CC6399',
-      'Serenity': '#E50000',
-      'Acceptance': '#FF7F3F',
-      'Apprehension': '#FF8F00',
-      'Distraction': '#00BA03',
-      'Pensiveness': '#008ED1',
-      'Boredom': '#7FCBE2',
-      'Annoyance': '#B2E4B2',
-      'Interest': '#FF7CC0'
-    };
     
     function preload() {
       // 背景画像やモチーフ画像の読み込み
@@ -145,13 +112,6 @@
       drawEmotionGrid(emotionsC, 2);
 
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
-
-      if (isEffectActive) {
-        drawEffects();
-        if (millis() - effectStartTime > 2000) {
-          isEffectActive = false;
-        }
-      }
     }
 
     function drawEmotionGrid(emotions, row) {
@@ -216,7 +176,7 @@
       buttons['Grief'] = createImg('https://mooo0ooo.github.io/diary/futaba.PNG', 'Grief').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Grief'));
       labels['Grief'] = createDiv('Grief').addClass('emotion-label');
 
-      buttons['Loathing'] = createImg('https://mooo0ooo.github.io/diary/mizuiroFlower.PNG', 'Loathing').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Loathing'));
+       buttons['Loathing'] = createImg('https://mooo0ooo.github.io/diary/mizuiroFlower.PNG', 'Loathing').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Loathing'));
       labels['Loathing'] = createDiv('Loathing').addClass('emotion-label');
 
       buttons['Rage'] = createImg('https://mooo0ooo.github.io/diary/blueFlower.PNG', 'Rage').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Rage'));
@@ -253,80 +213,6 @@
     function handleEmotionButton(emotion) {
       if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
       selectedEmotions[emotion]++;
-
-function startEffect(emotion) {
-  effectColor = emotionColors[emotion];
-  effectShapes = [];
-  for (let i = 0; i < 50; i++) {
-    effectShapes.push({
-      x: random(width),
-      y: random(height),
-      size: random(3, 12),
-      type: random(['star', 'hexagon', 'diamond', 'circle']),  // カンマを追加
-      filled: random() > 0.5  // 塗りつぶし or 線だけ
-    });
-  }
-  effectStartTime = millis();
-  isEffectActive = true;
-}
-
-
-    function drawEffects() {
-  for (let shape of effectShapes) {
-    if (shape.filled) {
-      fill(effectColor);
-      noStroke();
-    } else {
-      noFill();
-      stroke(effectColor);
-      strokeWeight(2);  // 線の太さを調整
-    }
-
-    push();
-    translate(shape.x, shape.y);
-    switch (shape.type) {
-      case 'star':
-        drawStar(0, 0, shape.size / 2, shape.size, 5);
-        break;
-      case 'hexagon':
-        drawPolygon(0, 0, shape.size / 2, 6);
-        break;
-      case 'diamond':
-        rotate(PI / 4);
-        rect(0, 0, shape.size, shape.size);
-        break;
-      case 'circle':
-        ellipse(0, 0, shape.size);
-        break;
-    }
-    pop();
-  }
-}
-
-    function drawStar(x, y, radius1, radius2, npoints) {
-      let angle = TWO_PI / npoints;
-      let halfAngle = angle / 2.0;
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius2;
-        let sy = y + sin(a) * radius2;
-        vertex(sx, sy);
-        sx = x + cos(a + halfAngle) * radius1;
-        sy = y + sin(a + halfAngle) * radius1;
-        vertex(sx, sy);
-      }
-      endShape(CLOSE);
-    }
-
-    function drawPolygon(x, y, radius, npoints) {
-      let angle = TWO_PI / npoints;
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius;
-        let sy = y + sin(a) * radius;
-        vertex(sx, sy);
-      }
-      endShape(CLOSE);
     }
 
     function displayResult() {
