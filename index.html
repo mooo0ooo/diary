@@ -164,6 +164,25 @@
       showRandomText();  
     }
 
+        function draw() {
+      if (isResultDisplayed) return;
+      
+      clear();
+      drawEmotionGrid(emotionsA, 0);
+      drawEmotionGrid(emotionsB, 1);
+      drawEmotionGrid(emotionsC, 2);
+
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+
+      if (isEffectActive) {
+        drawEffects();
+        if (millis() - effectStartTime > 2000) {
+          isEffectActive = false;
+        }
+      }
+    }
+
+
     function startEmotionSelection() {
       createEmotionButtons();
 
@@ -272,8 +291,6 @@
   let emotion = emotionLabel;
   if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
   selectedEmotions[emotion]++;
-
-  startEffect(emotion);
 }
 
     function startEffect(emotion) {
@@ -293,7 +310,6 @@
     }
 
     function drawEffects() {
-      if (isEffectActive) {
         for (let shape of effectShapes) {
           if (shape.filled) {
             fill(effectColor);  
@@ -323,25 +339,6 @@
           }
           pop();
         }
-
-        if (millis() - effectStartTime > 2000) {
-          isEffectActive = false;
-        }
-      }
-    }
-
-    function draw() {
-      if (!isResultDisplayed) {
-        clear();
-        drawEmotionGrid(emotionsA, 0);
-        drawEmotionGrid(emotionsB, 1);
-        drawEmotionGrid(emotionsC, 2);
-        checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
-      }
-
-      if (isEffectActive) {
-        drawEffects();  
-      }
     }
 
     function drawStar(x, y, radius1, radius2, npoints) {
