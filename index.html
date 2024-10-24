@@ -47,6 +47,33 @@
     let emotionsB = emotionsB_en;
     let emotionsC = emotionsC_en;
 
+    const emotionTranslationMap = {
+      '喜び': 'Joy',
+      '信頼': 'Trust',
+      '恐れ': 'Fear',
+      '驚き': 'Surprise',
+      '悲しみ': 'Sadness',
+      '嫌悪': 'Disgust',
+      '怒り': 'Anger',
+      '期待＜予期＞': 'Anticipation',
+      '恍惚': 'Ecstasy',
+      '敬愛': 'Adoration',
+      '恐怖': 'Terror',
+      '驚嘆': 'Amazement',
+      '悲嘆': 'Grief',
+      '強い嫌悪': 'Loathing',
+      '激怒': 'Rage',
+      '警戒': 'Vigilance',
+      '平穏': 'Serenity',
+      '容認': 'Acceptance',
+      '不安': 'Apprehension',
+      '放心': 'Distraction',
+      '哀愁': 'Pensiveness',
+      'うんざり': 'Boredom',
+      '苛立ち': 'Annoyance',
+      '関心': 'Interest'
+    };
+
     let selectedEmotions = {};
     let selectedMotif = [];
     let positiveCount = 0;
@@ -250,9 +277,20 @@
       labels['Interest'] = createDiv('Interest').addClass('emotion-label');
     }
 
-    function handleEmotionButton(emotion) {
+    // 英語に変換する関数
+    function toEnglishEmotion(emotion) {
+      if (currentLanguage === 'ja') {
+        return emotionTranslationMap[emotion] || emotion;
+      }
+      return emotion;
+    }
+
+    function handleEmotionButton(emotionLabel) {
+      // 日本語ラベルを英語に変換
+      let emotion = toEnglishEmotion(emotionLabel);
       if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
       selectedEmotions[emotion]++;
+
       startEffect(emotion);
     }
 
