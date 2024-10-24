@@ -174,13 +174,7 @@
 
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
 
-      if (isEffectActive) {
-        drawEffects();
-        if (millis() - effectStartTime > 2000) {
-          isEffectActive = false;
-        }
       }
-    }
 
 
     function startEmotionSelection() {
@@ -292,12 +286,17 @@
       if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
       selectedEmotions[emotion]++;
 
+      console.log('Emotion Button Clicked: ', emotion);  // デバッグ用ログ
       startEffect(emotion);
     }
 
     function startEffect(emotion) {
       effectColor = emotionColors[emotion];
       effectShapes = [];
+
+      console.log('Start Effect for emotion: ', emotion);  // デバッグ用ログ
+      console.log('Effect color: ', effectColor);  // デバッグ用ログ
+      
       for (let i = 0; i < 50; i++) {
         effectShapes.push({
           x: random(width),
@@ -307,10 +306,29 @@
           filled: random() > 0.5
         });
       }
+
+      console.log('Generated Effect Shapes: ', effectShapes);  // デバッグ用ログ
+
       effectStartTime = millis();  
       isEffectActive = true;
+
+      console.log('Effect start time: ', effectStartTime);  // デバッグ用ログ
+      console.log('Effect active: ', isEffectActive);  // デバッグ用ログ
     }
 
+    function draw() {
+      if (isEffectActive) {
+    console.log('Drawing Effects...');  // デバッグ用ログ
+    drawEffects();
+    
+    // エフェクトを5000msまで表示
+    if (millis() - effectStartTime > 5000) {
+      console.log('Effect duration exceeded, stopping effect');  // デバッグ用ログ
+      isEffectActive = false;
+    }
+   }
+ }
+      
     function drawEffects() {
       for (let shape of effectShapes) {
         if (shape.filled) {
