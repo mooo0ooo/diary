@@ -92,7 +92,7 @@
       motifImages['Interest'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG');
     }
 
-function setup() {
+    function setup() {
       createCanvas(windowWidth, windowHeight);
       createEmotionButtons();
 
@@ -135,7 +135,6 @@ function setup() {
       if (windowWidth > 800) return 6;
       return 4;
     }
-
 
     function createEmotionButtons() {
       buttons['Joy'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png', 'Joy').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Joy'));
@@ -234,6 +233,13 @@ function setup() {
 
       image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
 
+      // モチーフの決定と表示
+      let mostSelectedEmotion = getMostSelectedEmotion();
+      let motif = motifImages[mostSelectedEmotion];
+      if (motif) {
+        image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
+      }
+
       for (let key in buttons) {
         buttons[key].hide();
         labels[key].hide();
@@ -247,6 +253,19 @@ function setup() {
       downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
 
       isResultDisplayed = true;
+    }
+
+    // 一番押された感情を取得する関数
+    function getMostSelectedEmotion() {
+      let maxCount = -1;
+      let selectedEmotion = '';
+      for (let emotion in selectedEmotions) {
+        if (selectedEmotions[emotion] > maxCount) {
+          maxCount = selectedEmotions[emotion];
+          selectedEmotion = emotion;
+        }
+      }
+      return selectedEmotion;
     }
 
     function toggleLanguage() {
