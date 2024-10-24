@@ -164,23 +164,23 @@
       showRandomText();  
     }
 
-       function draw() {
-  if (isResultDisplayed) return;
+    function draw() {
+      if (isResultDisplayed) return;
 
-  clear();
-  drawEmotionGrid(emotionsA, 0);
-  drawEmotionGrid(emotionsB, 1);
-  drawEmotionGrid(emotionsC, 2);
+      clear();
+      drawEmotionGrid(emotionsA, 0);
+      drawEmotionGrid(emotionsB, 1);
+      drawEmotionGrid(emotionsC, 2);
 
-  checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
 
-  if (isEffectActive) {
-    drawEffects();
-    if (millis() - effectStartTime > 2000) {
-      isEffectActive = false;
+      if (isEffectActive) {
+        drawEffects();
+        if (millis() - effectStartTime > 2000) {
+          isEffectActive = false;
+        }
+      }
     }
-  }
-}
 
 
     function startEmotionSelection() {
@@ -288,60 +288,59 @@
     }
 
     function handleEmotionButton(emotionLabel) {
-  let emotion = emotionLabel;
-  if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
-  selectedEmotions[emotion]++;
+      let emotion = emotionLabel;
+      if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+      selectedEmotions[emotion]++;
 
-        startEffect(emotion);
-}
+      startEffect(emotion);
+    }
 
-function startEffect(emotion) {
-  effectColor = emotionColors[emotion];  // 感情に対応する色を設定
-  effectShapes = [];
-  for (let i = 0; i < 50; i++) {
-    effectShapes.push({
-      x: random(width),
-      y: random(height),
-      size: random(3, 12),
-      type: random(['star', 'hexagon', 'diamond', 'circle']),
-      filled: random() > 0.5
-    });
-  }
-  effectStartTime = millis();  
-  isEffectActive = true;
-}
-
+    function startEffect(emotion) {
+      effectColor = emotionColors[emotion];
+      effectShapes = [];
+      for (let i = 0; i < 50; i++) {
+        effectShapes.push({
+          x: random(width),
+          y: random(height),
+          size: random(3, 12),
+          type: random(['star', 'hexagon', 'diamond', 'circle']),
+          filled: random() > 0.5
+        });
+      }
+      effectStartTime = millis();  
+      isEffectActive = true;
+    }
 
     function drawEffects() {
-        for (let shape of effectShapes) {
-          if (shape.filled) {
-            fill(effectColor);  
-            noStroke();
-          } else {
-            noFill();
-            stroke(effectColor);
-            strokeWeight(2);
-          }
-
-          push();
-          translate(shape.x, shape.y);
-          switch (shape.type) {
-            case 'star':
-              drawStar(0, 0, shape.size / 2, shape.size, 5);
-              break;
-            case 'hexagon':
-              drawPolygon(0, 0, shape.size / 2, 6);
-              break;
-            case 'diamond':
-              rotate(PI / 4);
-              rect(0, 0, shape.size, shape.size);
-              break;
-            case 'circle':
-              ellipse(0, 0, shape.size);
-              break;
-          }
-          pop();
+      for (let shape of effectShapes) {
+        if (shape.filled) {
+          fill(effectColor);  
+          noStroke();
+        } else {
+          noFill();
+          stroke(effectColor);
+          strokeWeight(2);
         }
+
+        push();
+        translate(shape.x, shape.y);
+        switch (shape.type) {
+          case 'star':
+            drawStar(0, 0, shape.size / 2, shape.size, 5);
+            break;
+          case 'hexagon':
+            drawPolygon(0, 0, shape.size / 2, 6);
+            break;
+          case 'diamond':
+            rotate(PI / 4);
+            rect(0, 0, shape.size, shape.size);
+            break;
+          case 'circle':
+            ellipse(0, 0, shape.size);
+            break;
+        }
+        pop();
+      }
     }
 
     function drawStar(x, y, radius1, radius2, npoints) {
@@ -373,7 +372,6 @@ function startEffect(emotion) {
     function displayResult() {
       clear();
 
-      // Count positive and negative emotions
       let positiveCount = 0;
       let negativeCount = 0;
 
@@ -385,16 +383,13 @@ function startEffect(emotion) {
         }
       }
 
-      // Calculate positive to negative ratio and set backgroundChoice accordingly
       let total = positiveCount + negativeCount;
 
       if (positiveCount > negativeCount) {
-  // positiveEmotionsが多い場合、背景画像1か2をランダムで選ぶ
-  backgroundChoice = Math.random() < 0.5 ? 0 : 3;  // 0: 背景1, 1: 背景2
-} else {
-  // negativeEmotionsが多い場合、背景画像3か4をランダムで選ぶ
-  backgroundChoice = Math.random() < 0.5 ? 1 : 2;  // 2: 背景3, 3: 背景4
-}
+        backgroundChoice = Math.random() < 0.5 ? 0 : 3;
+      } else {
+        backgroundChoice = Math.random() < 0.5 ? 1 : 2;
+      }
 
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
