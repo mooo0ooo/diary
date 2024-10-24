@@ -254,24 +254,22 @@
       if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
       selectedEmotions[emotion]++;
 
-      startEffect(emotion);
-    }
+function startEffect(emotion) {
+  effectColor = emotionColors[emotion];
+  effectShapes = [];
+  for (let i = 0; i < 50; i++) {
+    effectShapes.push({
+      x: random(width),
+      y: random(height),
+      size: random(3, 12),
+      type: random(['star', 'hexagon', 'diamond', 'circle']),  // カンマを追加
+      filled: random() > 0.5  // 塗りつぶし or 線だけ
+    });
+  }
+  effectStartTime = millis();
+  isEffectActive = true;
+}
 
-    function startEffect(emotion) {
-      effectColor = emotionColors[emotion];
-      effectShapes = [];
-      for (let i = 0; i < 50; i++) {
-        effectShapes.push({
-          x: random(width),
-          y: random(height),
-          size: random(3, 12),
-          type: random(['star', 'hexagon', 'diamond', 'circle'])
-          filled: random() > 0.5
-        });
-      }
-      effectStartTime = millis();
-      isEffectActive = true;
-    }
 
     function drawEffects() {
   for (let shape of effectShapes) {
