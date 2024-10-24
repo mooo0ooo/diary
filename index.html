@@ -390,10 +390,10 @@ function startEffect(emotion) {
 
       if (positiveCount > negativeCount) {
   // positiveEmotionsが多い場合、背景画像1か2をランダムで選ぶ
-  backgroundChoice = Math.random() < 0.5 ? 0 : 1;  // 0: 背景1, 1: 背景2
+  backgroundChoice = Math.random() < 0.5 ? 0 : 3;  // 0: 背景1, 1: 背景2
 } else {
   // negativeEmotionsが多い場合、背景画像3か4をランダムで選ぶ
-  backgroundChoice = Math.random() < 0.5 ? 2 : 3;  // 2: 背景3, 3: 背景4
+  backgroundChoice = Math.random() < 0.5 ? 1 : 2;  // 2: 背景3, 3: 背景4
 }
 
       let img = backgroundImages[backgroundChoice];
