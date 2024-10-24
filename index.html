@@ -12,7 +12,7 @@
     .emotion-label {
       text-align: center;
       color: black;
-      font-size: 12px;  /* フォントサイズを調整 */
+      font-size: 12px;  
       position: absolute;
     }
     #download-btn {
@@ -116,49 +116,40 @@ function setup() {
 
 
 function draw() {
-  if (isResultDisplayed) {
-    return; // 結果が表示された後はdraw()で何もしない
-  }
-  
-  clear();  // clear() で描画をリセット
-  
-  drawEmotionGrid(emotionsA, 0);
-  drawEmotionGrid(emotionsB, 1);
-  drawEmotionGrid(emotionsC, 2);
+      if (isResultDisplayed) return;
+      
+      clear();
+      drawEmotionGrid(emotionsA, 0);
+      drawEmotionGrid(emotionsB, 1);
+      drawEmotionGrid(emotionsC, 2);
 
-  checkButton.position(windowWidth / 2 - 50, windowHeight - 100);  // Checkボタンの位置を調整
-}
-
-
-    // 画面幅に基づいて列数を調整する関数
-    function getColCount() {
-      if (windowWidth > 1200) {
-        return 8;  // デスクトップ画面では1行に8つ並べる
-      } else if (windowWidth > 800) {
-        return 6;  // タブレット画面では1行に6つ並べる
-      } else {
-        return 4;  // スマートフォンでは1行に4つ並べる
-      }
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
     }
 
-    // 感情ボタンをデバイスに応じた列数で並べ、中央揃えにする関数
+
     function drawEmotionGrid(emotions, row) {
-      let colCount = getColCount();  // 画面幅に基づいて列数を取得
-      let xOffset = 20;  // 横方向の余白
-      let yOffset = 120;  // 縦方向の余白（ラベルの分も含む）
-      
-      // ボタン全体の幅を計算し、中央に揃えるためのxオフセット
+      let colCount = getColCount();
+      let xOffset = 20;
+      let yOffset = 120;
       let totalRowWidth = (colCount * emotionSize) + ((colCount - 1) * xOffset);
-      let startX = (windowWidth - totalRowWidth) / 2;  // 左からのオフセット（中央揃え）
+      let startX = (windowWidth - totalRowWidth) / 2;
 
       for (let i = 0; i < emotions.length; i++) {
         let x = startX + (i % colCount) * (emotionSize + xOffset);
         let y = row * (emotionSize + yOffset) + yOffset;
-        
+
         buttons[emotions[i]].position(x, y);
-        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);  // ラベルを中央に揃える
+        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);
       }
     }
+
+    function getColCount() {
+      if (windowWidth > 1200) return 8;
+      if (windowWidth > 800) return 6;
+      return 4;
+    }
+
+
 
     function createEmotionButtons() {
       buttons['Joy'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png', 'Joy').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('Joy'));
@@ -235,83 +226,47 @@ function draw() {
     }
 
     function handleEmotionButton(emotion) {
-      if (!selectedEmotions[emotion]) {
-        selectedEmotions[emotion] = 0;
-      }
+      if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
       selectedEmotions[emotion]++;
-      selectedMotif.push(motifImages[emotion]);
-
-      if (positiveEmotions.includes(emotion)) {
-        positiveCount++;
-      } else if (negativeEmotions.includes(emotion)) {
-        negativeCount++;
-      }
     }
 
+
 function displayResult() {
-  let totalCount = positiveCount + negativeCount;
-  let positiveRatio = totalCount > 0 ? positiveCount / totalCount : 0;
+      clear();
 
-  if (positiveRatio === 1) {
-    backgroundChoice = 0;
-  } else if (positiveRatio >= 0.6) {
-    backgroundChoice = 1;
-  } else if (positiveRatio >= 0.4) {
-    backgroundChoice = 2;
-  } else {
-    backgroundChoice = 3;
-  }
+      // 背景とモチーフを描画
+      let img = backgroundImages[backgroundChoice];
+      let imgAspect = img.width / img.height;
+      let canvasAspect = width / height;
+      let imgWidth, imgHeight;
 
-  let motifCounts = selectedMotif.reduce((acc, motif) => {
-    acc[motif] = (acc[motif] || 0) + 1;
-    return acc;
-  }, {});
+      if (imgAspect > canvasAspect) {
+        imgWidth = width;
+        imgHeight = width / imgAspect;
+      } else {
+        imgHeight = height;
+        imgWidth = height * imgAspect;
+      }
 
-  motifChoice = selectedMotif.length > 0 ? 
-    Object.keys(motifCounts).reduce((a, b) => motifCounts[a] > motifCounts[b] ? a : b) : 
-    'Joy';
+      image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
 
-  clear();
+      // ボタンやラベルを非表示
+      for (let key in buttons) {
+        buttons[key].hide();
+        labels[key].hide();
+      }
 
-  let img = backgroundImages[backgroundChoice];
-  let imgAspect = img.width / img.height;
-  let canvasAspect = width / height;
+      // 言語切り替えボタンとCheckボタンも非表示
+      checkButton.hide();
+      select('#language-btn').style('display', 'none');
 
-  let imgWidth, imgHeight;
+      // ダウンロードボタンを表示
+      let downloadBtn = select('#download-btn');
+      downloadBtn.style('display', 'block');
+      downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
 
-  if (imgAspect > canvasAspect) {
-    imgWidth = width;
-    imgHeight = width / imgAspect;
-  } else {
-    imgHeight = height;
-    imgWidth = height * imgAspect;
-  }
-
-  image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
-  
-  image(motifImages[motifChoice], width / 2 - motifImages[motifChoice].width / 2, height / 2 - motifImages[motifChoice].height / 2);
-
-  // 感情ボタンとラベルを非表示にする
-  for (let key in buttons) {
-    buttons[key].style('display', 'none');  // ボタンを非表示
-    labels[key].style('display', 'none');   // ラベルを非表示
-  }
-
-  // Checkボタンと言語切り替えボタンも非表示にする
-  checkButton.hide();  // p5.jsのボタン非表示メソッドを使用
-  select('#language-btn').style('display', 'none');  // 言語切り替えボタンを非表示
-
-  // ダウンロードボタンを表示
-  let downloadBtn = select('#download-btn');
-  downloadBtn.style('display', 'block');
-  downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
-
-  isResultDisplayed = true;
-}
-
-
-
-
+      isResultDisplayed = true;
+    }
 
     // 言語切り替えの関数
     function toggleLanguage() {
