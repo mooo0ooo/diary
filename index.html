@@ -68,6 +68,7 @@
     let emotionSize = 100;
 
     let backgroundChoice = 0;
+    
     let effectColor = '';
     let effectShapes = [];
     let effectStartTime = 0;
@@ -168,24 +169,6 @@
       checkButton = createButton('Check');
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
       checkButton.mousePressed(displayResult);
-    }
-
-    function draw() {
-      if (isResultDisplayed) return;
-      
-      clear();
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
-
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
-
-      if (isEffectActive) {
-        drawEffects();
-        if (millis() - effectStartTime > 2000) {
-          isEffectActive = false;
-        }
-      }
     }
 
     function drawEmotionGrid(emotions, row) {
@@ -292,26 +275,27 @@
       startEffect(emotion);
     }
 
-    function startEffect(emotion) {
-      effectColor = emotionColors[emotion];
-      effectShapes = [];
-      for (let i = 0; i < 50; i++) {
-        effectShapes.push({
-          x: random(width),
-          y: random(height),
-          size: random(3, 12),
-          type: random(['star', 'hexagon', 'diamond', 'circle']),
-          filled: random() > 0.5  
-        });
-      }
-      effectStartTime = millis();
-      isEffectActive = true;
+      function startEffect(emotion) {
+    effectColor = emotionColors[emotion];
+    effectShapes = [];
+    for (let i = 0; i < 50; i++) {
+      effectShapes.push({
+        x: random(width),
+        y: random(height),
+        size: random(3, 12),
+        type: random(['star', 'hexagon', 'diamond', 'circle']),
+        filled: random() > 0.5  
+      });
     }
+    effectStartTime = millis();  // Start effect timing
+    isEffectActive = true;
+  }
 
-    function drawEffects() {
+  function drawEffects() {
+    if (isEffectActive) {
       for (let shape of effectShapes) {
         if (shape.filled) {
-          fill(effectColor);
+          fill(effectColor);  // Use effectColor to fill shapes
           noStroke();
         } else {
           noFill();
@@ -338,34 +322,62 @@
         }
         pop();
       }
-    }
 
-    function drawStar(x, y, radius1, radius2, npoints) {
-      let angle = TWO_PI / npoints;
-      let halfAngle = angle / 2.0;
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius2;
-        let sy = y + sin(a) * radius2;
-        vertex(sx, sy);
-        sx = x + cos(a + halfAngle) * radius1;
-        sy = y + sin(a + halfAngle) * radius1;
-        vertex(sx, sy);
+      // Stop effect after 2 seconds
+      if (millis() - effectStartTime > 2000) {
+        isEffectActive = false;  // Turn off the effect after time expires
       }
-      endShape(CLOSE);
+    }
+  }
+
+  function drawStar(x, y, radius1, radius2, npoints) {
+    let angle = TWO_PI / npoints;
+    let halfAngle = angle / 2.0;
+    beginShape();
+    for (let a = 0; a < TWO_PI; a += angle) {
+      let sx = x + cos(a) * radius2;
+      let sy = y + sin(a) * radius2;
+      vertex(sx, sy);
+      sx = x + cos(a + halfAngle) * radius1;
+      sy = y + sin(a + halfAngle) * radius1;
+      vertex(sx, sy);
+    }
+    endShape(CLOSE);
+  }
+
+  function drawPolygon(x, y, radius, npoints) {
+    let angle = TWO_PI / npoints;
+    beginShape();
+    for (let a = 0; a < TWO_PI; a += angle) {
+      let sx = x + cos(a) * radius;
+      let sy = y + sin(a) * radius;
+      vertex(sx, sy);
+    }
+    endShape(CLOSE);
+  }
+
+  function handleEmotionButton(emotionLabel) {
+    let emotion = emotionLabel;
+    if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+    selectedEmotions[emotion]++;
+
+    startEffect(emotion);  // Start the effect when an emotion button is clicked
+  }
+
+  function draw() {
+    if (!isResultDisplayed) {
+      clear();
+      drawEmotionGrid(emotionsA, 0);
+      drawEmotionGrid(emotionsB, 1);
+      drawEmotionGrid(emotionsC, 2);
+
+      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
     }
 
-    function drawPolygon(x, y, radius, npoints) {
-      let angle = TWO_PI / npoints;
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius;
-        let sy = y + sin(a) * radius;
-        vertex(sx, sy);
-      }
-      endShape(CLOSE);
+    if (isEffectActive) {
+      drawEffects();  // Draw the effect while it is active
     }
-
+  }
     function displayResult() {
       clear();
 
