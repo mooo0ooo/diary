@@ -323,6 +323,22 @@
         image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
       }
 
+      et selectedEmotionsList = Object.keys(selectedEmotions);
+      let radius = 200; // 中心からの距離
+      let angleStep = TWO_PI / selectedEmotionsList.length;
+
+      for (let i = 0; i < selectedEmotionsList.length; i++) {
+        let emotion = selectedEmotionsList[i];
+        let motifImage = motifImages[emotion];
+        
+        if (motifImage) {
+          let angle = i * angleStep;
+          let x = width / 2 + cos(angle) * radius - motifImage.width / 4;
+          let y = height / 2 + sin(angle) * radius - motifImage.height / 4;
+          image(motifImage, x, y, motifImage.width / 2, motifImage.height / 2); // 画像サイズを半分に調整
+        }
+      }
+
       for (let key in buttons) {
         buttons[key].hide();
         labels[key].hide();
