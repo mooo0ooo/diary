@@ -66,7 +66,13 @@
     let emotionsC = emotionsC_ja;
 
     let emotionSize = 100;
+
     let backgroundChoice = 0;
+    
+    let isEffectActive = false;
+    let effectColor;
+    let effectShapes = [];
+    let effectStartTime;
 
     let selectedEmotions = {};
     let buttons = {};
@@ -108,8 +114,7 @@
       '今の気分は？',
       '締め切りに間に合わなそう！！',
       '友達とけんかした',
-      '失恋した',
-      '推しのライブ当選！！',
+      '失恋した'
     ];
 
     function showRandomText() {
@@ -159,16 +164,24 @@
       showRandomText();  
     }
 
-    function draw() {
-      if (isResultDisplayed) return;
+       function draw() {
+  if (isResultDisplayed) return;
 
-      clear();
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
+  clear();
+  drawEmotionGrid(emotionsA, 0);
+  drawEmotionGrid(emotionsB, 1);
+  drawEmotionGrid(emotionsC, 2);
 
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+  checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
+
+  if (isEffectActive) {
+    drawEffects();
+    if (millis() - effectStartTime > 2000) {
+      isEffectActive = false;
     }
+  }
+}
+
 
     function startEmotionSelection() {
       createEmotionButtons();
@@ -229,7 +242,7 @@
       labels['恍惚'] = createDiv('恍惚').addClass('emotion-label');
 
       buttons['敬愛'] = createImg('https://mooo0ooo.github.io/diary/tulip.PNG', '敬愛').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('敬愛'));
-      labels['敬愛'] = createDiv('敬愛').addClass('emotion-label');
+            labels['敬愛'] = createDiv('敬愛').addClass('emotion-label');
 
       buttons['恐怖'] = createImg('https://mooo0ooo.github.io/diary/yellowFlower.PNG', '恐怖').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('恐怖'));
       labels['恐怖'] = createDiv('恐怖').addClass('emotion-label');
@@ -275,14 +288,92 @@
     }
 
     function handleEmotionButton(emotionLabel) {
-      let emotion = emotionLabel;
-      if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
-      selectedEmotions[emotion]++;
+  let emotion = emotionLabel;
+  if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+  selectedEmotions[emotion]++;
+
+        startEffect(emotion);
+}
+
+function startEffect(emotion) {
+  effectColor = emotionColors[emotion];  // 感情に対応する色を設定
+  effectShapes = [];
+  for (let i = 0; i < 50; i++) {
+    effectShapes.push({
+      x: random(width),
+      y: random(height),
+      size: random(3, 12),
+      type: random(['star', 'hexagon', 'diamond', 'circle']),
+      filled: random() > 0.5
+    });
+  }
+  effectStartTime = millis();  
+  isEffectActive = true;
+}
+
+
+    function drawEffects() {
+        for (let shape of effectShapes) {
+          if (shape.filled) {
+            fill(effectColor);  
+            noStroke();
+          } else {
+            noFill();
+            stroke(effectColor);
+            strokeWeight(2);
+          }
+
+          push();
+          translate(shape.x, shape.y);
+          switch (shape.type) {
+            case 'star':
+              drawStar(0, 0, shape.size / 2, shape.size, 5);
+              break;
+            case 'hexagon':
+              drawPolygon(0, 0, shape.size / 2, 6);
+              break;
+            case 'diamond':
+              rotate(PI / 4);
+              rect(0, 0, shape.size, shape.size);
+              break;
+            case 'circle':
+              ellipse(0, 0, shape.size);
+              break;
+          }
+          pop();
+        }
+    }
+
+    function drawStar(x, y, radius1, radius2, npoints) {
+      let angle = TWO_PI / npoints;
+      let halfAngle = angle / 2.0;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius2;
+        let sy = y + sin(a) * radius2;
+        vertex(sx, sy);
+        sx = x + cos(a + halfAngle) * radius1;
+        sy = y + sin(a + halfAngle) * radius1;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
+    }
+
+    function drawPolygon(x, y, radius, npoints) {
+      let angle = TWO_PI / npoints;
+      beginShape();
+      for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius;
+        let sy = y + sin(a) * radius;
+        vertex(sx, sy);
+      }
+      endShape(CLOSE);
     }
 
     function displayResult() {
       clear();
 
+      // Count positive and negative emotions
       let positiveCount = 0;
       let negativeCount = 0;
 
@@ -294,13 +385,16 @@
         }
       }
 
+      // Calculate positive to negative ratio and set backgroundChoice accordingly
       let total = positiveCount + negativeCount;
 
       if (positiveCount > negativeCount) {
-        backgroundChoice = Math.random() < 0.5 ? 0 : 3;
-      } else {
-        backgroundChoice = Math.random() < 0.5 ? 1 : 2;
-      }
+  // positiveEmotionsが多い場合、背景画像1か2をランダムで選ぶ
+  backgroundChoice = Math.random() < 0.5 ? 0 : 3;  // 0: 背景1, 1: 背景2
+} else {
+  // negativeEmotionsが多い場合、背景画像3か4をランダムで選ぶ
+  backgroundChoice = Math.random() < 0.5 ? 1 : 2;  // 2: 背景3, 3: 背景4
+}
 
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
@@ -321,22 +415,6 @@
       let motif = motifImages[mostSelectedEmotion];
       if (motif) {
         image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
-      }
-
-      let selectedEmotionsList = Object.keys(selectedEmotions);
-      let radius = 200; // 中心からの距離
-      let angleStep = TWO_PI / selectedEmotionsList.length;
-
-      for (let i = 0; i < selectedEmotionsList.length; i++) {
-        let emotion = selectedEmotionsList[i];
-        let motifImage = motifImages[emotion];
-        
-        if (motifImage) {
-          let angle = i * angleStep;
-          let x = width / 2 + cos(angle) * radius - motifImage.width / 4;
-          let y = height / 2 + sin(angle) * radius - motifImage.height / 4;
-          image(motifImage, x, y, motifImage.width / 2, motifImage.height / 2); // 画像サイズを半分に調整
-        }
       }
 
       for (let key in buttons) {
