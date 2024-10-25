@@ -74,12 +74,6 @@
     let checkButton;
     let isResultDisplayed = false;
 
-    let effects = [];
-    let effectDuration = 2000;
-    let effectStartTime = 0;
-    let isEffectActive = false;
-    let effectColor = '#FFFFFF';
-
     const positiveEmotions = ['喜び', '信頼', '驚き', '期待＜予期＞', '恍惚', '敬愛', '驚嘆', '平穏', '容認', '関心'];
     const negativeEmotions = ['恐れ', '悲しみ', '嫌悪', '怒り', '恐怖', '悲嘆', '強い嫌悪', '激怒', '警戒', '不安', '放心', '哀愁', 'うんざり', '苛立ち'];
 
@@ -117,8 +111,6 @@
       '失恋した',
       '推しのライブ当選！！',
     ];
-
-    const effectShapes = ['star', 'hexagon', 'diamond', 'circle']; // エフェクトの形状を定義
 
     function showRandomText() {
       const randomIndex = Math.floor(Math.random() * randomTexts.length);
@@ -174,10 +166,6 @@
       drawEmotionGrid(emotionsA, 0);
       drawEmotionGrid(emotionsB, 1);
       drawEmotionGrid(emotionsC, 2);
-
-     if (isEffectActive) {
-        drawEffect();
-      }
 
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
     }
@@ -286,92 +274,10 @@
       labels['関心'] = createDiv('関心').addClass('emotion-label');
     }
 
-function handleEmotionButton(emotionLabel) {
-    let emotion = emotionLabel;
-    if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
-    selectedEmotions[emotion]++;
-
-    effectColor = emotionColors[emotion];
-    startEffect();
-}
-
-function startEffect() {
-    effects = [];
-    isEffectActive = true;
-    effectStartTime = millis();  // 開始時間を設定
-
-    for (let i = 0; i < 50; i++) {
-        let x = random(windowWidth);
-        let y = random(windowHeight);
-        let size = random(20, 50);
-        let shape = random(effectShapes); 
-        effects.push({ x, y, size, shape });
-    }
-}
-
-function drawEffect() {
-    if (isEffectActive) {
-        let currentTime = millis();
-        // エフェクトを一定時間描画
-        if (currentTime - effectStartTime < effectDuration) {
-            for (let effect of effects) {
-                fill(effectColor);
-                noStroke();
-                switch (effect.shape) {
-                    case 'star':
-                        drawStar(effect.x, effect.y, effect.size / 2, effect.size, 5);
-                        break;
-                    case 'hexagon':
-                        drawHexagon(effect.x, effect.y, effect.size);
-                        break;
-                    case 'diamond':
-                        drawDiamond(effect.x, effect.y, effect.size, effect.size * 1.5);
-                        break;
-                    case 'circle':
-                        ellipse(effect.x, effect.y, effect.size);
-                        break;
-                }
-            }
-        } else {
-            isEffectActive = false;  // 一定時間が過ぎたらエフェクトをオフ
-        }
-    }
-}
-
-
-
-    function drawStar(x, y, radius1, radius2, npoints) {
-      let angle = TWO_PI / npoints;
-      let halfAngle = angle / 2.0;
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += angle) {
-        let sx = x + cos(a) * radius2;
-        let sy = y + sin(a) * radius2;
-        vertex(sx, sy);
-        sx = x + cos(a + halfAngle) * radius1;
-        sy = y + sin(a + halfAngle) * radius1;
-        vertex(sx, sy);
-      }
-      endShape(CLOSE);
-    }
-
-    function drawHexagon(x, y, radius) {
-      beginShape();
-      for (let a = 0; a < TWO_PI; a += PI / 3) {
-        let sx = x + cos(a) * radius;
-        let sy = y + sin(a) * radius;
-        vertex(sx, sy);
-      }
-      endShape(CLOSE);
-    }
-
-    function drawDiamond(x, y, width, height) {
-      beginShape();
-      vertex(x, y - height / 2);
-      vertex(x + width / 2, y);
-      vertex(x, y + height / 2);
-      vertex(x - width / 2, y);
-      endShape(CLOSE);
+    function handleEmotionButton(emotionLabel) {
+      let emotion = emotionLabel;
+      if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+      selectedEmotions[emotion]++;
     }
 
     function displayResult() {
