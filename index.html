@@ -78,7 +78,7 @@
     let effectDuration = 2000;
     let effectStartTime = 0;
     let isEffectActive = false;
-    let effectColor = '#B50000';
+    let effectColor = '#FFFFFF';
 
     const positiveEmotions = ['喜び', '信頼', '驚き', '期待＜予期＞', '恍惚', '敬愛', '驚嘆', '平穏', '容認', '関心'];
     const negativeEmotions = ['恐れ', '悲しみ', '嫌悪', '怒り', '恐怖', '悲嘆', '強い嫌悪', '激怒', '警戒', '不安', '放心', '哀愁', 'うんざり', '苛立ち'];
@@ -286,60 +286,58 @@
       labels['関心'] = createDiv('関心').addClass('emotion-label');
     }
 
-    function handleEmotionButton(emotionLabel) {
-      let emotion = emotionLabel;
-      if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
-      selectedEmotions[emotion]++;
+function handleEmotionButton(emotionLabel) {
+    let emotion = emotionLabel;
+    if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+    selectedEmotions[emotion]++;
 
-      effectColor = emotionColors[emotion];
-  　　startEffect();
-    }
+    effectColor = emotionColors[emotion];
+    startEffect();
+}
 
-    function startEffect() {
-      effects = [];
-      isEffectActive = true;  
-      effectStartTime = millis();  
+function startEffect() {
+    effects = [];
+    isEffectActive = true;
+    effectStartTime = millis();  // 開始時間を設定
 
-  // エフェクトの位置、サイズ、形状をランダムに生成
-      for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 50; i++) {
         let x = random(windowWidth);
         let y = random(windowHeight);
         let size = random(20, 50);
         let shape = random(effectShapes); 
         effects.push({ x, y, size, shape });
-      }
+    }
 }
 
-    function drawEffect() {
-  if (isEffectActive) {
-    let currentTime = millis();
-    // 一定時間経過後にエフェクトを無効化する
-    if (currentTime - effectStartTime > effectDuration) {
-      isEffectActive = false;
-      return;  // 時間が経過したら描画を終了
+function drawEffect() {
+    if (isEffectActive) {
+        let currentTime = millis();
+        // エフェクトを一定時間描画
+        if (currentTime - effectStartTime < effectDuration) {
+            for (let effect of effects) {
+                fill(effectColor);
+                noStroke();
+                switch (effect.shape) {
+                    case 'star':
+                        drawStar(effect.x, effect.y, effect.size / 2, effect.size, 5);
+                        break;
+                    case 'hexagon':
+                        drawHexagon(effect.x, effect.y, effect.size);
+                        break;
+                    case 'diamond':
+                        drawDiamond(effect.x, effect.y, effect.size, effect.size * 1.5);
+                        break;
+                    case 'circle':
+                        ellipse(effect.x, effect.y, effect.size);
+                        break;
+                }
+            }
+        } else {
+            isEffectActive = false;  // 一定時間が過ぎたらエフェクトをオフ
+        }
     }
-
-    // 各エフェクトを描画する
-    for (let effect of effects) {
-      fill(effectColor);
-      noStroke();
-      switch (effect.shape) {
-        case 'star':
-          drawStar(effect.x, effect.y, effect.size / 2, effect.size, 5);
-          break;
-        case 'hexagon':
-          drawHexagon(effect.x, effect.y, effect.size);
-          break;
-        case 'diamond':
-          drawDiamond(effect.x, effect.y, effect.size, effect.size * 1.5);
-          break;
-        case 'circle':
-          ellipse(effect.x, effect.y, effect.size);
-          break;
-      }
-    }
-  }
 }
+
 
 
     function drawStar(x, y, radius1, radius2, npoints) {
