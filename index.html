@@ -280,78 +280,76 @@
       selectedEmotions[emotion]++;
     }
 
-    function displayResult() {
-      clear();
+function displayResult() {
+  clear();
 
-      let positiveCount = 0;
-      let negativeCount = 0;
+  let positiveCount = 0;
+  let negativeCount = 0;
 
-      for (let emotion in selectedEmotions) {
-        if (positiveEmotions.includes(emotion)) {
-          positiveCount += selectedEmotions[emotion];
-        } else if (negativeEmotions.includes(emotion)) {
-          negativeCount += selectedEmotions[emotion];
-        }
-      }
-
-      let total = positiveCount + negativeCount;
-
-      if (positiveCount > negativeCount) {
-        backgroundChoice = Math.random() < 0.5 ? 0 : 3;
-      } else {
-        backgroundChoice = Math.random() < 0.5 ? 1 : 2;
-      }
-
-      let img = backgroundImages[backgroundChoice];
-      let imgAspect = img.width / img.height;
-      let canvasAspect = width / height;
-      let imgWidth, imgHeight;
-
-      if (imgAspect > canvasAspect) {
-        imgWidth = width;
-        imgHeight = width / imgAspect;
-      } else {
-        imgHeight = height;
-        imgWidth = height * imgAspect;
-      }
-
-      image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
-
-      let mostSelectedEmotion = getMostSelectedEmotion();
-      let motif = motifImages[mostSelectedEmotion];
-      if (motif) {
-        image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
-      }
-
-      let selectedEmotionsList = Object.keys(selectedEmotions);
-      let radius = 200; // 中心からの距離
-      let angleStep = TWO_PI / selectedEmotionsList.length;
-
-      for (let i = 0; i < selectedEmotionsList.length; i++) {
-        let emotion = selectedEmotionsList[i];
-        let motifImage = motifImages[emotion];
-        
-        if (motifImage) {
-          let angle = i * angleStep;
-          let x = width / 2 + cos(angle) * radius - motifImage.width / 4;
-          let y = height / 2 + sin(angle) * radius - motifImage.height / 4;
-          image(motifImage, x, y, motifImage.width / 2, motifImage.height / 2); // 画像サイズを半分に調整
-        }
-      }
-
-      for (let key in buttons) {
-        buttons[key].hide();
-        labels[key].hide();
-      }
-
-      checkButton.hide();
-
-      let downloadBtn = select('#download-btn');
-      downloadBtn.style('display', 'block');
-      downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
-
-      isResultDisplayed = true;
+  for (let emotion in selectedEmotions) {
+    if (positiveEmotions.includes(emotion)) {
+      positiveCount += selectedEmotions[emotion];
+    } else if (negativeEmotions.includes(emotion)) {
+      negativeCount += selectedEmotions[emotion];
     }
+  }
+
+  if (positiveCount > negativeCount) {
+    backgroundChoice = Math.random() < 0.5 ? 0 : 3;
+  } else {
+    backgroundChoice = Math.random() < 0.5 ? 1 : 2;
+  }
+
+  let img = backgroundImages[backgroundChoice];
+  let imgAspect = img.width / img.height;
+  let canvasAspect = width / height;
+  let imgWidth, imgHeight;
+  let marginRatio = 0.9; // 背景画像のサイズをキャンバスの90%に設定
+
+  if (imgAspect > canvasAspect) {
+    imgWidth = width * marginRatio;
+    imgHeight = imgWidth / imgAspect;
+  } else {
+    imgHeight = height * marginRatio;
+    imgWidth = imgHeight * imgAspect;
+  }
+
+  // 背景画像をキャンバス中央に配置
+  let imgX = (width - imgWidth) / 2;
+  let imgY = (height - imgHeight) / 2;
+  image(img, imgX, imgY, imgWidth, imgHeight);
+
+  // 選択されたモチーフ画像を背景画像の外側に円形配置
+  let selectedEmotionsList = Object.keys(selectedEmotions);
+  let radius = Math.max(imgWidth, imgHeight) / 2 + 50; // 背景画像の外側
+  let angleStep = TWO_PI / selectedEmotionsList.length;
+
+  for (let i = 0; i < selectedEmotionsList.length; i++) {
+    let emotion = selectedEmotionsList[i];
+    let motifImage = motifImages[emotion];
+
+    if (motifImage) {
+      let angle = i * angleStep;
+      let x = width / 2 + cos(angle) * radius - motifImage.width / 4;
+      let y = height / 2 + sin(angle) * radius - motifImage.height / 4;
+      image(motifImage, x, y, motifImage.width / 2, motifImage.height / 2);
+    }
+  }
+
+  // 残りのUIを隠す
+  for (let key in buttons) {
+    buttons[key].hide();
+    labels[key].hide();
+  }
+  checkButton.hide();
+
+  let downloadBtn = select('#download-btn');
+  downloadBtn.style('display', 'block');
+  downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
+
+  isResultDisplayed = true;
+}
+
 
     function getMostSelectedEmotion() {
       let maxCount = -1;
