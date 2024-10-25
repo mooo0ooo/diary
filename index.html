@@ -282,58 +282,58 @@
 
 function displayResult() {
   clear();
+  
+  // キャンバスを2倍の幅にして左と右に画像を並べる
+  resizeCanvas(windowWidth * 2, windowHeight);
 
-  // === First Image Setup: Background with Center Motif ===
+  // === 左側の画像: 背景画像と中央のモチーフ ===
   let margin = 150;
   let img = backgroundImages[backgroundChoice];
   let imgAspect = img.width / img.height;
   let imgWidth, imgHeight;
 
-  // Calculate image dimensions to fit within canvas with margin
-  if ((width - 2 * margin) / height < imgAspect) {
-    imgWidth = width - 2 * margin;
+  // 背景画像のサイズを調整
+  if ((width / 2 - 2 * margin) / height < imgAspect) {
+    imgWidth = width / 2 - 2 * margin;
     imgHeight = imgWidth / imgAspect;
   } else {
     imgHeight = height;
     imgWidth = imgHeight * imgAspect;
   }
 
-  // Center background image
-  let imgX = (width - imgWidth) / 2;
+  // 背景画像を左半分の中央に配置
+  let imgX = margin;
   let imgY = (height - imgHeight) / 2;
   image(img, imgX, imgY, imgWidth, imgHeight);
 
-  // Display most selected emotion motif at the center
+  // 最も多く選ばれた感情のモチーフを背景の中心に表示
   let mostSelectedEmotion = getMostSelectedEmotion();
   let centerMotif = motifImages[mostSelectedEmotion];
   if (centerMotif) {
-    image(centerMotif, width / 2 - centerMotif.width / 4, height / 2 - centerMotif.height / 4, centerMotif.width / 2, centerMotif.height / 2);
+    image(centerMotif, imgX + imgWidth / 2 - centerMotif.width / 4, height / 2 - centerMotif.height / 4, centerMotif.width / 2, centerMotif.height / 2);
   }
 
-  // === Second Image Setup: Grid of Selected Emotions with Labels ===
-  // Create a new graphics buffer for the second image
-  let gridBuffer = createGraphics(width, height);
-  let gridColCount = 4; // Number of columns in the grid
+  // === 右側の画像: 選択された感情のモチーフグリッド ===
+  let gridBuffer = createGraphics(width / 2, height);
+  let gridColCount = 4;  // グリッドの列数
   let xOffset = 20;
   let yOffset = 150;
   let iconSize = 80;
   let totalRowWidth = gridColCount * iconSize + (gridColCount - 1) * xOffset;
-  let startX = (width - totalRowWidth) / 2;
-  let startY = 100;  // Starting Y position for the grid layout
-  
+  let startX = (gridBuffer.width - totalRowWidth) / 2;
+  let startY = 100;
+
+  // グリッドに各モチーフ画像とラベルを表示
   let selectedEmotionsList = Object.keys(selectedEmotions);
-  
   for (let i = 0; i < selectedEmotionsList.length; i++) {
     let emotion = selectedEmotionsList[i];
     let motifImage = motifImages[emotion];
 
-    // Calculate grid positions
     let col = i % gridColCount;
     let row = Math.floor(i / gridColCount);
     let x = startX + col * (iconSize + xOffset);
     let y = startY + row * (iconSize + yOffset);
 
-    // Draw motif image and label in the grid buffer
     if (motifImage) {
       gridBuffer.image(motifImage, x, y, iconSize, iconSize);
       gridBuffer.fill(0);
@@ -343,23 +343,24 @@ function displayResult() {
     }
   }
 
-  // Display the grid image on the main canvas
-  image(gridBuffer, 0, height - gridBuffer.height);
+  // グリッド画像をキャンバスの右側に描画
+  image(gridBuffer, width / 2, 0);
 
-  // Hide UI elements after displaying results
+  // UIボタンを非表示にする
   for (let key in buttons) {
     buttons[key].hide();
     labels[key].hide();
   }
   checkButton.hide();
 
-  // Show download button
+  // 保存ボタンを表示
   let downloadBtn = select('#download-btn');
   downloadBtn.style('display', 'block');
   downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
 
   isResultDisplayed = true;
 }
+
 
 
 
