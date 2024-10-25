@@ -74,9 +74,6 @@
     let checkButton;
     let isResultDisplayed = false;
 
-    let currentPage = 1;
-    let nextPageButton, prevPageButton;
-
     const positiveEmotions = ['喜び', '信頼', '驚き', '期待＜予期＞', '恍惚', '敬愛', '驚嘆', '平穏', '容認', '関心'];
     const negativeEmotions = ['恐れ', '悲しみ', '嫌悪', '怒り', '恐怖', '悲嘆', '強い嫌悪', '激怒', '警戒', '不安', '放心', '哀愁', 'うんざり', '苛立ち'];
 
@@ -283,124 +280,78 @@
       selectedEmotions[emotion]++;
     }
 
+    function displayResult() {
+      clear();
 
+      let positiveCount = 0;
+      let negativeCount = 0;
 
-  // グリッド画像をキャンバスの右側に描画
-  image(gridBuffer, width / 2, 0);
+      for (let emotion in selectedEmotions) {
+        if (positiveEmotions.includes(emotion)) {
+          positiveCount += selectedEmotions[emotion];
+        } else if (negativeEmotions.includes(emotion)) {
+          negativeCount += selectedEmotions[emotion];
+        }
+      }
 
-  // UIボタンを非表示にする
-  for (let key in buttons) {
-    buttons[key].hide();
-    labels[key].hide();
-  }
-  checkButton.hide();
+      let total = positiveCount + negativeCount;
 
-  // 保存ボタンを表示
-  let downloadBtn = select('#download-btn');
-  downloadBtn.style('display', 'block');
-  downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
+      if (positiveCount > negativeCount) {
+        backgroundChoice = Math.random() < 0.5 ? 0 : 3;
+      } else {
+        backgroundChoice = Math.random() < 0.5 ? 1 : 2;
+      }
 
-  isResultDisplayed = true;
-}
+      let img = backgroundImages[backgroundChoice];
+      let imgAspect = img.width / img.height;
+      let canvasAspect = width / height;
+      let imgWidth, imgHeight;
 
-function displayResult() {
-  clear();
-  resizeCanvas(windowWidth, windowHeight);
+      if (imgAspect > canvasAspect) {
+        imgWidth = width;
+        imgHeight = width / imgAspect;
+      } else {
+        imgHeight = height;
+        imgWidth = height * imgAspect;
+      }
 
-  // 初期表示: 1ページ目の画像 (背景と中央のモチーフ)
-  showFirstImage();
+      image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
 
-  // Next Page and Previous Page buttons setup
-  nextPageButton = createButton('次のページ');
-  nextPageButton.position(windowWidth - 150, windowHeight - 50);
-  nextPageButton.mousePressed(showSecondImage);
+      let mostSelectedEmotion = getMostSelectedEmotion();
+      let motif = motifImages[mostSelectedEmotion];
+      if (motif) {
+        image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
+      }
 
-  prevPageButton = createButton('前のページ');
-  prevPageButton.position(50, windowHeight - 50);
-  prevPageButton.hide();  // 最初は非表示
-  prevPageButton.mousePressed(showFirstImage);
+      let selectedEmotionsList = Object.keys(selectedEmotions);
+      let radius = 200; // 中心からの距離
+      let angleStep = TWO_PI / selectedEmotionsList.length;
 
-  // Hide UI elements after displaying results
-  for (let key in buttons) {
-    buttons[key].hide();
-    labels[key].hide();
-  }
-  checkButton.hide();
+      for (let i = 0; i < selectedEmotionsList.length; i++) {
+        let emotion = selectedEmotionsList[i];
+        let motifImage = motifImages[emotion];
+        
+        if (motifImage) {
+          let angle = i * angleStep;
+          let x = width / 2 + cos(angle) * radius - motifImage.width / 4;
+          let y = height / 2 + sin(angle) * radius - motifImage.height / 4;
+          image(motifImage, x, y, motifImage.width / 2, motifImage.height / 2); // 画像サイズを半分に調整
+        }
+      }
 
-  // Show download button
-  let downloadBtn = select('#download-btn');
-  downloadBtn.style('display', 'block');
-  downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
-}
+      for (let key in buttons) {
+        buttons[key].hide();
+        labels[key].hide();
+      }
 
-function showFirstImage() {
-  clear();
-  currentPage = 1;
-  prevPageButton.hide();  // 最初のページでは前のページボタンを非表示
+      checkButton.hide();
 
-  // === 左側の画像: 背景画像と中央のモチーフ ===
-  let margin = 150;
-  let img = backgroundImages[backgroundChoice];
-  let imgAspect = img.width / img.height;
-  let imgWidth, imgHeight;
+      let downloadBtn = select('#download-btn');
+      downloadBtn.style('display', 'block');
+      downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
 
-  // 背景画像のサイズを調整
-  if ((width - 2 * margin) / height < imgAspect) {
-    imgWidth = width - 2 * margin;
-    imgHeight = imgWidth / imgAspect;
-  } else {
-    imgHeight = height;
-    imgWidth = imgHeight * imgAspect;
-  }
-
-  // 背景画像をキャンバスに表示
-  let imgX = margin;
-  let imgY = (height - imgHeight) / 2;
-  image(img, imgX, imgY, imgWidth, imgHeight);
-
-  // 最も多く選ばれた感情のモチーフを背景の中心に表示
-  let mostSelectedEmotion = getMostSelectedEmotion();
-  let centerMotif = motifImages[mostSelectedEmotion];
-  if (centerMotif) {
-    image(centerMotif, width / 2 - centerMotif.width / 4, height / 2 - centerMotif.height / 4, centerMotif.width / 2, centerMotif.height / 2);
-  }
-}
-
-function showSecondImage() {
-  clear();
-  currentPage = 2;
-  prevPageButton.show();  // 2ページ目で前のページボタンを表示
-
-  // === 右側の画像: 選択された感情のモチーフグリッド ===
-  let gridColCount = 4;  // グリッドの列数
-  let xOffset = 20;
-  let yOffset = 150;
-  let iconSize = 80;
-  let totalRowWidth = gridColCount * iconSize + (gridColCount - 1) * xOffset;
-  let startX = (width - totalRowWidth) / 2;
-  let startY = 100;
-
-  let selectedEmotionsList = Object.keys(selectedEmotions);
-
-  for (let i = 0; i < selectedEmotionsList.length; i++) {
-    let emotion = selectedEmotionsList[i];
-    let motifImage = motifImages[emotion];
-
-    let col = i % gridColCount;
-    let row = Math.floor(i / gridColCount);
-    let x = startX + col * (iconSize + xOffset);
-    let y = startY + row * (iconSize + yOffset);
-
-    if (motifImage) {
-      image(motifImage, x, y, iconSize, iconSize);
-      fill(0);
-      textAlign(CENTER);
-      textSize(12);
-      text(emotion, x + iconSize / 2, y + iconSize + 15);
+      isResultDisplayed = true;
     }
-  }
-}
-
 
     function getMostSelectedEmotion() {
       let maxCount = -1;
