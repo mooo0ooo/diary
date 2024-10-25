@@ -283,15 +283,13 @@
 function displayResult() {
   clear();
 
-  // Margin for displaying motifs on the sides of the background image
+  // === First Image Setup: Background with Center Motif ===
   let margin = 150;
-
-  // Aspect ratio calculation for centered background image
   let img = backgroundImages[backgroundChoice];
   let imgAspect = img.width / img.height;
   let imgWidth, imgHeight;
 
-  // Adjust width or height to fit within canvas with margin
+  // Calculate image dimensions to fit within canvas with margin
   if ((width - 2 * margin) / height < imgAspect) {
     imgWidth = width - 2 * margin;
     imgHeight = imgWidth / imgAspect;
@@ -300,48 +298,55 @@ function displayResult() {
     imgWidth = imgHeight * imgAspect;
   }
 
-  // Center the background image with margin on each side
+  // Center background image
   let imgX = (width - imgWidth) / 2;
   let imgY = (height - imgHeight) / 2;
   image(img, imgX, imgY, imgWidth, imgHeight);
 
-  // Display the most selected emotion motif in the center
+  // Display most selected emotion motif at the center
   let mostSelectedEmotion = getMostSelectedEmotion();
   let centerMotif = motifImages[mostSelectedEmotion];
   if (centerMotif) {
     image(centerMotif, width / 2 - centerMotif.width / 4, height / 2 - centerMotif.height / 4, centerMotif.width / 2, centerMotif.height / 2);
   }
 
-  // Display all selected emotions in the left and right margins
+  // === Second Image Setup: Grid of Selected Emotions with Labels ===
+  // Create a new graphics buffer for the second image
+  let gridBuffer = createGraphics(width, height);
+  let gridColCount = 4; // Number of columns in the grid
+  let xOffset = 20;
+  let yOffset = 150;
+  let iconSize = 80;
+  let totalRowWidth = gridColCount * iconSize + (gridColCount - 1) * xOffset;
+  let startX = (width - totalRowWidth) / 2;
+  let startY = 100;  // Starting Y position for the grid layout
+  
   let selectedEmotionsList = Object.keys(selectedEmotions);
-  let yOffset = 20;  // Vertical space between motifs
-  let topMargin = 50;
-
-  // Left side
+  
   for (let i = 0; i < selectedEmotionsList.length; i++) {
     let emotion = selectedEmotionsList[i];
-    let motif = motifImages[emotion];
+    let motifImage = motifImages[emotion];
 
-    if (motif) {
-      let x = margin / 2 - motif.width / 4;
-      let y = topMargin + i * (motif.height / 2 + yOffset);
-      image(motif, x, y, motif.width / 2, motif.height / 2);
+    // Calculate grid positions
+    let col = i % gridColCount;
+    let row = Math.floor(i / gridColCount);
+    let x = startX + col * (iconSize + xOffset);
+    let y = startY + row * (iconSize + yOffset);
+
+    // Draw motif image and label in the grid buffer
+    if (motifImage) {
+      gridBuffer.image(motifImage, x, y, iconSize, iconSize);
+      gridBuffer.fill(0);
+      gridBuffer.textAlign(CENTER);
+      gridBuffer.textSize(12);
+      gridBuffer.text(emotion, x + iconSize / 2, y + iconSize + 15);
     }
   }
 
-  // Right side
-  for (let i = 0; i < selectedEmotionsList.length; i++) {
-    let emotion = selectedEmotionsList[i];
-    let motif = motifImages[emotion];
+  // Display the grid image on the main canvas
+  image(gridBuffer, 0, height - gridBuffer.height);
 
-    if (motif) {
-      let x = width - margin / 2 - motif.width / 4;
-      let y = topMargin + i * (motif.height / 2 + yOffset);
-      image(motif, x, y, motif.width / 2, motif.height / 2);
-    }
-  }
-
-  // Hide the selection UI elements
+  // Hide UI elements after displaying results
   for (let key in buttons) {
     buttons[key].hide();
     labels[key].hide();
@@ -355,6 +360,7 @@ function displayResult() {
 
   isResultDisplayed = true;
 }
+
 
 
     function getMostSelectedEmotion() {
