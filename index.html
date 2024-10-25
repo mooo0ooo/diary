@@ -168,61 +168,53 @@ function setup() {
       if (isResultDisplayed) return;
       clear();
       if (currentPage === 1) {
-        drawFirstPage();
+        drawFirstResultPage();
       } else if (currentPage === 2) {
-        drawSecondPage();
+        drawSecondResultPage();
       }
     }
 
-    function drawFirstPage() {
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
-      document.getElementById('next-page-btn').style.display = 'none';
-      document.getElementById('prev-page-btn').style.display = 'none';
-    }
-
-    function drawSecondPage() {
+    function drawFirstResultPage() {
       background(backgroundImages[backgroundChoice]);
       let motif = motifImages[getMostSelectedEmotion()];
       if (motif) {
         image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
       }
       document.getElementById('next-page-btn').style.display = 'block';
+      document.getElementById('prev-page-btn').style.display = 'none';
+    }
+
+    function drawSecondResultPage() {
+      let startY = 50;
+      let colCount = getColCount();
+      let colWidth = windowWidth / colCount;
+
+      for (let i = 0; i < Object.keys(motifImages).length; i++) {
+        let emotion = Object.keys(motifImages)[i];
+        let img = motifImages[emotion];
+        let x = (i % colCount) * colWidth + colWidth / 2;
+        let y = startY + Math.floor(i / colCount) * (emotionSize + 20);
+
+        if (img) {
+          image(img, x - img.width / 2, y);
+        }
+      }
+      document.getElementById('next-page-btn').style.display = 'none';
       document.getElementById('prev-page-btn').style.display = 'block';
     }
 
     function startEmotionSelection() {
       createEmotionButtons();
-
       checkButton = createButton('Check');
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
       checkButton.mousePressed(displayResult);
     }
 
     function displayResult() {
-      currentPage = 1;  // 初期ページを表示
+      currentPage = 1; // ページ1から開始
       isResultDisplayed = true;
-      document.getElementById('next-page-btn').style.display = 'block';
       document.getElementById('next-page-btn').onclick = () => { currentPage = 2; };
       document.getElementById('prev-page-btn').onclick = () => { currentPage = 1; };
-    }
-
-    function drawEmotionGrid(emotions, row) {
-      let colCount = getColCount();
-      let xOffset = 20;
-      let yOffset = 120;
-      let totalRowWidth = (colCount * emotionSize) + ((colCount - 1) * xOffset);
-      let startX = (windowWidth - totalRowWidth) / 2;
-
-      for (let i = 0; i < emotions.length; i++) {
-        let x = startX + (i % colCount) * (emotionSize + xOffset);
-        let y = row * (emotionSize + yOffset) + yOffset;
-
-        buttons[emotions[i]].position(x, y);
-        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);
-      }
     }
 
     function getColCount() {
@@ -303,84 +295,6 @@ function setup() {
 
       buttons['関心'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG', '関心').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('関心'));
       labels['関心'] = createDiv('関心').addClass('emotion-label');
-    }
-
-    function setup() {
-      createCanvas(windowWidth, windowHeight);
-      showRandomText();  
-    }
-
-    function draw() {
-      if (isResultDisplayed) return;
-      clear();
-      if (currentPage === 1) {
-        drawFirstPage();
-      } else if (currentPage === 2) {
-        drawSecondPage();
-      }
-    }
-
-    function drawFirstPage() {
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
-      document.getElementById('next-page-btn').style.display = 'none';
-      document.getElementById('prev-page-btn').style.display = 'none';
-    }
-
-    function drawSecondPage() {
-      background(backgroundImages[backgroundChoice]);
-      let motif = motifImages[getMostSelectedEmotion()];
-      if (motif) {
-        image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
-      }
-      document.getElementById('next-page-btn').style.display = 'block';
-      document.getElementById('prev-page-btn').style.display = 'block';
-    }
-
-    function startEmotionSelection() {
-      createEmotionButtons();
-
-      checkButton = createButton('Check');
-      checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
-      checkButton.mousePressed(displayResult);
-    }
-
-    function displayResult() {
-      currentPage = 1;  // 初期ページを表示
-      isResultDisplayed = true;
-      document.getElementById('next-page-btn').style.display = 'block';
-      document.getElementById('next-page-btn').onclick = () => { currentPage = 2; };
-      document.getElementById('prev-page-btn').onclick = () => { currentPage = 1; };
-    }
-
-    function drawEmotionGrid(emotions, row) {
-      let colCount = getColCount();
-      let xOffset = 20;
-      let yOffset = 120;
-      let totalRowWidth = (colCount * emotionSize) + ((colCount - 1) * xOffset);
-      let startX = (windowWidth - totalRowWidth) / 2;
-
-      for (let i = 0; i < emotions.length; i++) {
-        let x = startX + (i % colCount) * (emotionSize + xOffset);
-        let y = row * (emotionSize + yOffset) + yOffset;
-
-        buttons[emotions[i]].position(x, y);
-        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);
-      }
-    }
-
-    function getColCount() {
-      if (windowWidth > 1200) return 8;
-      if (windowWidth > 800) return 6;
-      return 4;
-    }
-
-    function createEmotionButtons() {
-      buttons['喜び'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png', '喜び').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('喜び'));
-      labels['喜び'] = createDiv('喜び').addClass('emotion-label');
-      // 他の感情ボタンも同様に作成
     }
 
     function handleEmotionButton(emotionLabel) {
