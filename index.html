@@ -383,28 +383,31 @@ function displayResult() {
 }
 
 function showSecondPage() {
-  // キャンバスを1ページ目と同じサイズに設定
+  // Resize canvas to match the size of the first page
   resizeCanvas(savedImgWidth, savedImgHeight);
 
-  // キャンバスを中央に配置するためのオフセットを計算
+  // Calculate offset to center the canvas within the viewport
   let offsetX = (windowWidth - savedImgWidth) / 2;
-    let offsetY = (windowHeight - savedImgHeight) / 2;
+  let offsetY = (windowHeight - savedImgHeight) / 2;
 
   clear();
-  background(255);
+  background(255); // Set white background for clarity
 
-  // キャンバスを中央に移動
+  // Translate canvas to the center of the viewport
   translate(offsetX, offsetY);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
-  let gridSize = 5;
-  let imgSize = savedImgWidth / gridSize - 10; // 画像サイズを1ページ目と同じにする
-  let padding = 10;
+  let gridSize = 5; // Maintain the 5x5 grid structure
+  let outerMargin = 60; // Define equal margin around the grid for uniform spacing
 
-  // グリッドの配置
-  let totalGridWidth = gridSize * (imgSize + padding) - padding;
-  let startX = (savedImgWidth - totalGridWidth) / 2;
-  let startY = (savedImgHeight - totalGridWidth) / 2;
+  // Calculate motif image size within each cell to fit grid and maintain spacing
+  let imgSize = (savedImgWidth - outerMargin * 2) / gridSize - 10;
+  let cellPadding = 15; // Space between cells for visual separation
+
+  // Calculate starting X and Y positions for the grid, ensuring it is centered
+  let totalGridWidth = gridSize * (imgSize + cellPadding) - cellPadding;
+  let startX = (savedImgWidth - totalGridWidth) / 2 + outerMargin / 2;
+  let startY = (savedImgHeight - totalGridWidth) / 2 + outerMargin / 2;
 
   let posX, posY;
   let displayed = 0;
@@ -416,13 +419,15 @@ function showSecondPage() {
     for (let i = 0; i < displayCount; i++) {
       if (displayed >= 25) break;
 
-      posX = startX + (displayed % gridSize) * (imgSize + padding);
-      posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+      // Calculate the position for each image within the grid
+      posX = startX + (displayed % gridSize) * (imgSize + cellPadding);
+      posY = startY + Math.floor(displayed / gridSize) * (imgSize + cellPadding);
 
       if (motifImage) {
+        // Draw the motif image in its calculated cell position
         image(motifImage, posX, posY, imgSize, imgSize);
 
-        // ラベルをキャンバス上に配置
+        // Place the label just below the image, centered horizontally
         let label = createDiv(emotionTranslations[emotion]);
         label.position(offsetX + posX + imgSize / 2 - 10, offsetY + posY + imgSize + 5);
         label.style('font-size', '10px');
@@ -434,10 +439,12 @@ function showSecondPage() {
     if (displayed >= 25) break;
   }
 
+  // Display navigation and download buttons
   prevPageBtn.show();
   nextPageBtn.hide();
   downloadBtn.show();
 }
+
 
 
 function downloadCanvas() {
