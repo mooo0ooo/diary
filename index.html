@@ -420,11 +420,6 @@ function displayResult() {
     }
     
     function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
-      clear();
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
       if (currentPage === 1) {
         resizeCanvas(windowWidth, windowHeight);
       } else {
