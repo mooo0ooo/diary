@@ -318,16 +318,96 @@ function getColCount() {
       labels['関心'] = createDiv('関心').addClass('emotion-label');
     }
 
+    const emotionColors = {
+  '悲しみ': '#3498db',  // 青
+  '嫌悪': '#8e44ad',    // 紫
+  '怒り': '#e74c3c',    // 赤
+  '期待＜予期＞': '#f1c40f', // 黄
+  '恍惚': '#2ecc71',    // 緑
+  // 必要に応じて他の感情の色を追加
+};
+
+// エフェクト表示関数
+function showEffect(emotion) {
+  let color = emotionColors[emotion];
+  let shapes = ['star', 'hexagon', 'diamond', 'circle'];
+  let size = 50;  // エフェクトのサイズ
+  let opacity = 255; // 不透明度
+
+  // 描画するためのループ
+  for (let i = 0; i < shapes.length; i++) {
+    setTimeout(() => {
+      clear();  // 画面をクリア
+      noFill();
+      stroke(color);  // 線の色を設定
+      strokeWeight(2);
+      drawShape(width / 2, height / 2, shapes[i], size);
+
+      fill(color);  // 塗りつぶし色を設定
+      strokeWeight(0.5);
+      drawShape(width / 2, height / 2, shapes[i], size - 10);
+
+      opacity -= 40;  // 徐々にフェードアウト
+    }, i * 500);
+  }
+
+  // エフェクトを2秒後に消去
+  setTimeout(clear, 2000);
+}
+
+// 各形状を描画する関数
+function drawShape(x, y, shape, size) {
+  switch (shape) {
+    case 'star':
+      beginShape();
+      for (let i = 0; i < 10; i++) {
+        let angle = PI / 5 * i;
+        let radius = i % 2 === 0 ? size : size / 2;
+        let posX = x + cos(angle) * radius;
+        let posY = y + sin(angle) * radius;
+        vertex(posX, posY);
+      }
+      endShape(CLOSE);
+      break;
+
+    case 'hexagon':
+      beginShape();
+      for (let i = 0; i < 6; i++) {
+        let angle = PI / 3 * i;
+        vertex(x + cos(angle) * size, y + sin(angle) * size);
+      }
+      endShape(CLOSE);
+      break;
+
+    case 'diamond':
+      beginShape();
+      vertex(x, y - size);
+      vertex(x + size / 2, y);
+      vertex(x, y + size);
+      vertex(x - size / 2, y);
+      endShape(CLOSE);
+      break;
+
+    case 'circle':
+      ellipse(x, y, size * 2);
+      break;
+  }
+}
+
   function handleEmotionButton(emotionLabel) {
-      if (selectedCount >= 25) return;
-    
-      let emotion = emotionLabel;
-      if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
-      selectedEmotions[emotion]++;
-      selectedCount++;
-      
-      countDisplay.html(`${selectedCount}/25`);
-    }  
+  if (selectedCount >= 25) return;
+
+  let emotion = emotionLabel;
+  if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+  selectedEmotions[emotion]++;
+  selectedCount++;
+
+  countDisplay.html(`${selectedCount}/25`);
+
+  // エフェクトを表示
+  showEffect(emotion);
+}
+
 
 function displayResult() {
   clear();
