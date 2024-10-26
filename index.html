@@ -86,6 +86,9 @@
     let checkButton;
     let isResultDisplayed = false;
 
+    let selectedCount = 0;
+    let countDisplay; 
+
     const positiveEmotions = ['喜び', '信頼', '驚き', '期待＜予期＞', '恍惚', '敬愛', '驚嘆', '平穏', '容認', '関心'];
     const negativeEmotions = ['恐れ', '悲しみ', '嫌悪', '怒り', '恐怖', '悲嘆', '強い嫌悪', '激怒', '警戒', '不安', '放心', '哀愁', 'うんざり', '苛立ち'];
 
@@ -184,6 +187,9 @@
 
     function startEmotionSelection() {
       createEmotionButtons();
+
+      countDisplay = createDiv(`${selectedCount}/25`);
+      countDisplay.position(windowWidth / 2 - 100, windowHeight - 80);
 
       checkButton = createButton('Check');
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
@@ -287,10 +293,15 @@
     }
 
     function handleEmotionButton(emotionLabel) {
-      let emotion = emotionLabel;
-      if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
-      selectedEmotions[emotion]++;
-    }
+  if (selectedCount >= 25) return; 
+
+  let emotion = emotionLabel;
+  if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+  selectedEmotions[emotion]++;
+  
+  selectedCount++; 
+  countDisplay.html(`${selectedCount}/25`); 
+}
 
 function displayResult() {
       clear();
@@ -408,12 +419,15 @@ function showSecondPage() {
     }
 
     function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
-      clear();
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
-    }
+  resizeCanvas(windowWidth, windowHeight);
+  clear();
+  drawEmotionGrid(emotionsA, 0);
+  drawEmotionGrid(emotionsB, 1);
+  drawEmotionGrid(emotionsC, 2);
+  
+  countDisplay.position(windowWidth / 2 - 100, windowHeight - 80); // カウント位置再調整
+  checkButton.position(windowWidth / 2, windowHeight - 100); // Checkボタンの位置再調整
+}
 
   </script>
 </body>
