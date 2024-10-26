@@ -12,7 +12,7 @@
     .emotion-label {
       text-align: center;
       color: black;
-      font-size: 12px;  
+      font-size: 10px;  
       position: absolute;
     }
     #download-btn {
@@ -349,27 +349,33 @@ function displayResult() {
       clear();
       background(255);
 
-      let selectedEmotionsList = Object.keys(selectedEmotions);
-      let colCount = 4;
-      let imgSize = 120;
-      let padding = 20;
-      let startX = (width - (colCount * (imgSize + padding))) / 2;
-      let startY = 100;
+      llet selectedEmotionsList = Object.keys(selectedEmotions);
+      let gridSize = 5; 
+      let imgSize = 80; 
+      let padding = 10;
+      let startX = (width - (gridSize * (imgSize + padding))) / 2;
+      let startY = 50;
 
-      for (let i = 0; i < selectedEmotionsList.length; i++) {
-        let emotion = selectedEmotionsList[i];
+      let posX, posY;
+      
+      let displayed = 0;
+      for (let emotion of selectedEmotionsList) {
         let motifImage = motifImages[emotion];
         let displayCount = selectedEmotions[emotion];
         
-        for (let j = 0; j < displayCount; j++) {
-          let x = startX + ((i * displayCount + j) % colCount) * (imgSize + padding);
-          let y = startY + Math.floor((i * displayCount + j) / colCount) * (imgSize + padding);
+        for (let i = 0; i < displayCount; i++) {
+          posX = startX + (displayed % gridSize) * (imgSize + padding);
+          posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
 
-          if (motifImage) {
-            image(motifImage, x, y, imgSize, imgSize);
-            let label = createDiv(emotionTranslations[emotion]);
-            label.position(x + imgSize / 4, y + imgSize + 5);
-            label.style('text-align', 'center');
+          if (displayed < 25) {
+            if (motifImage) {
+              image(motifImage, posX, posY, imgSize, imgSize);
+              let label = createDiv(emotionTranslations[emotion]);
+              label.position(posX + imgSize / 4, posY + imgSize + 5);
+              label.style('font-size', '10px'); // ラベルのサイズを小さく
+              label.style('text-align', 'center');
+            }
+            displayed++;
           }
         }
       }
