@@ -304,6 +304,8 @@
 }
 
 function displayResult() {
+  　　countDisplay.hide();
+  
       clear();
       let positiveCount = 0;
       let negativeCount = 0;
@@ -351,7 +353,6 @@ function displayResult() {
       for (let key in buttons) {
         buttons[key].hide();
         labels[key].hide();
-        selectedCount[key].hide();
       }
 
       checkButton.hide();
