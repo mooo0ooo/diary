@@ -383,18 +383,19 @@ function displayResult() {
 }
 
 function showSecondPage() {
-  clear();
-  resizeCanvas(windowWidth, windowHeight);
+  // キャンバスを1ページ目と同じサイズにリサイズ
+  resizeCanvas(savedImgWidth, savedImgHeight);
   background(255);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
   let gridSize = 5;
-  let imgSize = savedImgWidth / gridSize - 10; // 正方形サイズを1ページ目と同じに設定
+  let imgSize = savedImgWidth / gridSize - 10; // 画像サイズを1ページ目に合わせる
   let padding = 10;
 
+  // グリッド配置
   let totalGridWidth = gridSize * (imgSize + padding) - padding;
-  let startX = (width - totalGridWidth) / 2;
-  let startY = (height - totalGridWidth) / 2; // Y座標も正方形に合わせて調整
+  let startX = (savedImgWidth - totalGridWidth) / 2;
+  let startY = (savedImgHeight - totalGridWidth) / 2;
 
   let posX, posY;
   let displayed = 0;
@@ -411,6 +412,8 @@ function showSecondPage() {
 
       if (motifImage) {
         image(motifImage, posX, posY, imgSize, imgSize);
+        
+        // ラベルをキャンバス上に描画
         let label = createDiv(emotionTranslations[emotion]);
         label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
         label.style('font-size', '10px');
