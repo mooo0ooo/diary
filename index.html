@@ -173,7 +173,7 @@
       motifImages['関心'] = loadImage('https://raw.githubusercontent.com/mooo0ooo/diary/main/glove.PNG');
     }
 
-   function setup() {
+    function setup() {
       createCanvas(windowWidth, windowHeight);
       showRandomText();  
     
@@ -217,7 +217,8 @@
     }
   
    function startEmotionSelection() {
-      countDisplay = createDiv(`${selectedCount}/25`);
+      createEmotionButtons();
+      countDisplay = createDiv(${selectedCount}/25);
       countDisplay.style('font-size', '14px');
       
       checkButton = createButton('Check');
@@ -329,7 +330,7 @@ function getColCount() {
       selectedEmotions[emotion]++;
       selectedCount++;
       
-      countDisplay.html(`${selectedCount}/25`);
+      countDisplay.html(${selectedCount}/25);
     }  
 
 function displayResult() {
@@ -385,7 +386,7 @@ function displayResult() {
   downloadBtn.show();
 }
 
-   function showSecondPage() {
+function showSecondPage() {
       clear();
 
       let squareSize = min(savedImgWidth, savedImgHeight);
@@ -399,24 +400,29 @@ function displayResult() {
 
       let totalGridWidth = gridSize * (imgSize + padding) - padding;
       let startX = (squareSize - totalGridWidth) / 2;
-      let startY = (squareSize - totalGridWidth) / 2;
+      let startY = (squareSize - totalGridWidth) / 2; // Y座標を中央にするために調整
 
+      let posX, posY;
       let displayed = 0;
 
       for (let emotion of selectedEmotionsList) {
+        let motifImage = motifImages[emotion];
         let displayCount = selectedEmotions[emotion];
         
         for (let i = 0; i < displayCount; i++) {
           if (displayed >= 25) break;
 
-          let posX = startX + (displayed % gridSize) * (imgSize + padding);
-          let posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+          posX = startX + (displayed % gridSize) * (imgSize + padding);
+          posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
 
-          // 画像を描画
-          textSize(10);
-          textAlign(CENTER);
-          text(emotionTranslations[emotion], posX + imgSize / 2, posY + imgSize + 15);
-
+          if (motifImage) {
+            image(motifImage, posX, posY, imgSize, imgSize);
+            let label = createDiv(emotionTranslations[emotion]);
+            label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
+            label.style('font-size', '10px');
+            label.style('text-align', 'center');
+            labelElements.push(label);
+          }
           displayed++;
         }
         if (displayed >= 25) break;
