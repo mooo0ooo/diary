@@ -400,10 +400,10 @@ function showSecondPage() {
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
   let gridSize = 5;
-  let imgSize = squareSize / gridSize - 10;
+  let imgSize = (squareSize - 2 * 20) / gridSize - 10; // Adjusted for padding
   let padding = 20;  // Add padding around the grid
-  let startX = (squareSize - (gridSize * (imgSize + padding))) / 2;
-  let startY = (squareSize - (gridSize * (imgSize + padding))) / 2;
+  let startX = padding;
+  let startY = padding;
 
   let posX, posY;
   let displayed = 0;
@@ -415,8 +415,8 @@ function showSecondPage() {
     for (let i = 0; i < displayCount; i++) {
       if (displayed >= 25) break;
 
-      posX = startX + (displayed % gridSize) * (imgSize + padding);
-      posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+      posX = startX + (displayed % gridSize) * (imgSize + 10);
+      posY = startY + Math.floor(displayed / gridSize) * (imgSize + 10);
 
       if (motifImage) {
         image(motifImage, posX, posY, imgSize, imgSize);
