@@ -321,26 +321,30 @@ function getColCount() {
 function showEffect(emotion) {
   let color = emotionColors[emotion];
   let shapes = ['star', 'hexagon', 'diamond', 'circle'];
-  let size = 50;
   
-  let effectIndex = 0;
   let intervalId = setInterval(() => {
-    clear();
-    drawShape(width / 2, height / 2, shapes[effectIndex % shapes.length], size, color);
-    effectIndex++;
+    for (let i = 0; i < 20; i++) { // 20個のシェイプを同時に表示
+      let x = random(width);
+      let y = random(height);
+      let size = random(10, 20); // サイズを小さく設定
+      let shape = random(shapes);
 
-    // インデックスがシェイプの数を超えたら停止
-    if (effectIndex >= shapes.length) {
-      clearInterval(intervalId);
-      setTimeout(() => clear(), 2000); // エフェクト終了後に画面をクリア
+      drawShape(x, y, shape, size, color);
     }
-  }, 500);
+  }, 100); // 100msごとにエフェクトを更新
+
+  // エフェクトを2秒後に停止
+  setTimeout(() => {
+    clearInterval(intervalId);
+    clear(); // 最後に画面をクリア
+  }, 2000);
 }
-    
+
+// 各形状を描画する関数
 function drawShape(x, y, shape, size, color) {
   noFill();
   stroke(color);
-  strokeWeight(2);
+  strokeWeight(1);
 
   switch (shape) {
     case 'star':
