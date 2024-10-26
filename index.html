@@ -176,30 +176,30 @@
     function setup() {
       createCanvas(windowWidth, windowHeight);
       showRandomText();  
-
+    
       downloadBtn = select('#download-btn');
       downloadBtn.mousePressed(downloadCanvas);
-
+    
       nextPageBtn = createButton('次のページ');
       nextPageBtn.position(width - 100, height - 50);
-      nextPageBtn.hide(); // 初期状態では非表示
+      nextPageBtn.hide();
       nextPageBtn.mousePressed(showSecondPage);
-
+    
       prevPageBtn = createButton('前のページ');
       prevPageBtn.position(20, windowHeight - 50);
-      prevPageBtn.hide(); // 初期状態では非表示
+      prevPageBtn.hide();
       prevPageBtn.mousePressed(() => {
         clear();
-        resizeCanvas(windowWidth, windowHeight); // キャンバスを元のサイズに戻す
-        labelElements.forEach(label => label.hide()); // ラベルを非表示
-        labelElements = []; // ラベルリストをリセット
-        displayResult(); // 1ページ目を表示
+        resizeCanvas(windowWidth, windowHeight);
+        labelElements.forEach(label => label.hide()); 
+        labelElements = []; 
+        displayResult(); 
       });
     }
-
+    
     function draw() {
       if (isResultDisplayed) return;
-    
+      
       clear();
       drawEmotionGrid(emotionsA, 0);
       drawEmotionGrid(emotionsB, 1);
@@ -207,26 +207,23 @@
     
       if (checkButton) {
         const centerX = windowWidth / 2;
-        const countWidth = 40; // 目安の幅
-        const checkButtonWidth = 100; // 目安の幅
+        const countWidth = 40;
+        const checkButtonWidth = 100;
         const offset = (checkButtonWidth + countWidth) / 2;
     
-        // 中央に配置するようにカウントとCheckボタンを並べる
         countDisplay.position(centerX - offset, windowHeight - 100);
-        checkButton.position(centerX - offset + countWidth + 10, windowHeight - 100); // 左隣に10pxの間隔
+        checkButton.position(centerX - offset + countWidth + 10, windowHeight - 100);
       }
     }
 
     function startEmotionSelection() {
-  createEmotionButtons();
-
-  // カウント表示を作成
-  countDisplay = createDiv(`${selectedCount}/25`);
-  countDisplay.style('font-size', '14px');
-  
-  checkButton = createButton('Check');
-  checkButton.mousePressed(displayResult);
-}
+      createEmotionButtons();
+      countDisplay = createDiv(`${selectedCount}/25`);
+      countDisplay.style('font-size', '14px');
+      
+      checkButton = createButton('Check');
+      checkButton.mousePressed(displayResult);
+    }
 
 function drawEmotionGrid(emotions, row) {
   let colCount = getColCount();
@@ -392,6 +389,7 @@ function displayResult() {
 function showSecondPage() {
   clear();
  
+  let squareSize = min(savedImgWidth, savedImgHeight);
   resizeCanvas(squareSize, squareSize);
   background(255);
 
