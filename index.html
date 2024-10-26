@@ -393,19 +393,20 @@ function showSecondPage() {
   clear();
   background(255);
 
-  // キャンバスを中央に移動
+  // キャンバスの中央位置に移動
   translate(offsetX, offsetY);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
   let gridSize = 5;
-  let imgSize = savedImgWidth / gridSize - 10; // モチーフ画像のサイズ
   let padding = 10;
   let gridMargin = 50; // グリッド周りの余白
 
-  // グリッドの幅を計算し、余白分を減算して配置
-  let totalGridWidth = gridSize * (imgSize + padding) - padding;
-  let startX = (savedImgWidth - totalGridWidth) / 2 + gridMargin;
-  let startY = (savedImgHeight - totalGridWidth) / 2 + gridMargin;
+  // モチーフ画像のサイズをグリッド全体の余白分を含めて計算
+  let imgSize = (savedImgWidth - 2 * gridMargin - (gridSize - 1) * padding) / gridSize;
+
+  // グリッドの描画開始位置を計算し、中央に配置
+  let startX = gridMargin;
+  let startY = gridMargin;
 
   let posX, posY;
   let displayed = 0;
@@ -439,6 +440,7 @@ function showSecondPage() {
   nextPageBtn.hide();
   downloadBtn.show();
 }
+
 
 
 
