@@ -345,45 +345,55 @@ function displayResult() {
       checkButton.hide();
       isResultDisplayed = true;
     }
-    function showSecondPage() {
-      clear();
-      background(255);
+function showSecondPage() {
+  clear();
+  background(255);
 
-      llet selectedEmotionsList = Object.keys(selectedEmotions);
-      let gridSize = 5; 
-      let imgSize = 80; 
-      let padding = 10;
-      let startX = (width - (gridSize * (imgSize + padding))) / 2;
-      let startY = 50;
+  let selectedEmotionsList = Object.keys(selectedEmotions);
+  let gridSize = 5; // 5x5 グリッド
+  let imgSize = 80; // 画像サイズ
+  let padding = 10;
+  let startX = (width - (gridSize * (imgSize + padding))) / 2;
+  let startY = 50;
 
-      let posX, posY;
-      
-      let displayed = 0;
-      for (let emotion of selectedEmotionsList) {
-        let motifImage = motifImages[emotion];
-        let displayCount = selectedEmotions[emotion];
-        
-        for (let i = 0; i < displayCount; i++) {
-          posX = startX + (displayed % gridSize) * (imgSize + padding);
-          posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+  let posX, posY;
+  
+  // 表示カウントを制限する変数
+  let displayed = 0;
 
-          if (displayed < 25) {
-            if (motifImage) {
-              image(motifImage, posX, posY, imgSize, imgSize);
-              let label = createDiv(emotionTranslations[emotion]);
-              label.position(posX + imgSize / 4, posY + imgSize + 5);
-              label.style('font-size', '10px'); // ラベルのサイズを小さく
-              label.style('text-align', 'center');
-            }
-            displayed++;
-          }
-        }
+  // 外側のループを制御するため、25個の画像を表示したらループを終了
+  for (let emotion of selectedEmotionsList) {
+    let motifImage = motifImages[emotion];
+    let displayCount = selectedEmotions[emotion];
+    
+    for (let i = 0; i < displayCount; i++) {
+      // 25個を超えたらループを完全に抜ける
+      if (displayed >= 25) break;
+
+      posX = startX + (displayed % gridSize) * (imgSize + padding);
+      posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+
+      // 画像とラベルを配置
+      if (motifImage) {
+        image(motifImage, posX, posY, imgSize, imgSize);
+        let label = createDiv(emotionTranslations[emotion]);
+        label.position(posX + imgSize / 2 - 10, posY + imgSize + 5); // 中央揃えを微調整
+        label.style('font-size', '10px'); // ラベルのサイズを小さく
+        label.style('text-align', 'center');
       }
-
-      let prevPageBtn = createButton('Previous Page');
-      prevPageBtn.position(20, height - 50);
-      prevPageBtn.mousePressed(displayResult);
+      displayed++;
     }
+
+    // 外側ループで25個に達したら終了
+    if (displayed >= 25) break;
+  }
+
+  // 「前のページ」ボタン
+  let prevPageBtn = createButton('Previous Page');
+  prevPageBtn.position(20, height - 50);
+  prevPageBtn.mousePressed(displayResult);
+}
+
 
     function getMostSelectedEmotion() {
       let maxCount = -1;
