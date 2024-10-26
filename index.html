@@ -61,6 +61,18 @@
     let emotionsB_ja = ['恍惚', '敬愛', '恐怖', '驚嘆', '悲嘆', '強い嫌悪', '激怒', '警戒'];
     let emotionsC_ja = ['平穏', '容認', '不安', '放心', '哀愁', 'うんざり', '苛立ち', '関心'];
 
+    let emotionsA_en = ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'];
+    let emotionsB_en = ['Ecstasy', 'Admiration', 'Terror', 'Amazement', 'Grief', 'Loathing', 'Rage', 'Vigilance'];
+    let emotionsC_en = ['Serenity', 'Acceptance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance', 'Interest'];
+
+    const emotionTranslations = {
+      '喜び': 'Joy', '信頼': 'Trust', '恐れ': 'Fear', '驚き': 'Surprise', '悲しみ': 'Sadness',
+      '嫌悪': 'Disgust', '怒り': 'Anger', '期待＜予期＞': 'Anticipation', '恍惚': 'Ecstasy',
+      '敬愛': 'Admiration', '恐怖': 'Terror', '驚嘆': 'Amazement', '悲嘆': 'Grief', '強い嫌悪': 'Loathing',
+      '激怒': 'Rage', '警戒': 'Vigilance', '平穏': 'Serenity', '容認': 'Acceptance', '不安': 'Apprehension',
+      '放心': 'Distraction', '哀愁': 'Pensiveness', 'うんざり': 'Boredom', '苛立ち': 'Annoyance', '関心': 'Interest'
+    };
+
     let emotionsA = emotionsA_ja;
     let emotionsB = emotionsB_ja;
     let emotionsC = emotionsC_ja;
@@ -282,46 +294,8 @@
 
 function displayResult() {
       clear();
-      let positiveCount = 0;
-      let negativeCount = 0;
-
-      for (let emotion in selectedEmotions) {
-        if (positiveEmotions.includes(emotion)) {
-          positiveCount += selectedEmotions[emotion];
-        } else if (negativeEmotions.includes(emotion)) {
-          negativeCount += selectedEmotions[emotion];
-        }
-      }
-
-      if (positiveCount > negativeCount) {
-        backgroundChoice = Math.random() < 0.5 ? 0 : 3;
-      } else {
-        backgroundChoice = Math.random() < 0.5 ? 1 : 2;
-      }
-
-      let img = backgroundImages[backgroundChoice];
-      let imgAspect = img.width / img.height;
-      let canvasAspect = width / height;
-      let imgWidth, imgHeight;
-
-      if (imgAspect > canvasAspect) {
-        imgWidth = width;
-        imgHeight = width / imgAspect;
-      } else {
-        imgHeight = height;
-        imgWidth = height * imgAspect;
-      }
-
-      image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
-
-      let mostSelectedEmotion = getMostSelectedEmotion();
-      let motif = motifImages[mostSelectedEmotion];
-      if (motif) {
-        image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
-      }
-
-      //「次のページ」ボタンを表示
-      let nextPageBtn = createButton('次のページ');
+      // ここで結果を表示し、次のページボタンを表示
+      let nextPageBtn = createButton('Next Page');
       nextPageBtn.position(width - 100, height - 50);
       nextPageBtn.mousePressed(showSecondPage);
 
@@ -336,32 +310,34 @@ function displayResult() {
 
     function showSecondPage() {
       clear();
-      background(255); // 背景を白に設定
+      background(255);
 
-      // 選択された感情のモチーフ画像とラベルをグリッド表示
       let selectedEmotionsList = Object.keys(selectedEmotions);
-      let colCount = 4; // 列の数を設定
-      let imgSize = 100; // 画像サイズ
-      let padding = 20; // 画像の間隔
+      let colCount = 4;
+      let imgSize = 100;
+      let padding = 20;
       let startX = (width - (colCount * (imgSize + padding))) / 2;
       let startY = 100;
 
       for (let i = 0; i < selectedEmotionsList.length; i++) {
         let emotion = selectedEmotionsList[i];
         let motifImage = motifImages[emotion];
-        let x = startX + (i % colCount) * (imgSize + padding);
-        let y = startY + Math.floor(i / colCount) * (imgSize + padding);
+        let displayCount = selectedEmotions[emotion];
+        
+        for (let j = 0; j < displayCount; j++) {
+          let x = startX + ((i * displayCount + j) % colCount) * (imgSize + padding);
+          let y = startY + Math.floor((i * displayCount + j) / colCount) * (imgSize + padding);
 
-        if (motifImage) {
-          image(motifImage, x, y, imgSize, imgSize);
-          let label = createDiv(emotion); // ラベル（英語）を作成
-          label.position(x, y + imgSize + 5);
-          label.style('text-align', 'center');
+          if (motifImage) {
+            image(motifImage, x, y, imgSize, imgSize);
+            let label = createDiv(emotionTranslations[emotion]);
+            label.position(x + imgSize / 4, y + imgSize + 5);
+            label.style('text-align', 'center');
+          }
         }
       }
 
-      //「前のページ」ボタン
-      let prevPageBtn = createButton('前のページ');
+      let prevPageBtn = createButton('Previous Page');
       prevPageBtn.position(20, height - 50);
       prevPageBtn.mousePressed(displayResult);
     }
