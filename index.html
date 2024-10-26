@@ -294,8 +294,46 @@
 
 function displayResult() {
       clear();
-      // ここで結果を表示し、次のページボタンを表示
-      let nextPageBtn = createButton('Next Page');
+      let positiveCount = 0;
+      let negativeCount = 0;
+
+      for (let emotion in selectedEmotions) {
+        if (positiveEmotions.includes(emotion)) {
+          positiveCount += selectedEmotions[emotion];
+        } else if (negativeEmotions.includes(emotion)) {
+          negativeCount += selectedEmotions[emotion];
+        }
+      }
+
+      if (positiveCount > negativeCount) {
+        backgroundChoice = Math.random() < 0.5 ? 0 : 3;
+      } else {
+        backgroundChoice = Math.random() < 0.5 ? 1 : 2;
+      }
+
+      let img = backgroundImages[backgroundChoice];
+      let imgAspect = img.width / img.height;
+      let canvasAspect = width / height;
+      let imgWidth, imgHeight;
+
+      if (imgAspect > canvasAspect) {
+        imgWidth = width;
+        imgHeight = width / imgAspect;
+      } else {
+        imgHeight = height;
+        imgWidth = height * imgAspect;
+      }
+
+      image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
+
+      let mostSelectedEmotion = getMostSelectedEmotion();
+      let motif = motifImages[mostSelectedEmotion];
+      if (motif) {
+        image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
+      }
+
+      //「次のページ」ボタンを表示
+      let nextPageBtn = createButton('次のページ');
       nextPageBtn.position(width - 100, height - 50);
       nextPageBtn.mousePressed(showSecondPage);
 
@@ -307,7 +345,6 @@ function displayResult() {
       checkButton.hide();
       isResultDisplayed = true;
     }
-
     function showSecondPage() {
       clear();
       background(255);
