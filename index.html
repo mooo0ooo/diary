@@ -324,10 +324,10 @@ function showEffect(emotion) {
   let shapes = ['star', 'hexagon', 'diamond', 'circle'];
 
   // 画面にランダムにシェイプを配置
-  for (let i = 0; i < 50; i++) { // 50個のシェイプを表示
+  for (let i = 0; i < 100; i++) { // 100個のシェイプを表示
     let x = random(width);
     let y = random(height);
-    let size = random(5, 15); // さらに小さめのサイズ
+    let size = random(2, 8); // さらに小さめのサイズ
     let shape = random(shapes);
     let isFilled = random() < 0.5; // 塗りつぶしをランダムに設定
 
@@ -346,7 +346,7 @@ function drawShape(x, y, shape, size, color, isFilled) {
     noFill(); // 塗りつぶしなし
   }
   stroke(color);
-  strokeWeight(1);
+  strokeWeight(0.5); // 線の太さも調整
 
   switch (shape) {
     case 'star':
