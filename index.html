@@ -44,6 +44,22 @@
       border: none;
       font-size: 18px;
     }
+    #navigation-buttons {
+      display: none;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+    #prev-page, #next-page {
+      padding: 10px 20px;
+      background-color: white;
+      color: black;
+      border: 2px solid black;
+      cursor: pointer;
+      margin: 0 10px;
+    }
   </style>
 </head>
 <body>
@@ -53,6 +69,10 @@
   </div>
 
   <button id="download-btn">画像をダウンロード</button>
+  <div id="navigation-buttons">
+    <button id="prev-page">前のページ</button>
+    <button id="next-page">次のページ</button>
+  </div>
   
   <script>
     let backgroundImages = [];
@@ -288,15 +308,15 @@
     }
 
     function handleEmotionButton(emotionLabel) {
-  let emotion = emotionLabel;
-  if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
-  selectedEmotions[emotion]++;
-
-        startEffect(emotion);
-}
+      let emotion = emotionLabel;
+      if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+      selectedEmotions[emotion]++;
+    
+      startEffect(emotion);
+    }
 
 function startEffect(emotion) {
-  effectColor = emotionColors[emotion];  // 感情に対応する色を設定
+  effectColor = emotionColors[emotion];  
   effectShapes = [];
   for (let i = 0; i < 50; i++) {
     effectShapes.push({
@@ -370,10 +390,9 @@ function startEffect(emotion) {
       endShape(CLOSE);
     }
 
-    function displayResult() {
+    function displayResultPage1() {
       clear();
 
-      // Count positive and negative emotions
       let positiveCount = 0;
       let negativeCount = 0;
 
@@ -385,16 +404,13 @@ function startEffect(emotion) {
         }
       }
 
-      // Calculate positive to negative ratio and set backgroundChoice accordingly
       let total = positiveCount + negativeCount;
 
       if (positiveCount > negativeCount) {
-  // positiveEmotionsが多い場合、背景画像1か2をランダムで選ぶ
-  backgroundChoice = Math.random() < 0.5 ? 0 : 3;  // 0: 背景1, 1: 背景2
-} else {
-  // negativeEmotionsが多い場合、背景画像3か4をランダムで選ぶ
-  backgroundChoice = Math.random() < 0.5 ? 1 : 2;  // 2: 背景3, 3: 背景4
-}
+        backgroundChoice = Math.random() < 0.5 ? 0 : 3;
+      } else {
+        backgroundChoice = Math.random() < 0.5 ? 1 : 2;
+      }
 
       let img = backgroundImages[backgroundChoice];
       let imgAspect = img.width / img.height;
@@ -429,6 +445,33 @@ function startEffect(emotion) {
       downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
 
       isResultDisplayed = true;
+
+      let navigationButtons = select('#navigation-buttons');
+      navigationButtons.style('display', 'block');
+    }
+
+    function displayResultPage2() {
+      clear();
+
+      let emotions = Object.keys(selectedEmotions);
+      let colCount = getColCount();
+      let xOffset = 20;
+      let yOffset = 120;
+      let totalRowWidth = (colCount * emotionSize) + ((colCount - 1) * xOffset);
+      let startX = (windowWidth - totalRowWidth) / 2;
+
+      for (let i = 0; i < emotions.length; i++) {
+        let x = startX + (i % colCount) * (emotionSize + xOffset);
+        let y = Math.floor(i / colCount) * (emotionSize + yOffset) + yOffset;
+
+        let btn = createImg(motifImages[emotions[i]].elt.src, emotions[i]);
+        btn.size(emotionSize, emotionSize);
+        btn.position(x, y);
+
+        let lbl = createDiv(emotions[i]);
+        lbl.addClass('emotion-label');
+        lbl.position(x + emotionSize / 2 - 20, y + emotionSize + 5);
+      }
     }
 
     function getMostSelectedEmotion() {
@@ -450,6 +493,18 @@ function startEffect(emotion) {
       drawEmotionGrid(emotionsB, 1);
       drawEmotionGrid(emotionsC, 2);
     }
+
+    document.getElementById('prev-page').addEventListener('click', () => {
+      if (isResultDisplayed) {
+        displayResultPage1();
+      }
+    });
+
+    document.getElementById('next-page').addEventListener('click', () => {
+      if (isResultDisplayed) {
+        displayResultPage2();
+      }
+    });
 
   </script>
 </body>
