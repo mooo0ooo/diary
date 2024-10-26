@@ -351,28 +351,31 @@
     }
 
 
-    function displayResultPage2() {
+function displayResultPage2() {
       clear();
-
       let emotions = Object.keys(selectedEmotions);
-      let colCount = getColCount();
-      let xOffset = 20;
-      let yOffset = 120;
-      let totalRowWidth = (colCount * emotionSize) + ((colCount - 1) * xOffset);
-      let startX = (windowWidth - totalRowWidth) / 2;
+      let itemCount = emotions.length;
+      let cols = Math.ceil(Math.sqrt(itemCount)); // 列数を計算
+      let rows = Math.ceil(itemCount / cols); // 行数を計算
+      let gridSize = Math.min(width / cols, height / rows) * 0.8; // 画像サイズを設定
 
       for (let i = 0; i < emotions.length; i++) {
-        let x = startX + (i % colCount) * (emotionSize + xOffset);
-        let y = Math.floor(i / colCount) * (emotionSize + yOffset) + yOffset;
+        let col = i % cols;
+        let row = Math.floor(i / cols);
+
+        let x = col * gridSize + (width - cols * gridSize) / 2;
+        let y = row * gridSize + (height - rows * gridSize) / 2;
 
         let emotion = emotions[i];
-        let btn = createImg(motifImages[emotion].elt.src, emotion);
-        btn.size(emotionSize, emotionSize);
-        btn.position(x, y);
+        let img = motifImages[emotion];
+        if (img) {
+          image(img, x, y, gridSize, gridSize); // 正方形画像に配置
 
-        let lbl = createDiv(emotionLabels[emotion] || emotion);
-        lbl.addClass('emotion-label');
-        lbl.position(x + emotionSize / 2 - 20, y + emotionSize + 5);
+          let label = emotionLabels[emotion] || emotion;
+          let labelDiv = createDiv(label);
+          labelDiv.addClass('emotion-label');
+          labelDiv.position(x + gridSize / 2 - labelDiv.elt.clientWidth / 2, y + gridSize + 5); // ラベル配置
+        }
       }
     }
 
