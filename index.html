@@ -284,10 +284,10 @@
       selectedEmotions[emotion]++;
     }
 
-        function displayResult() {
+    function displayResult() {
       clear();
 
-      // 1. Determine dominant emotion to set background choice.
+      // Determine dominant emotion to set background choice.
       let positiveCount = 0;
       let negativeCount = 0;
       for (let emotion in selectedEmotions) {
@@ -319,7 +319,7 @@
 
       showPage(1); // Start with the first page
     }
-
+    
     function showPage(pageNum) {
       clear();
       currentPage = pageNum;
@@ -354,28 +354,35 @@
         nextPageBtn.show();
         prevPageBtn.hide();
       } else if (currentPage === 2) {
-        // Show Page 2: Grid of selected emotions with English labels
-        resizeCanvas(squareCanvasSize, squareCanvasSize);
-        background(255); 
+        // Show Page 2: Grid of selected emotions with English labels on a square canvas
+        resizeCanvas(squareCanvasSize, squareCanvasSize); // Set canvas to square for Page 2
+        background(255); // Set white background for Page 2
 
-        let gridCols = 3;
+        let emotionList = [];
+        for (let emotion in selectedEmotions) {
+          for (let i = 0; i < selectedEmotions[emotion]; i++) {
+            emotionList.push(emotion); // Add each selected emotion based on count
+          }
+        }
+
+        // Set grid based on total number of repeated emotions
+        let gridCols = Math.ceil(Math.sqrt(emotionList.length)); 
         let cellSize = squareCanvasSize / gridCols;
 
-        let selectedEmotionsList = Object.keys(selectedEmotions);
-        for (let i = 0; i < selectedEmotionsList.length; i++) {
-          let emotion = selectedEmotionsList[i];
-          let x = (i % gridCols) * gridSize;
-          let y = Math.floor(i / gridCols) * gridSize;
+        for (let i = 0; i < emotionList.length; i++) {
+          let emotion = emotionList[i];
+          let x = (i % gridCols) * cellSize;
+          let y = Math.floor(i / gridCols) * cellSize;
 
           let motifImage = motifImages[emotion];
-          let englishLabel = getEnglishLabel(emotion); // Translate to English if needed
+          let englishLabel = getEnglishLabel(emotion);
 
           if (motifImage) {
-            image(motifImage, x + gridSize / 4, y + gridSize / 4, gridSize / 2, gridSize / 2);
+            image(motifImage, x + cellSize / 4, y + cellSize / 4, cellSize / 2, cellSize / 2); // Center motif in cell
             fill(emotionColors[emotion] || 'black');
             textSize(12);
             textAlign(CENTER, CENTER);
-            text(englishLabel, x + gridSize / 2, y + gridSize - 10);
+            text(englishLabel, x + cellSize / 2, y + cellSize - 10); // Label below motif
           }
         }
 
@@ -385,7 +392,7 @@
       }
     }
     
-    function getMostSelectedEmotion() {
+   function getMostSelectedEmotion() {
       let maxCount = -1;
       let selectedEmotion = '';
       for (let emotion in selectedEmotions) {
@@ -420,6 +427,8 @@
       } else {
         resizeCanvas(squareCanvasSize, squareCanvasSize);
       }
+      clear();
+      showPage(currentPage);
     }
 
   </script>
