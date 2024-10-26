@@ -383,19 +383,24 @@ function displayResult() {
 }
 
 function showSecondPage() {
-  // キャンバスを1ページ目と同じサイズにリサイズ
+  // キャンバスを1ページ目と同じサイズに設定
   resizeCanvas(savedImgWidth, savedImgHeight);
-   let offsetX = (windowWidth - savedImgWidth) / 2;
+
+  // キャンバスを中央に配置するためのオフセットを計算
+  let offsetX = (windowWidth - savedImgWidth) / 2;
 
   clear();
   background(255);
 
+  // キャンバスを中央に移動
+  translate(offsetX, offsetY);
+
   let selectedEmotionsList = Object.keys(selectedEmotions);
   let gridSize = 5;
-  let imgSize = savedImgWidth / gridSize - 10; // 画像サイズを1ページ目に合わせる
+  let imgSize = savedImgWidth / gridSize - 10; // 画像サイズを1ページ目と同じにする
   let padding = 10;
 
-  // グリッド配置
+  // グリッドの配置
   let totalGridWidth = gridSize * (imgSize + padding) - padding;
   let startX = (savedImgWidth - totalGridWidth) / 2;
   let startY = (savedImgHeight - totalGridWidth) / 2;
@@ -415,10 +420,10 @@ function showSecondPage() {
 
       if (motifImage) {
         image(motifImage, posX, posY, imgSize, imgSize);
-        
-        // ラベルをキャンバス上に描画
+
+        // ラベルをキャンバス上に配置
         let label = createDiv(emotionTranslations[emotion]);
-        label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
+        label.position(offsetX + posX + imgSize / 2 - 10, offsetY + posY + imgSize + 5);
         label.style('font-size', '10px');
         label.style('text-align', 'center');
         labelElements.push(label);
@@ -432,6 +437,7 @@ function showSecondPage() {
   nextPageBtn.hide();
   downloadBtn.show();
 }
+
 
 function downloadCanvas() {
   // キャンバスにラベルを描画
