@@ -428,18 +428,46 @@ function showSecondPage() {
 }
 
 function downloadCanvas() {
-  // キャンバスにラベルを描画
-  labelElements.forEach(label => {
-    const x = label.position().x;
-    const y = label.position().y;
-    const textContent = label.html();
-    fill(0); // テキストカラー
-    textSize(10);
-    textAlign(CENTER);
-    text(textContent, x, y);
-  });
+  // 保存用の仮想キャンバスを1ページ目と同じサイズで作成
+  let saveCanvas = createGraphics(savedImgWidth, savedImgHeight);
 
-  saveCanvas('emotion_canvas', 'png');  // キャンバスを保存
+  // 背景色を白に設定
+  saveCanvas.background(255);
+
+  // グリッド設定
+  let gridSize = 5;
+  let imgSize = savedImgWidth / gridSize - 10;
+  let padding = 10;
+  let totalGridWidth = gridSize * (imgSize + padding) - padding;
+  let startX = (savedImgWidth - totalGridWidth) / 2;
+  let startY = (savedImgHeight - totalGridWidth) / 2;
+
+  // 2ページ目と同じように感情アイコンとラベルを描画
+  let displayed = 0;
+  for (let emotion in selectedEmotions) {
+    let motifImage = motifImages[emotion];
+    let displayCount = selectedEmotions[emotion];
+    
+    for (let i = 0; i < displayCount; i++) {
+      if (displayed >= 25) break;
+
+      let posX = startX + (displayed % gridSize) * (imgSize + padding);
+      let posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+
+      if (motifImage) {
+        saveCanvas.image(motifImage, posX, posY, imgSize, imgSize);
+        saveCanvas.fill(0); // テキストの色
+        saveCanvas.textSize(10);
+        saveCanvas.textAlign(CENTER);
+        saveCanvas.text(emotionTranslations[emotion], posX + imgSize / 2, posY + imgSize + 10);
+      }
+      displayed++;
+    }
+    if (displayed >= 25) break;
+  }
+
+  // 仮想キャンバスを画像として保存
+  saveCanvas.save('emotion_canvas_page2', 'png');
 }
 
 function getMostSelectedEmotion() {
