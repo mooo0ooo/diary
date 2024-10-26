@@ -191,12 +191,12 @@
       prevPageBtn.mousePressed(() => {
         clear();
         resizeCanvas(windowWidth, windowHeight);
-        labelElements.forEach(label => label.hide());
-        labelElements = [];
-        displayResult();
+        labelElements.forEach(label => label.hide()); 
+        labelElements = []; 
+        displayResult(); 
       });
     }
-    
+
     function draw() {
       if (isResultDisplayed) return;
       
@@ -215,15 +215,16 @@
         checkButton.position(centerX - offset + countWidth + 10, windowHeight - 100);
       }
     }
-
-    function startEmotionSelection() {
+  
+   function startEmotionSelection() {
       createEmotionButtons();
-      countDisplay = createDiv(${selectedCount}/25);
+      countDisplay = createDiv(`${selectedCount}/25`);
       countDisplay.style('font-size', '14px');
       
       checkButton = createButton('Check');
       checkButton.mousePressed(displayResult);
     }
+
 
 function drawEmotionGrid(emotions, row) {
   let colCount = getColCount();
@@ -321,7 +322,7 @@ function getColCount() {
       labels['関心'] = createDiv('関心').addClass('emotion-label');
     }
 
-    function handleEmotionButton(emotionLabel) {
+  function handleEmotionButton(emotionLabel) {
       if (selectedCount >= 25) return;
     
       let emotion = emotionLabel;
@@ -329,19 +330,18 @@ function getColCount() {
       selectedEmotions[emotion]++;
       selectedCount++;
       
-      countDisplay.html(${selectedCount}/25);
-    }
+      countDisplay.html(`${selectedCount}/25`);
+    }  
 
 function displayResult() {
   clear();
-  
   countDisplay.hide();
   checkButton.hide();
   for (let key in buttons) {
     buttons[key].hide();
     labels[key].hide();
   }
-  labelElements.forEach(label => label.remove()); // ラベルを完全に削除
+  labelElements.forEach(label => label.remove());
   labelElements = []; 
   
   let positiveCount = 0;
@@ -388,20 +388,17 @@ function displayResult() {
 
 function showSecondPage() {
   clear();
- 
+
   let squareSize = min(savedImgWidth, savedImgHeight);
   resizeCanvas(squareSize, squareSize);
   background(255);
 
-  let gridGraphics = createGraphics(squareSize, squareSize);
-  gridGraphics.background(255);
-
   let selectedEmotionsList = Object.keys(selectedEmotions);
   let gridSize = 5;
-  let imgSize = 80;
+  let imgSize = squareSize / gridSize - 10;
   let padding = 10;
-  let startX = (width - (gridSize * (imgSize + padding))) / 2;
-  let startY = 50;
+  let startX = (squareSize - (gridSize * (imgSize + padding))) / 2;
+  let startY = 20;
 
   let posX, posY;
   let displayed = 0;
@@ -429,51 +426,13 @@ function showSecondPage() {
     if (displayed >= 25) break;
   }
 
-  image(gridGraphics, (width - squareSize) / 2, (height - squareSize) / 2);
-
   prevPageBtn.show();
   nextPageBtn.hide();
   downloadBtn.show();
 }
 
 function downloadCanvas() {
-  let squareSize = min(savedImgWidth, savedImgHeight);
-  let gridGraphics = createGraphics(squareSize, squareSize);
-  gridGraphics.background(255);
-
-  let selectedEmotionsList = Object.keys(selectedEmotions);
-  let gridSize = 5;
-  let imgSize = squareSize / gridSize - 10;
-  let padding = 10;
-  let startX = (squareSize - (gridSize * (imgSize + padding))) / 2;
-  let startY = (squareSize - (gridSize * (imgSize + padding))) / 2;
-
-  let posX, posY;
-  let displayed = 0;
-
-  for (let emotion of selectedEmotionsList) {
-    let motifImage = motifImages[emotion];
-    let displayCount = selectedEmotions[emotion];
-    
-    for (let i = 0; i < displayCount; i++) {
-      if (displayed >= 25) break;
-
-      posX = startX + (displayed % gridSize) * (imgSize + padding);
-      posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
-
-      if (motifImage) {
-        gridGraphics.image(motifImage, posX, posY, imgSize, imgSize);
-        gridGraphics.fill(0);
-        gridGraphics.textAlign(CENTER);
-        gridGraphics.textSize(10);
-        gridGraphics.text(emotionTranslations[emotion], posX + imgSize / 2, posY + imgSize + 10);
-      }
-      displayed++;
-    }
-    if (displayed >= 25) break;
-  }
-
-  save(gridGraphics, 'emotion_canvas', 'png');
+  saveCanvas('emotion_canvas', 'png');
 }
 
 function getMostSelectedEmotion() {
@@ -487,6 +446,18 @@ function getMostSelectedEmotion() {
   }
   return selectedEmotion;
 }
+
+    function getMostSelectedEmotion() {
+      let maxCount = -1;
+      let selectedEmotion = '';
+      for (let emotion in selectedEmotions) {
+        if (selectedEmotions[emotion] > maxCount) {
+          maxCount = selectedEmotions[emotion];
+          selectedEmotion = emotion;
+        }
+      }
+      return selectedEmotion;
+    }
 
     function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
