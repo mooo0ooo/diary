@@ -318,45 +318,30 @@ function getColCount() {
       labels['関心'] = createDiv('関心').addClass('emotion-label');
     }
 
-    const emotionColors = {
-  '悲しみ': '#3498db',  // 青
-  '嫌悪': '#8e44ad',    // 紫
-  '怒り': '#e74c3c',    // 赤
-  '期待＜予期＞': '#f1c40f', // 黄
-  '恍惚': '#2ecc71',    // 緑
-  // 必要に応じて他の感情の色を追加
-};
-
-// エフェクト表示関数
 function showEffect(emotion) {
   let color = emotionColors[emotion];
   let shapes = ['star', 'hexagon', 'diamond', 'circle'];
-  let size = 50;  // エフェクトのサイズ
-  let opacity = 255; // 不透明度
+  let size = 50;
+  
+  let effectIndex = 0;
+  let intervalId = setInterval(() => {
+    clear();
+    drawShape(width / 2, height / 2, shapes[effectIndex % shapes.length], size, color);
+    effectIndex++;
 
-  // 描画するためのループ
-  for (let i = 0; i < shapes.length; i++) {
-    setTimeout(() => {
-      clear();  // 画面をクリア
-      noFill();
-      stroke(color);  // 線の色を設定
-      strokeWeight(2);
-      drawShape(width / 2, height / 2, shapes[i], size);
-
-      fill(color);  // 塗りつぶし色を設定
-      strokeWeight(0.5);
-      drawShape(width / 2, height / 2, shapes[i], size - 10);
-
-      opacity -= 40;  // 徐々にフェードアウト
-    }, i * 500);
-  }
-
-  // エフェクトを2秒後に消去
-  setTimeout(clear, 2000);
+    // インデックスがシェイプの数を超えたら停止
+    if (effectIndex >= shapes.length) {
+      clearInterval(intervalId);
+      setTimeout(() => clear(), 2000); // エフェクト終了後に画面をクリア
+    }
+  }, 500);
 }
+    
+function drawShape(x, y, shape, size, color) {
+  noFill();
+  stroke(color);
+  strokeWeight(2);
 
-// 各形状を描画する関数
-function drawShape(x, y, shape, size) {
   switch (shape) {
     case 'star':
       beginShape();
