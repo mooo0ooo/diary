@@ -324,18 +324,23 @@ function showEffect(emotion) {
   let shapes = ['star', 'hexagon', 'diamond', 'circle'];
 
   // 画面にランダムにシェイプを配置
-  for (let i = 0; i < 50; i++) { // 100個のシェイプを表示
+  for (let i = 0; i < 100; i++) { // 100個のシェイプを表示
     let x = random(width);
     let y = random(height);
-    let size = random(2, 8); // さらに小さめのサイズ
+    let size = random(2, 8); // 小さめのサイズ
     let shape = random(shapes);
     let isFilled = random() < 0.5; // 塗りつぶしをランダムに設定
 
+    // シェイプの描画と2秒後の削除を設定
     drawShape(x, y, shape, size, color, isFilled);
-  }
 
-  // 2秒後に全てのエフェクトを消去
-  setTimeout(() => clear(), 2000);
+    // 2秒後に個別のシェイプを消去
+    setTimeout(() => {
+      noStroke();
+      fill(255, 255, 255, 0);  // 完全透明に設定
+      drawShape(x, y, shape, size, color, isFilled);  // 同じ位置に消去用の描画
+    }, 2000);
+  }
 }
 
 // 各形状を描画する関数
@@ -346,7 +351,7 @@ function drawShape(x, y, shape, size, color, isFilled) {
     noFill(); // 塗りつぶしなし
   }
   stroke(color);
-  strokeWeight(0.5); // 線の太さも調整
+  strokeWeight(0.5);
 
   switch (shape) {
     case 'star':
@@ -384,6 +389,7 @@ function drawShape(x, y, shape, size, color, isFilled) {
       break;
   }
 }
+
 
 
   function handleEmotionButton(emotionLabel) {
