@@ -393,20 +393,20 @@ function showSecondPage() {
   clear();
   background(255);
 
-  // キャンバスの中央位置に移動
+  // キャンバスを中央に移動
   translate(offsetX, offsetY);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
   let gridSize = 5;
-  let padding = 10;
-  let gridMargin = 50; // グリッド周りの余白
+  let padding = 8;  // モチーフ画像間の余白を少なめに設定
+  let gridMargin = 30; // グリッド全体の余白を控えめに設定
 
-  // モチーフ画像のサイズをグリッド全体の余白分を含めて計算
+  // モチーフ画像のサイズを計算（余白とグリッドサイズを含める）
   let imgSize = (savedImgWidth - 2 * gridMargin - (gridSize - 1) * padding) / gridSize;
 
-  // グリッドの描画開始位置を計算し、中央に配置
-  let startX = gridMargin;
-  let startY = gridMargin;
+  // グリッド全体が中央に配置されるように開始位置を計算
+  let startX = (savedImgWidth - (gridSize * imgSize + (gridSize - 1) * padding)) / 2;
+  let startY = (savedImgHeight - (gridSize * imgSize + (gridSize - 1) * padding)) / 2;
 
   let posX, posY;
   let displayed = 0;
@@ -440,9 +440,6 @@ function showSecondPage() {
   nextPageBtn.hide();
   downloadBtn.show();
 }
-
-
-
 
 function downloadCanvas() {
   // キャンバスにラベルを描画
