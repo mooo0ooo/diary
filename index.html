@@ -280,9 +280,8 @@
       selectedEmotions[emotion]++;
     }
 
-    function displayResult() {
+function displayResult() {
       clear();
-
       let positiveCount = 0;
       let negativeCount = 0;
 
@@ -293,8 +292,6 @@
           negativeCount += selectedEmotions[emotion];
         }
       }
-
-      let total = positiveCount + negativeCount;
 
       if (positiveCount > negativeCount) {
         backgroundChoice = Math.random() < 0.5 ? 0 : 3;
@@ -323,21 +320,10 @@
         image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
       }
 
-      let selectedEmotionsList = Object.keys(selectedEmotions);
-      let radius = 200; // 中心からの距離
-      let angleStep = TWO_PI / selectedEmotionsList.length;
-
-      for (let i = 0; i < selectedEmotionsList.length; i++) {
-        let emotion = selectedEmotionsList[i];
-        let motifImage = motifImages[emotion];
-        
-        if (motifImage) {
-          let angle = i * angleStep;
-          let x = width / 2 + cos(angle) * radius - motifImage.width / 4;
-          let y = height / 2 + sin(angle) * radius - motifImage.height / 4;
-          image(motifImage, x, y, motifImage.width / 2, motifImage.height / 2); // 画像サイズを半分に調整
-        }
-      }
+      //「次のページ」ボタンを表示
+      let nextPageBtn = createButton('次のページ');
+      nextPageBtn.position(width - 100, height - 50);
+      nextPageBtn.mousePressed(showSecondPage);
 
       for (let key in buttons) {
         buttons[key].hide();
@@ -345,12 +331,39 @@
       }
 
       checkButton.hide();
-
-      let downloadBtn = select('#download-btn');
-      downloadBtn.style('display', 'block');
-      downloadBtn.mousePressed(() => saveCanvas('result', 'png'));
-
       isResultDisplayed = true;
+    }
+
+    function showSecondPage() {
+      clear();
+      background(255); // 背景を白に設定
+
+      // 選択された感情のモチーフ画像とラベルをグリッド表示
+      let selectedEmotionsList = Object.keys(selectedEmotions);
+      let colCount = 4; // 列の数を設定
+      let imgSize = 100; // 画像サイズ
+      let padding = 20; // 画像の間隔
+      let startX = (width - (colCount * (imgSize + padding))) / 2;
+      let startY = 100;
+
+      for (let i = 0; i < selectedEmotionsList.length; i++) {
+        let emotion = selectedEmotionsList[i];
+        let motifImage = motifImages[emotion];
+        let x = startX + (i % colCount) * (imgSize + padding);
+        let y = startY + Math.floor(i / colCount) * (imgSize + padding);
+
+        if (motifImage) {
+          image(motifImage, x, y, imgSize, imgSize);
+          let label = createDiv(emotion); // ラベル（英語）を作成
+          label.position(x, y + imgSize + 5);
+          label.style('text-align', 'center');
+        }
+      }
+
+      //「前のページ」ボタン
+      let prevPageBtn = createButton('前のページ');
+      prevPageBtn.position(20, height - 50);
+      prevPageBtn.mousePressed(displayResult);
     }
 
     function getMostSelectedEmotion() {
