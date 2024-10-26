@@ -284,10 +284,10 @@
       selectedEmotions[emotion]++;
     }
 
-    function displayResult() {
+function displayResult() {
       clear();
 
-      // Determine dominant emotion to set background choice.
+      // Determine background choice based on selected emotions.
       let positiveCount = 0;
       let negativeCount = 0;
       for (let emotion in selectedEmotions) {
@@ -299,7 +299,7 @@
       }
       backgroundChoice = positiveCount > negativeCount ? (Math.random() < 0.5 ? 0 : 3) : (Math.random() < 0.5 ? 1 : 2);
 
-      // Hide initial buttons and show page buttons
+      // Hide initial buttons and show page navigation buttons
       for (let key in buttons) { buttons[key].hide(); labels[key].hide(); }
       checkButton.hide();
 
@@ -328,7 +328,8 @@
       let prevPageBtn = select('#prev-page-btn');
 
       if (currentPage === 1) {
-        // Show Page 1: Background and central motif
+        // Page 1: Display background image and central motif
+        resizeCanvas(squareCanvasSize, squareCanvasSize);
         let img = backgroundImages[backgroundChoice];
         let imgAspect = img.width / img.height;
         let canvasAspect = width / height;
@@ -354,21 +355,23 @@
         nextPageBtn.show();
         prevPageBtn.hide();
       } else if (currentPage === 2) {
-        // Show Page 2: Grid of selected emotions with English labels on a square canvas
-        resizeCanvas(squareCanvasSize, squareCanvasSize); // Set canvas to square for Page 2
-        background(255); // Set white background for Page 2
+        // Page 2: Display selected emotions in a grid with a white background
+        resizeCanvas(squareCanvasSize, squareCanvasSize);
+        background(255); // White background
 
+        // Prepare the list of repeated emotions
         let emotionList = [];
         for (let emotion in selectedEmotions) {
           for (let i = 0; i < selectedEmotions[emotion]; i++) {
-            emotionList.push(emotion); // Add each selected emotion based on count
+            emotionList.push(emotion);
           }
         }
 
-        // Set grid based on total number of repeated emotions
-        let gridCols = Math.ceil(Math.sqrt(emotionList.length)); 
+        // Calculate grid dimensions
+        let gridCols = Math.ceil(Math.sqrt(emotionList.length));
         let cellSize = squareCanvasSize / gridCols;
 
+        // Render each emotion in grid
         for (let i = 0; i < emotionList.length; i++) {
           let emotion = emotionList[i];
           let x = (i % gridCols) * cellSize;
@@ -378,7 +381,7 @@
           let englishLabel = getEnglishLabel(emotion);
 
           if (motifImage) {
-            image(motifImage, x + cellSize / 4, y + cellSize / 4, cellSize / 2, cellSize / 2); // Center motif in cell
+            image(motifImage, x + cellSize / 4, y + cellSize / 4, cellSize / 2, cellSize / 2); // Center motif
             fill(emotionColors[emotion] || 'black');
             textSize(12);
             textAlign(CENTER, CENTER);
