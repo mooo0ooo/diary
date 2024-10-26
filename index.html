@@ -86,9 +86,6 @@
     let checkButton;
     let isResultDisplayed = false;
 
-    let selectedCount = 0;
-    let countDisplay; 
-
     const positiveEmotions = ['喜び', '信頼', '驚き', '期待＜予期＞', '恍惚', '敬愛', '驚嘆', '平穏', '容認', '関心'];
     const negativeEmotions = ['恐れ', '悲しみ', '嫌悪', '怒り', '恐怖', '悲嘆', '強い嫌悪', '激怒', '警戒', '不安', '放心', '哀愁', 'うんざり', '苛立ち'];
 
@@ -172,9 +169,6 @@
     function setup() {
       createCanvas(windowWidth, windowHeight);
       showRandomText();  
-
-        downloadBtn = select('#download-btn');
-  downloadBtn.mousePressed(downloadCanvas);
     }
 
     function draw() {
@@ -190,9 +184,6 @@
 
     function startEmotionSelection() {
       createEmotionButtons();
-
-      countDisplay = createDiv(`${selectedCount}/25`);
-      countDisplay.position(windowWidth / 2 - 100, windowHeight - 80);
 
       checkButton = createButton('Check');
       checkButton.position(windowWidth / 2 - 50, windowHeight - 100);
@@ -243,7 +234,7 @@
       buttons['怒り'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/star-removebg-preview.png', '怒り').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('怒り'));
       labels['怒り'] = createDiv('怒り').addClass('emotion-label');
 
-      buttons['期待＜予期＞'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG', '期待＜予期＞').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('期待＜予期＞'));
+    buttons['期待＜予期＞'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG', '期待＜予期＞').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('期待＜予期＞'));
       labels['期待＜予期＞'] = createDiv('期待＜予期＞').addClass('emotion-label');
 
       buttons['恍惚'] = createImg('https://mooo0ooo.github.io/diary/rose.PNG', '恍惚').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('恍惚'));
@@ -296,124 +287,111 @@
     }
 
     function handleEmotionButton(emotionLabel) {
-  if (selectedCount >= 25) return; 
-
-  let emotion = emotionLabel;
-  if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
-  selectedEmotions[emotion]++;
-  
-  selectedCount++; 
-  countDisplay.html(`${selectedCount}/25`); 
-}
+      let emotion = emotionLabel;
+      if (!selectedEmotions[emotion]) selectedEmotions[emotion] = 0;
+      selectedEmotions[emotion]++;
+    }
 
 function displayResult() {
-　　　clear();
-  　　countDisplay.hide();
-  
+      clear();
       let positiveCount = 0;
       let negativeCount = 0;
 
       for (let emotion in selectedEmotions) {
-    if (positiveEmotions.includes(emotion)) {
-      positiveCount += selectedEmotions[emotion];
-    } else if (negativeEmotions.includes(emotion)) {
-      negativeCount += selectedEmotions[emotion];
+        if (positiveEmotions.includes(emotion)) {
+          positiveCount += selectedEmotions[emotion];
+        } else if (negativeEmotions.includes(emotion)) {
+          negativeCount += selectedEmotions[emotion];
+        }
+      }
+
+      if (positiveCount > negativeCount) {
+        backgroundChoice = Math.random() < 0.5 ? 0 : 3;
+      } else {
+        backgroundChoice = Math.random() < 0.5 ? 1 : 2;
+      }
+
+      let img = backgroundImages[backgroundChoice];
+      let imgAspect = img.width / img.height;
+      let canvasAspect = width / height;
+      let imgWidth, imgHeight;
+
+      if (imgAspect > canvasAspect) {
+        imgWidth = width;
+        imgHeight = width / imgAspect;
+      } else {
+        imgHeight = height;
+        imgWidth = height * imgAspect;
+      }
+
+      image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
+
+      let mostSelectedEmotion = getMostSelectedEmotion();
+      let motif = motifImages[mostSelectedEmotion];
+      if (motif) {
+        image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
+      }
+
+      //「次のページ」ボタンを表示
+      let nextPageBtn = createButton('次のページ');
+      nextPageBtn.position(width - 100, height - 50);
+      nextPageBtn.mousePressed(showSecondPage);
+
+      for (let key in buttons) {
+        buttons[key].hide();
+        labels[key].hide();
+      }
+
+      checkButton.hide();
+      isResultDisplayed = true;
     }
-  }
-
-  if (positiveCount > negativeCount) {
-    backgroundChoice = Math.random() < 0.5 ? 0 : 3;
-  } else {
-    backgroundChoice = Math.random() < 0.5 ? 1 : 2;
-  }
-
-  let img = backgroundImages[backgroundChoice];
-  let imgAspect = img.width / img.height;
-  let canvasAspect = width / height;
-  let imgWidth, imgHeight;
-
-  if (imgAspect > canvasAspect) {
-    imgWidth = width;
-    imgHeight = width / imgAspect;
-  } else {
-    imgHeight = height;
-    imgWidth = height * imgAspect;
-  }
-
-  image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
-
-  let mostSelectedEmotion = getMostSelectedEmotion();
-  let motif = motifImages[mostSelectedEmotion];
-  if (motif) {
-    image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
-  }
-
-  let nextPageBtn = createButton('次のページ');
-  nextPageBtn.position(width - 100, height - 50);
-  nextPageBtn.mousePressed(showSecondPage);
-
-  for (let key in buttons) {
-    buttons[key].hide();
-    labels[key].hide();
-  }
-
-  checkButton.hide();
-  isResultDisplayed = true;
-  
-  // ダウンロードボタンを表示
-  downloadBtn.show();
-}
-    
 function showSecondPage() {
   clear();
   background(255);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
-  let gridSize = 5;
-  let imgSize = 80;
+  let gridSize = 5; // 5x5 グリッド
+  let imgSize = 80; // 画像サイズ
   let padding = 10;
   let startX = (width - (gridSize * (imgSize + padding))) / 2;
   let startY = 50;
 
   let posX, posY;
+  
+  // 表示カウントを制限する変数
   let displayed = 0;
 
+  // 外側のループを制御するため、25個の画像を表示したらループを終了
   for (let emotion of selectedEmotionsList) {
     let motifImage = motifImages[emotion];
     let displayCount = selectedEmotions[emotion];
     
     for (let i = 0; i < displayCount; i++) {
+      // 25個を超えたらループを完全に抜ける
       if (displayed >= 25) break;
 
       posX = startX + (displayed % gridSize) * (imgSize + padding);
       posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
 
+      // 画像とラベルを配置
       if (motifImage) {
         image(motifImage, posX, posY, imgSize, imgSize);
         let label = createDiv(emotionTranslations[emotion]);
-        label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
-        label.style('font-size', '10px');
+        label.position(posX + imgSize / 2 - 10, posY + imgSize + 5); // 中央揃えを微調整
+        label.style('font-size', '10px'); // ラベルのサイズを小さく
         label.style('text-align', 'center');
       }
       displayed++;
     }
+
+    // 外側ループで25個に達したら終了
     if (displayed >= 25) break;
   }
 
+  // 「前のページ」ボタン
   let prevPageBtn = createButton('Previous Page');
   prevPageBtn.position(20, height - 50);
-  prevPageBtn.mousePressed(() => {
-    clear();
-    displayResult(); // 1ページ目に戻るときに1ページ目を再表示
-    downloadBtn.show(); // ダウンロードボタン再表示
-  });
-
-  // ダウンロードボタンを表示
-  downloadBtn.show();
-}
-
-    function downloadCanvas() {
-  saveCanvas('emotion_canvas', 'png');
+  prevPageBtn.mousePressed(displayResult);
 }
 
 
@@ -430,15 +408,12 @@ function showSecondPage() {
     }
 
     function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  clear();
-  drawEmotionGrid(emotionsA, 0);
-  drawEmotionGrid(emotionsB, 1);
-  drawEmotionGrid(emotionsC, 2);
-  
-  countDisplay.position(windowWidth / 2 - 100, windowHeight - 80); // カウント位置再調整
-  checkButton.position(windowWidth / 2, windowHeight - 100); // Checkボタンの位置再調整
-}
+      resizeCanvas(windowWidth, windowHeight);
+      clear();
+      drawEmotionGrid(emotionsA, 0);
+      drawEmotionGrid(emotionsB, 1);
+      drawEmotionGrid(emotionsC, 2);
+    }
 
   </script>
 </body>
