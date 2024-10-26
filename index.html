@@ -385,18 +385,17 @@ function displayResult() {
 function showSecondPage() {
       clear();
 
-      let squareSize = min(savedImgWidth, savedImgHeight);
-      resizeCanvas(squareSize, squareSize);
+      resizeCanvas(windowWidth, windowHeight); // キャンバスを元のサイズに
       background(255);
 
       let selectedEmotionsList = Object.keys(selectedEmotions);
       let gridSize = 5;
-      let imgSize = squareSize / gridSize - 10;
+      let imgSize = savedImgWidth / gridSize - 10; // 1ページ目と同じサイズで配置
       let padding = 10;
 
       let totalGridWidth = gridSize * (imgSize + padding) - padding;
-      let startX = (squareSize - totalGridWidth) / 2;
-      let startY = (height - (imgSize * Math.ceil(selectedEmotionsList.length / gridSize) + padding * (Math.ceil(selectedEmotionsList.length / gridSize) - 1))) / 2; // Y座標を中央に調整
+      let startX = (width - totalGridWidth) / 2;
+      let startY = (height - totalGridWidth) / 2; // Y座標も同じに調整
 
       let posX, posY;
       let displayed = 0;
