@@ -44,10 +44,6 @@
       border: none;
       font-size: 18px;
     }
-    #second-page-canvas {
-      display: block;
-      margin: auto;
-    }
   </style>
 </head>
 <body>
@@ -222,7 +218,7 @@
   
    function startEmotionSelection() {
       createEmotionButtons();
-      countDisplay = createDiv(${selectedCount}/25);
+      countDisplay = createDiv(`${selectedCount}/25`);
       countDisplay.style('font-size', '14px');
       
       checkButton = createButton('Check');
@@ -334,7 +330,7 @@ function getColCount() {
       selectedEmotions[emotion]++;
       selectedCount++;
       
-      countDisplay.html(${selectedCount}/25);
+      countDisplay.html(`${selectedCount}/25`);
     }  
 
 function displayResult() {
@@ -390,24 +386,19 @@ function displayResult() {
   downloadBtn.show();
 }
 
-  function showSecondPage() {
+function showSecondPage() {
   clear();
 
-  // キャンバスのリサイズと位置調整
-  resizeCanvas(savedImgWidth, savedImgHeight);
-  canvas.position((windowWidth - savedImgWidth) / 2, (windowHeight - savedImgHeight) / 2); 
-  
-  // 背景画像の描画
-  let img = backgroundImages[backgroundChoice];
-  image(img, 0, 0, savedImgWidth, savedImgHeight);
+  let squareSize = min(savedImgWidth, savedImgHeight);
+  resizeCanvas(squareSize, squareSize);
+  background(255);
 
-  // 感情アイコンとラベルの描画
   let selectedEmotionsList = Object.keys(selectedEmotions);
   let gridSize = 5;
-  let imgSize = (min(savedImgWidth, savedImgHeight) - 2 * 20) / gridSize - 10; 
-  let padding = 20;
-  let startX = padding;
-  let startY = padding;
+  let imgSize = squareSize / gridSize - 10;
+  let padding = 10;
+  let startX = (squareSize - (gridSize * (imgSize + padding))) / 2;
+  let startY = 20;
 
   let posX, posY;
   let displayed = 0;
@@ -419,17 +410,16 @@ function displayResult() {
     for (let i = 0; i < displayCount; i++) {
       if (displayed >= 25) break;
 
-      posX = startX + (displayed % gridSize) * (imgSize + 10);
-      posY = startY + Math.floor(displayed / gridSize) * (imgSize + 10);
+      posX = startX + (displayed % gridSize) * (imgSize + padding);
+      posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
 
       if (motifImage) {
         image(motifImage, posX, posY, imgSize, imgSize);
-        
-        // ラベルをキャンバスに描画
-        drawingContext.font = '10px Arial';
-        drawingContext.textAlign = 'center';
-        drawingContext.fillStyle = 'black';
-        drawingContext.fillText(emotionTranslations[emotion], posX + imgSize / 2, posY + imgSize + 12);
+        let label = createDiv(emotionTranslations[emotion]);
+        label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
+        label.style('font-size', '10px');
+        label.style('text-align', 'center');
+        labelElements.push(label);
       }
       displayed++;
     }
@@ -442,11 +432,9 @@ function displayResult() {
 }
 
 function downloadCanvas() {
-  clear();
-  showSecondPage(); // 2ページ目をキャプチャ
   saveCanvas('emotion_canvas', 'png');
 }
-    
+
 function getMostSelectedEmotion() {
   let maxCount = -1;
   let selectedEmotion = '';
@@ -458,6 +446,18 @@ function getMostSelectedEmotion() {
   }
   return selectedEmotion;
 }
+
+    function getMostSelectedEmotion() {
+      let maxCount = -1;
+      let selectedEmotion = '';
+      for (let emotion in selectedEmotions) {
+        if (selectedEmotions[emotion] > maxCount) {
+          maxCount = selectedEmotions[emotion];
+          selectedEmotion = emotion;
+        }
+      }
+      return selectedEmotion;
+    }
 
     function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
