@@ -318,26 +318,22 @@ function getColCount() {
       labels['関心'] = createDiv('関心').addClass('emotion-label');
     }
 
+// エフェクト表示関数
 function showEffect(emotion) {
   let color = emotionColors[emotion];
   let shapes = ['star', 'hexagon', 'diamond', 'circle'];
-  
-  let intervalId = setInterval(() => {
-    for (let i = 0; i < 20; i++) { // 20個のシェイプを同時に表示
-      let x = random(width);
-      let y = random(height);
-      let size = random(10, 20); // サイズを小さく設定
-      let shape = random(shapes);
 
-      drawShape(x, y, shape, size, color);
-    }
-  }, 100); // 100msごとにエフェクトを更新
+  // 画面にランダムにシェイプを配置
+  for (let i = 0; i < 50; i++) { // 50個のシェイプを表示
+    let x = random(width);
+    let y = random(height);
+    let size = random(10, 20); // 小さめのサイズ
+    let shape = random(shapes);
+    drawShape(x, y, shape, size, color);
+  }
 
-  // エフェクトを2秒後に停止
-  setTimeout(() => {
-    clearInterval(intervalId);
-    clear(); // 最後に画面をクリア
-  }, 2000);
+  // 2秒後に全てのエフェクトを消去
+  setTimeout(() => clear(), 2000);
 }
 
 // 各形状を描画する関数
