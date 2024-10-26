@@ -61,10 +61,6 @@
     let emotionsB_ja = ['恍惚', '敬愛', '恐怖', '驚嘆', '悲嘆', '強い嫌悪', '激怒', '警戒'];
     let emotionsC_ja = ['平穏', '容認', '不安', '放心', '哀愁', 'うんざり', '苛立ち', '関心'];
 
-    let emotionsA_en = ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'];
-    let emotionsB_en = ['Ecstasy', 'Admiration', 'Terror', 'Amazement', 'Grief', 'Loathing', 'Rage', 'Vigilance'];
-    let emotionsC_en = ['Serenity', 'Acceptance', 'Apprehension', 'Distraction', 'Pensiveness', 'Boredom', 'Annoyance', 'Interest'];
-
     const emotionTranslations = {
       '喜び': 'Joy', '信頼': 'Trust', '恐れ': 'Fear', '驚き': 'Surprise', '悲しみ': 'Sadness',
       '嫌悪': 'Disgust', '怒り': 'Anger', '期待＜予期＞': 'Anticipation', '恍惚': 'Ecstasy',
@@ -218,7 +214,7 @@
   
    function startEmotionSelection() {
       createEmotionButtons();
-      countDisplay = createDiv(${selectedCount}/25);
+      countDisplay = createDiv(`${selectedCount}/25`);
       countDisplay.style('font-size', '14px');
       
       checkButton = createButton('Check');
@@ -330,7 +326,7 @@ function getColCount() {
       selectedEmotions[emotion]++;
       selectedCount++;
       
-      countDisplay.html(${selectedCount}/25);
+      countDisplay.html(`${selectedCount}/25`);
     }  
 
 function displayResult() {
@@ -400,7 +396,7 @@ function showSecondPage() {
 
       let totalGridWidth = gridSize * (imgSize + padding) - padding;
       let startX = (squareSize - totalGridWidth) / 2;
-      let startY = (squareSize - totalGridWidth) / 2; // Y座標を中央にするために調整
+      let startY = (height - (imgSize * Math.ceil(selectedEmotionsList.length / gridSize) + padding * (Math.ceil(selectedEmotionsList.length / gridSize) - 1))) / 2; // Y座標を中央に調整
 
       let posX, posY;
       let displayed = 0;
