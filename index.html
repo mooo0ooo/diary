@@ -191,6 +191,8 @@
         labelElements = []; 
         displayResult(); 
       });
+
+      effectLayer = createGraphics(windowWidth, windowHeight); // エフェクト用レイヤー
     }
 
     function draw() {
@@ -210,6 +212,8 @@
         countDisplay.position(centerX - offset, windowHeight - 100);
         checkButton.position(centerX - offset + countWidth + 10, windowHeight - 100);
       }
+
+      image(effectLayer, 0, 0); // エフェクトレイヤーを描画
     }
   
    function startEmotionSelection() {
@@ -257,23 +261,11 @@
       });
     }
 
-    let effectLayer;
-
-    function setup() {
-      createCanvas(windowWidth, windowHeight);
-      effectLayer = createGraphics(windowWidth, windowHeight);
-    }
-
-    function draw() {
-      background(255);
-      image(effectLayer, 0, 0);
-    }
-
     function showEffect(emotion) {
       let color = emotionColors[emotion];
       let shapes = ['star', 'hexagon', 'diamond', 'circle'];
 
-      for (let i = 0; i < 100; i++) {
+          for (let i = 0; i < 100; i++) {
         let x = random(width);
         let y = random(height);
         let size = random(2, 8);
@@ -399,6 +391,7 @@
       nextPageBtn.show();
       prevPageBtn.hide();
       downloadBtn.show();
+      isResultDisplayed = true; // 結果が表示されたことを記録
     }
 
     function showSecondPage() {
