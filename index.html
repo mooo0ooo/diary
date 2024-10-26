@@ -385,6 +385,9 @@ function displayResult() {
 function showSecondPage() {
   // キャンバスを1ページ目と同じサイズにリサイズ
   resizeCanvas(savedImgWidth, savedImgHeight);
+   let offsetX = (windowWidth - savedImgWidth) / 2;
+
+  clear();
   background(255);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
