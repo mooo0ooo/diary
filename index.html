@@ -91,6 +91,7 @@
     let nextPageBtn, prevPageBtn;
     let countDisplay;
     let selectedCount = 0;
+    let savedImgWidth, savedImgHeight;
 
     const positiveEmotions = ['喜び', '信頼', '驚き', '期待＜予期＞', '恍惚', '敬愛', '驚嘆', '平穏', '容認', '関心'];
     const negativeEmotions = ['恐れ', '悲しみ', '嫌悪', '怒り', '恐怖', '悲嘆', '強い嫌悪', '激怒', '警戒', '不安', '放心', '哀愁', 'うんざり', '苛立ち'];
@@ -197,31 +198,31 @@
     }
 
     function draw() {
-  if (isResultDisplayed) return;
-
-  clear();
-  drawEmotionGrid(emotionsA, 0);
-  drawEmotionGrid(emotionsB, 1);
-  drawEmotionGrid(emotionsC, 2);
-
-  if (checkButton) {
-    const centerX = windowWidth / 2;
-    const countWidth = 40; // 目安の幅
-    const checkButtonWidth = 100; // 目安の幅
-    const offset = (checkButtonWidth + countWidth) / 2;
-
-    // 中央に配置するようにカウントとCheckボタンを並べる
-    countDisplay.position(centerX - offset, windowHeight - 100);
-    checkButton.position(centerX - offset + countWidth + 10, windowHeight - 100); // 左隣に10pxの間隔
-  }
-}
+      if (isResultDisplayed) return;
+    
+      clear();
+      drawEmotionGrid(emotionsA, 0);
+      drawEmotionGrid(emotionsB, 1);
+      drawEmotionGrid(emotionsC, 2);
+    
+      if (checkButton) {
+        const centerX = windowWidth / 2;
+        const countWidth = 40; // 目安の幅
+        const checkButtonWidth = 100; // 目安の幅
+        const offset = (checkButtonWidth + countWidth) / 2;
+    
+        // 中央に配置するようにカウントとCheckボタンを並べる
+        countDisplay.position(centerX - offset, windowHeight - 100);
+        checkButton.position(centerX - offset + countWidth + 10, windowHeight - 100); // 左隣に10pxの間隔
+      }
+    }
 
     function startEmotionSelection() {
   createEmotionButtons();
 
   // カウント表示を作成
   countDisplay = createDiv(`${selectedCount}/25`);
-  countDisplay.style('font-size', '18px');
+  countDisplay.style('font-size', '14px');
   
   checkButton = createButton('Check');
   checkButton.mousePressed(displayResult);
@@ -337,7 +338,6 @@ function getColCount() {
 function displayResult() {
   clear();
   
-  // カウント、ボタン、ラベルを非表示
   countDisplay.hide();
   checkButton.hide();
   for (let key in buttons) {
@@ -373,6 +373,9 @@ function displayResult() {
     imgWidth = height * imgAspect;
   }
 
+  savedImgWidth = imgWidth;
+  savedImgHeight = imgHeight;
+
   image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
 
   let mostSelectedEmotion = getMostSelectedEmotion();
@@ -388,8 +391,7 @@ function displayResult() {
 
 function showSecondPage() {
   clear();
-
-  let squareSize = min(width, height); 
+ 
   resizeCanvas(squareSize, squareSize);
   background(255);
 
@@ -465,14 +467,14 @@ function getMostSelectedEmotion() {
     }
 
     function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  clear();
-  drawEmotionGrid(emotionsA, 0);
-  drawEmotionGrid(emotionsB, 1);
-  drawEmotionGrid(emotionsC, 2);
-  nextPageBtn.position(width - 100, height - 50);
-  prevPageBtn.position(20, height - 50);
-}
+      resizeCanvas(windowWidth, windowHeight);
+      clear();
+      drawEmotionGrid(emotionsA, 0);
+      drawEmotionGrid(emotionsB, 1);
+      drawEmotionGrid(emotionsC, 2);
+      nextPageBtn.position(width - 100, height - 50);
+      prevPageBtn.position(20, height - 50);
+    }
 
   </script>
 </body>
