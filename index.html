@@ -383,31 +383,31 @@ function displayResult() {
 }
 
 function showSecondPage() {
-  // Resizing canvas to match the first page size
+  // Resize canvas to the original size
   resizeCanvas(savedImgWidth, savedImgHeight);
 
-  // Calculate the offset to center the canvas within the viewport
+  // Center the canvas with an offset
   let offsetX = (windowWidth - savedImgWidth) / 2;
   let offsetY = (windowHeight - savedImgHeight) / 2;
 
   clear();
-  background(255); // Set a white background
+  background(255); // White background
 
-  // Move canvas to the center
+  // Center canvas within viewport
   translate(offsetX, offsetY);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
-  let gridSize = 5; // Grid is 5x5
-  let gridPadding = 30; // Extra padding around the grid
+  let gridSize = 5; // 5x5 grid layout
+  let outerPadding = 40; // Extra padding around the entire grid
 
-  // Calculate motif image size, ensuring they fit within the canvas with padding
-  let imgSize = (savedImgWidth - gridPadding * 2) / gridSize - 10;
-  let padding = 10;
+  // Calculate motif image size with grid padding for layout consistency
+  let imgSize = (savedImgWidth - outerPadding * 2) / gridSize - 10;
+  let innerPadding = 12;
 
-  // Calculate the total grid width and starting positions for centering
-  let totalGridWidth = gridSize * (imgSize + padding) - padding;
-  let startX = (savedImgWidth - totalGridWidth) / 2;
-  let startY = (savedImgHeight - totalGridWidth) / 2;
+  // Calculate grid's starting position for centering
+  let gridWidth = gridSize * (imgSize + innerPadding) - innerPadding;
+  let startX = (savedImgWidth - gridWidth) / 2;
+  let startY = (savedImgHeight - gridWidth) / 2;
 
   let posX, posY;
   let displayed = 0;
@@ -419,13 +419,13 @@ function showSecondPage() {
     for (let i = 0; i < displayCount; i++) {
       if (displayed >= 25) break;
 
-      posX = startX + (displayed % gridSize) * (imgSize + padding);
-      posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+      posX = startX + (displayed % gridSize) * (imgSize + innerPadding);
+      posY = startY + Math.floor(displayed / gridSize) * (imgSize + innerPadding);
 
       if (motifImage) {
         image(motifImage, posX, posY, imgSize, imgSize);
 
-        // Create and position the label below each motif image
+        // Place label below each motif image, centered
         let label = createDiv(emotionTranslations[emotion]);
         label.position(offsetX + posX + imgSize / 2 - 10, offsetY + posY + imgSize + 5);
         label.style('font-size', '10px');
@@ -437,11 +437,12 @@ function showSecondPage() {
     if (displayed >= 25) break;
   }
 
-  // Display controls
+  // Show navigation and download buttons
   prevPageBtn.show();
   nextPageBtn.hide();
   downloadBtn.show();
 }
+
 
 
 
