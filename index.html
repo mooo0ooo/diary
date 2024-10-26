@@ -383,31 +383,28 @@ function displayResult() {
 }
 
 function showSecondPage() {
-  // Resize canvas to the original size
+  // キャンバスを1ページ目と同じサイズに設定
   resizeCanvas(savedImgWidth, savedImgHeight);
 
-  // Center the canvas with an offset
+  // キャンバスを中央に配置するためのオフセットを計算
   let offsetX = (windowWidth - savedImgWidth) / 2;
-  let offsetY = (windowHeight - savedImgHeight) / 2;
+    let offsetY = (windowHeight - savedImgHeight) / 2;
 
   clear();
-  background(255); // White background
+  background(255);
 
-  // Center canvas within viewport
+  // キャンバスを中央に移動
   translate(offsetX, offsetY);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
-  let gridSize = 5; // 5x5 grid layout
-  let outerPadding = 40; // Extra padding around the entire grid
+  let gridSize = 5;
+  let imgSize = savedImgWidth / gridSize - 10; // 画像サイズを1ページ目と同じにする
+  let padding = 10;
 
-  // Calculate motif image size with grid padding for layout consistency
-  let imgSize = (savedImgWidth - outerPadding * 2) / gridSize - 10;
-  let innerPadding = 12;
-
-  // Calculate grid's starting position for centering
-  let gridWidth = gridSize * (imgSize + innerPadding) - innerPadding;
-  let startX = (savedImgWidth - gridWidth) / 2;
-  let startY = (savedImgHeight - gridWidth) / 2;
+  // グリッドの配置
+  let totalGridWidth = gridSize * (imgSize + padding) - padding;
+  let startX = (savedImgWidth - totalGridWidth) / 2;
+  let startY = (savedImgHeight - totalGridWidth) / 2;
 
   let posX, posY;
   let displayed = 0;
@@ -419,13 +416,13 @@ function showSecondPage() {
     for (let i = 0; i < displayCount; i++) {
       if (displayed >= 25) break;
 
-      posX = startX + (displayed % gridSize) * (imgSize + innerPadding);
-      posY = startY + Math.floor(displayed / gridSize) * (imgSize + innerPadding);
+      posX = startX + (displayed % gridSize) * (imgSize + padding);
+      posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
 
       if (motifImage) {
         image(motifImage, posX, posY, imgSize, imgSize);
 
-        // Place label below each motif image, centered
+        // ラベルをキャンバス上に配置
         let label = createDiv(emotionTranslations[emotion]);
         label.position(offsetX + posX + imgSize / 2 - 10, offsetY + posY + imgSize + 5);
         label.style('font-size', '10px');
@@ -437,13 +434,10 @@ function showSecondPage() {
     if (displayed >= 25) break;
   }
 
-  // Show navigation and download buttons
   prevPageBtn.show();
   nextPageBtn.hide();
   downloadBtn.show();
 }
-
-
 
 
 function downloadCanvas() {
