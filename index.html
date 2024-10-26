@@ -390,7 +390,7 @@ function showSecondPage() {
   clear();
 
   let squareSize = min(savedImgWidth, savedImgHeight);
-  resizeCanvas(squareSize, squareSize);
+  resizeCanvas(savedImgWidth, savedImgHeight);
   background(255);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
@@ -398,7 +398,7 @@ function showSecondPage() {
   let imgSize = squareSize / gridSize - 10;
   let padding = 10;
   let startX = (squareSize - (gridSize * (imgSize + padding))) / 2;
-  let startY = 20;
+  let startY = (squareSize - (gridSize * (imgSize + padding))) / 2;
 
   let posX, posY;
   let displayed = 0;
@@ -432,7 +432,18 @@ function showSecondPage() {
 }
 
 function downloadCanvas() {
+  clear();
+  showSecondPage(); 
+
+  labelElements.forEach(label => {
+    drawingContext.font = '10px Arial';
+    drawingContext.textAlign = 'center';
+    drawingContext.fillStyle = 'black';
+    drawingContext.fillText(label.elt.innerText, parseFloat(label.elt.style.left) + 10, parseFloat(label.elt.style.top) - 5);
+  });
+
   saveCanvas('emotion_canvas', 'png');
+  displayResult(); 
 }
 
 function getMostSelectedEmotion() {
@@ -446,18 +457,6 @@ function getMostSelectedEmotion() {
   }
   return selectedEmotion;
 }
-
-    function getMostSelectedEmotion() {
-      let maxCount = -1;
-      let selectedEmotion = '';
-      for (let emotion in selectedEmotions) {
-        if (selectedEmotions[emotion] > maxCount) {
-          maxCount = selectedEmotions[emotion];
-          selectedEmotion = emotion;
-        }
-      }
-      return selectedEmotion;
-    }
 
     function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
