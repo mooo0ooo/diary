@@ -383,25 +383,28 @@ function displayResult() {
 }
 
 function showSecondPage() {
-  // キャンバスを1ページ目と同じサイズに設定
+  // Resizing canvas to match the first page size
   resizeCanvas(savedImgWidth, savedImgHeight);
 
-  // キャンバスを中央に配置するためのオフセットを計算
+  // Calculate the offset to center the canvas within the viewport
   let offsetX = (windowWidth - savedImgWidth) / 2;
-    let offsetY = (windowHeight - savedImgHeight) / 2;
+  let offsetY = (windowHeight - savedImgHeight) / 2;
 
   clear();
-  background(255);
+  background(255); // Set a white background
 
-  // キャンバスを中央に移動
+  // Move canvas to the center
   translate(offsetX, offsetY);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
-  let gridSize = 5;
-  let imgSize = savedImgWidth / gridSize - 10; // 画像サイズを1ページ目と同じにする
+  let gridSize = 5; // Grid is 5x5
+  let gridPadding = 30; // Extra padding around the grid
+
+  // Calculate motif image size, ensuring they fit within the canvas with padding
+  let imgSize = (savedImgWidth - gridPadding * 2) / gridSize - 10;
   let padding = 10;
 
-  // グリッドの配置
+  // Calculate the total grid width and starting positions for centering
   let totalGridWidth = gridSize * (imgSize + padding) - padding;
   let startX = (savedImgWidth - totalGridWidth) / 2;
   let startY = (savedImgHeight - totalGridWidth) / 2;
@@ -422,7 +425,7 @@ function showSecondPage() {
       if (motifImage) {
         image(motifImage, posX, posY, imgSize, imgSize);
 
-        // ラベルをキャンバス上に配置
+        // Create and position the label below each motif image
         let label = createDiv(emotionTranslations[emotion]);
         label.position(offsetX + posX + imgSize / 2 - 10, offsetY + posY + imgSize + 5);
         label.style('font-size', '10px');
@@ -434,10 +437,12 @@ function showSecondPage() {
     if (displayed >= 25) break;
   }
 
+  // Display controls
   prevPageBtn.show();
   nextPageBtn.hide();
   downloadBtn.show();
 }
+
 
 
 function downloadCanvas() {
