@@ -86,6 +86,9 @@
     let checkButton;
     let isResultDisplayed = false;
 
+    let downloadBtn; 
+    let labelElements = []; 
+
     const positiveEmotions = ['喜び', '信頼', '驚き', '期待＜予期＞', '恍惚', '敬愛', '驚嘆', '平穏', '容認', '関心'];
     const negativeEmotions = ['恐れ', '悲しみ', '嫌悪', '怒り', '恐怖', '悲嘆', '強い嫌悪', '激怒', '警戒', '不安', '放心', '哀愁', 'うんざり', '苛立ち'];
 
@@ -169,6 +172,9 @@
     function setup() {
       createCanvas(windowWidth, windowHeight);
       showRandomText();  
+
+      downloadBtn = select('#download-btn');
+      downloadBtn.mousePressed(downloadCanvas);
     }
 
     function draw() {
@@ -294,6 +300,11 @@
 
 function displayResult() {
       clear();
+      countDisplay.hide();
+
+      labelElements.forEach(label => label.hide());
+      labelElements = [];
+  
       let positiveCount = 0;
       let negativeCount = 0;
 
@@ -344,9 +355,15 @@ function displayResult() {
 
       checkButton.hide();
       isResultDisplayed = true;
+
+      downloadBtn.show();
     }
+    
 function showSecondPage() {
   clear();
+
+  let squareSize = min(width, height); 
+  resizeCanvas(squareSize, squareSize);
   background(255);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
@@ -357,17 +374,13 @@ function showSecondPage() {
   let startY = 50;
 
   let posX, posY;
-  
-  // 表示カウントを制限する変数
   let displayed = 0;
 
-  // 外側のループを制御するため、25個の画像を表示したらループを終了
   for (let emotion of selectedEmotionsList) {
     let motifImage = motifImages[emotion];
     let displayCount = selectedEmotions[emotion];
     
     for (let i = 0; i < displayCount; i++) {
-      // 25個を超えたらループを完全に抜ける
       if (displayed >= 25) break;
 
       posX = startX + (displayed % gridSize) * (imgSize + padding);
@@ -380,6 +393,7 @@ function showSecondPage() {
         label.position(posX + imgSize / 2 - 10, posY + imgSize + 5); // 中央揃えを微調整
         label.style('font-size', '10px'); // ラベルのサイズを小さく
         label.style('text-align', 'center');
+        labelElements.push(label);
       }
       displayed++;
     }
@@ -390,8 +404,19 @@ function showSecondPage() {
 
   // 「前のページ」ボタン
   let prevPageBtn = createButton('Previous Page');
-  prevPageBtn.position(20, height - 50);
-  prevPageBtn.mousePressed(displayResult);
+  prevPageBtn.position(20, squareSize - 50);
+  prevPageBtn.mousePressed(() => {
+    clear();
+    resizeCanvas(windowWidth, windowHeight); // キャンバスを元のサイズに戻す
+    displayResult();
+    downloadBtn.show();
+  });
+
+  downloadBtn.show();
+}
+
+    function downloadCanvas() {
+  saveCanvas('emotion_canvas', 'png');
 }
 
 
