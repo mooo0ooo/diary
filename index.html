@@ -327,9 +327,11 @@ function showEffect(emotion) {
   for (let i = 0; i < 50; i++) { // 50個のシェイプを表示
     let x = random(width);
     let y = random(height);
-    let size = random(10, 20); // 小さめのサイズ
+    let size = random(5, 15); // さらに小さめのサイズ
     let shape = random(shapes);
-    drawShape(x, y, shape, size, color);
+    let isFilled = random() < 0.5; // 塗りつぶしをランダムに設定
+
+    drawShape(x, y, shape, size, color, isFilled);
   }
 
   // 2秒後に全てのエフェクトを消去
@@ -337,8 +339,12 @@ function showEffect(emotion) {
 }
 
 // 各形状を描画する関数
-function drawShape(x, y, shape, size, color) {
-  noFill();
+function drawShape(x, y, shape, size, color, isFilled) {
+  if (isFilled) {
+    fill(color); // 塗りつぶし
+  } else {
+    noFill(); // 塗りつぶしなし
+  }
   stroke(color);
   strokeWeight(1);
 
@@ -378,6 +384,7 @@ function drawShape(x, y, shape, size, color) {
       break;
   }
 }
+
 
   function handleEmotionButton(emotionLabel) {
   if (selectedCount >= 25) return;
