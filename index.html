@@ -383,50 +383,49 @@ function displayResult() {
 }
 
 function showSecondPage() {
-      clear();
+  clear();
+  resizeCanvas(windowWidth, windowHeight);
+  background(255);
 
-      resizeCanvas(windowWidth, windowHeight); // キャンバスを元のサイズに
-      background(255);
+  let selectedEmotionsList = Object.keys(selectedEmotions);
+  let gridSize = 5;
+  let imgSize = savedImgWidth / gridSize - 10; // 正方形サイズを1ページ目と同じに設定
+  let padding = 10;
 
-      let selectedEmotionsList = Object.keys(selectedEmotions);
-      let gridSize = 5;
-      let imgSize = savedImgWidth / gridSize - 10; // 1ページ目と同じサイズで配置
-      let padding = 10;
+  let totalGridWidth = gridSize * (imgSize + padding) - padding;
+  let startX = (width - totalGridWidth) / 2;
+  let startY = (height - totalGridWidth) / 2; // Y座標も正方形に合わせて調整
 
-      let totalGridWidth = gridSize * (imgSize + padding) - padding;
-      let startX = (width - totalGridWidth) / 2;
-      let startY = (height - totalGridWidth) / 2; // Y座標も同じに調整
+  let posX, posY;
+  let displayed = 0;
 
-      let posX, posY;
-      let displayed = 0;
+  for (let emotion of selectedEmotionsList) {
+    let motifImage = motifImages[emotion];
+    let displayCount = selectedEmotions[emotion];
 
-      for (let emotion of selectedEmotionsList) {
-        let motifImage = motifImages[emotion];
-        let displayCount = selectedEmotions[emotion];
-        
-        for (let i = 0; i < displayCount; i++) {
-          if (displayed >= 25) break;
+    for (let i = 0; i < displayCount; i++) {
+      if (displayed >= 25) break;
 
-          posX = startX + (displayed % gridSize) * (imgSize + padding);
-          posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+      posX = startX + (displayed % gridSize) * (imgSize + padding);
+      posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
 
-          if (motifImage) {
-            image(motifImage, posX, posY, imgSize, imgSize);
-            let label = createDiv(emotionTranslations[emotion]);
-            label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
-            label.style('font-size', '10px');
-            label.style('text-align', 'center');
-            labelElements.push(label);
-          }
-          displayed++;
-        }
-        if (displayed >= 25) break;
+      if (motifImage) {
+        image(motifImage, posX, posY, imgSize, imgSize);
+        let label = createDiv(emotionTranslations[emotion]);
+        label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
+        label.style('font-size', '10px');
+        label.style('text-align', 'center');
+        labelElements.push(label);
       }
-
-      prevPageBtn.show();
-      nextPageBtn.hide();
-      downloadBtn.show();
+      displayed++;
     }
+    if (displayed >= 25) break;
+  }
+
+  prevPageBtn.show();
+  nextPageBtn.hide();
+  downloadBtn.show();
+}
 
 function downloadCanvas() {
   // キャンバスにラベルを描画
