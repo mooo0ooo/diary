@@ -318,77 +318,88 @@ function getColCount() {
       labels['関心'] = createDiv('関心').addClass('emotion-label');
     }
 
+let effectLayer;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  effectLayer = createGraphics(windowWidth, windowHeight); // エフェクト用レイヤー
+}
+
+function draw() {
+  background(255); // メインキャンバスの背景
+  image(effectLayer, 0, 0); // エフェクトレイヤーを描画
+}
+
 // エフェクト表示関数
 function showEffect(emotion) {
   let color = emotionColors[emotion];
   let shapes = ['star', 'hexagon', 'diamond', 'circle'];
 
-  // 画面にランダムにシェイプを配置
   for (let i = 0; i < 100; i++) { // 100個のシェイプを表示
     let x = random(width);
     let y = random(height);
-    let size = random(2, 8); // 小さめのサイズ
+    let size = random(2, 8);
     let shape = random(shapes);
-    let isFilled = random() < 0.5; // 塗りつぶしをランダムに設定
+    let isFilled = random() < 0.5;
 
-    // シェイプの描画と2秒後の削除を設定
-    drawShape(x, y, shape, size, color, isFilled);
+    drawShape(effectLayer, x, y, shape, size, color, isFilled);
 
-    // 2秒後に個別のシェイプを消去
+    // 2秒後にこのシェイプの領域を消去
     setTimeout(() => {
-      noStroke();
-      fill(255, 255, 255, 0);  // 完全透明に設定
-      drawShape(x, y, shape, size, color, isFilled);  // 同じ位置に消去用の描画
+      effectLayer.noFill();
+      effectLayer.stroke(255); // 背景と同じ色で上書きして消去
+      drawShape(effectLayer, x, y, shape, size, color, isFilled);
     }, 2000);
   }
 }
 
-// 各形状を描画する関数
-function drawShape(x, y, shape, size, color, isFilled) {
+// 各形状を描画する関数（レイヤー指定）
+function drawShape(layer, x, y, shape, size, color, isFilled) {
   if (isFilled) {
-    fill(color); // 塗りつぶし
+    layer.fill(color);
   } else {
-    noFill(); // 塗りつぶしなし
+    layer.noFill();
   }
-  stroke(color);
-  strokeWeight(0.5);
+  layer.stroke(color);
+  layer.strokeWeight(0.5);
 
   switch (shape) {
     case 'star':
-      beginShape();
+      layer.beginShape();
       for (let i = 0; i < 10; i++) {
         let angle = PI / 5 * i;
         let radius = i % 2 === 0 ? size : size / 2;
         let posX = x + cos(angle) * radius;
         let posY = y + sin(angle) * radius;
-        vertex(posX, posY);
+        layer.vertex(posX, posY);
       }
-      endShape(CLOSE);
+      layer.endShape(CLOSE);
       break;
 
     case 'hexagon':
-      beginShape();
+      layer.beginShape();
       for (let i = 0; i < 6; i++) {
         let angle = PI / 3 * i;
-        vertex(x + cos(angle) * size, y + sin(angle) * size);
+        layer.vertex(x + cos(angle) * size, y + sin(angle) * size);
       }
-      endShape(CLOSE);
+      layer.endShape(CLOSE);
       break;
 
     case 'diamond':
-      beginShape();
-      vertex(x, y - size);
-      vertex(x + size / 2, y);
-      vertex(x, y + size);
-      vertex(x - size / 2, y);
-      endShape(CLOSE);
+      layer.beginShape();
+      layer.vertex(x, y - size);
+      layer.vertex(x + size / 2, y);
+      layer.vertex(x, y + size);
+      layer.vertex(x - size / 2, y);
+      layer.endShape(CLOSE);
       break;
 
     case 'circle':
-      ellipse(x, y, size * 2);
+      layer.ellipse(x, y, size * 2);
       break;
   }
 }
+
 
 
 
