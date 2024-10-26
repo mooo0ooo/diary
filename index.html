@@ -351,6 +351,7 @@ function displayResult() {
       for (let key in buttons) {
         buttons[key].hide();
         labels[key].hide();
+        selectedCount[key].hide();
       }
 
       checkButton.hide();
@@ -400,7 +401,7 @@ function showSecondPage() {
   }
 
   // 「前のページ」ボタン
-  let prevPageBtn = createButton('Previous Page');
+  let prevPageBtn = createButton('前のページ');
   prevPageBtn.position(20, height - 50);
   prevPageBtn.mousePressed(displayResult);
 }
