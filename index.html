@@ -332,60 +332,6 @@ function getColCount() {
       countDisplay.html(`${selectedCount}/25`);
     }
 
-function displayResult() {
-  clear();
-  
-  countDisplay.hide();
-  checkButton.hide();
-  for (let key in buttons) {
-    buttons[key].hide();
-    labels[key].hide();
-  }
-  labelElements.forEach(label => label.remove()); // ラベルを完全に削除
-  labelElements = []; 
-  
-  let positiveCount = 0;
-  let negativeCount = 0;
-
-  for (let emotion in selectedEmotions) {
-    if (positiveEmotions.includes(emotion)) {
-      positiveCount += selectedEmotions[emotion];
-    } else if (negativeEmotions.includes(emotion)) {
-      negativeCount += selectedEmotions[emotion];
-    }
-  }
-
-  backgroundChoice = positiveCount > negativeCount ? (Math.random() < 0.5 ? 0 : 3) : (Math.random() < 0.5 ? 1 : 2);
-
-  let img = backgroundImages[backgroundChoice];
-  let imgAspect = img.width / img.height;
-  let canvasAspect = width / height;
-  let imgWidth, imgHeight;
-
-  if (imgAspect > canvasAspect) {
-    imgWidth = width;
-    imgHeight = width / imgAspect;
-  } else {
-    imgHeight = height;
-    imgWidth = height * imgAspect;
-  }
-
-  savedImgWidth = imgWidth;
-  savedImgHeight = imgHeight;
-
-  image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
-
-  let mostSelectedEmotion = getMostSelectedEmotion();
-  let motif = motifImages[mostSelectedEmotion];
-  if (motif) {
-    image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
-  }
-
-  nextPageBtn.show();
-  prevPageBtn.hide();
-  downloadBtn.show();
-}
-
 function showSecondPage() {
   clear();
  
@@ -393,15 +339,14 @@ function showSecondPage() {
   resizeCanvas(squareSize, squareSize);
   background(255);
 
-  let gridGraphics = createGraphics(squareSize, squareSize);
-  gridGraphics.background(255);
-
   let selectedEmotionsList = Object.keys(selectedEmotions);
-  let gridSize = 5;
-  let imgSize = 80;
+  let gridSize = 5; // グリッドのサイズ
+  let imgSize = squareSize / gridSize - 10;
   let padding = 10;
-  let startX = (width - (gridSize * (imgSize + padding))) / 2;
-  let startY = 50;
+  
+  // キャンバス中央にグリッドを配置するための開始位置
+  let startX = (squareSize - (gridSize * (imgSize + padding))) / 2;
+  let startY = (squareSize - (gridSize * (imgSize + padding))) / 2;
 
   let posX, posY;
   let displayed = 0;
@@ -418,18 +363,17 @@ function showSecondPage() {
 
       if (motifImage) {
         image(motifImage, posX, posY, imgSize, imgSize);
+        
         let label = createDiv(emotionTranslations[emotion]);
         label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
         label.style('font-size', '10px');
         label.style('text-align', 'center');
-        labelElements.push(label);
+        labelElements.push(label);  // ラベルを保持して後で削除
       }
       displayed++;
     }
     if (displayed >= 25) break;
   }
-
-  image(gridGraphics, (width - squareSize) / 2, (height - squareSize) / 2);
 
   prevPageBtn.show();
   nextPageBtn.hide();
@@ -445,6 +389,7 @@ function downloadCanvas() {
   let gridSize = 5;
   let imgSize = squareSize / gridSize - 10;
   let padding = 10;
+  
   let startX = (squareSize - (gridSize * (imgSize + padding))) / 2;
   let startY = (squareSize - (gridSize * (imgSize + padding))) / 2;
 
@@ -466,7 +411,7 @@ function downloadCanvas() {
         gridGraphics.fill(0);
         gridGraphics.textAlign(CENTER);
         gridGraphics.textSize(10);
-        gridGraphics.text(emotionTranslations[emotion], posX + imgSize / 2, posY + imgSize + 10);
+        gridGraphics.text(emotionTranslations[emotion], posX + imgSize / 2, posY + imgSize + 10); // ラベルを追加
       }
       displayed++;
     }
@@ -475,6 +420,7 @@ function downloadCanvas() {
 
   save(gridGraphics, 'emotion_canvas', 'png');
 }
+
 
 function getMostSelectedEmotion() {
   let maxCount = -1;
