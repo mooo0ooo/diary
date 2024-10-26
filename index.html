@@ -387,53 +387,58 @@ function displayResult() {
 }
 
 function showSecondPage() {
-  clear();
+      clear();
 
-  let squareSize = min(savedImgWidth, savedImgHeight);
-  resizeCanvas(squareSize, squareSize);
-  background(255);
+      let squareSize = min(savedImgWidth, savedImgHeight);
+      resizeCanvas(squareSize, squareSize);
+      background(255);
 
-  let selectedEmotionsList = Object.keys(selectedEmotions);
-  let gridSize = 5;
-  let imgSize = squareSize / gridSize - 10;
-  let padding = 10;
-  let startX = (squareSize - (gridSize * (imgSize + padding))) / 2;
-  let startY = 20;
+      let selectedEmotionsList = Object.keys(selectedEmotions);
+      let gridSize = 5;
+      let imgSize = squareSize / gridSize - 10;
+      let padding = 10;
 
-  let posX, posY;
-  let displayed = 0;
+      let totalGridWidth = gridSize * (imgSize + padding) - padding;
+      let startX = (squareSize - totalGridWidth) / 2;
+      let startY = (squareSize - totalGridWidth) / 2; // Y座標を中央にするために調整
 
-  for (let emotion of selectedEmotionsList) {
-    let motifImage = motifImages[emotion];
-    let displayCount = selectedEmotions[emotion];
-    
-    for (let i = 0; i < displayCount; i++) {
-      if (displayed >= 25) break;
+      let posX, posY;
+      let displayed = 0;
 
-      posX = startX + (displayed % gridSize) * (imgSize + padding);
-      posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+      for (let emotion of selectedEmotionsList) {
+        let motifImage = motifImages[emotion];
+        let displayCount = selectedEmotions[emotion];
+        
+        for (let i = 0; i < displayCount; i++) {
+          if (displayed >= 25) break;
 
-      if (motifImage) {
-        image(motifImage, posX, posY, imgSize, imgSize);
-        let label = createDiv(emotionTranslations[emotion]);
-        label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
-        label.style('font-size', '10px');
-        label.style('text-align', 'center');
-        labelElements.push(label);
+          posX = startX + (displayed % gridSize) * (imgSize + padding);
+          posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+
+          if (motifImage) {
+            image(motifImage, posX, posY, imgSize, imgSize);
+            let label = createDiv(emotionTranslations[emotion]);
+            label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
+            label.style('font-size', '10px');
+            label.style('text-align', 'center');
+            labelElements.push(label);
+          }
+          displayed++;
+        }
+        if (displayed >= 25) break;
       }
-      displayed++;
-    }
-    if (displayed >= 25) break;
-  }
 
-  prevPageBtn.show();
-  nextPageBtn.hide();
-  downloadBtn.show();
-}
+      prevPageBtn.show();
+      nextPageBtn.hide();
+      downloadBtn.show();
+    }
 
 function downloadCanvas() {
-  saveCanvas('emotion_canvas', 'png');
-}
+      // ラベルを表示させた上でキャンバスを保存
+      labelElements.forEach(label => label.hide());  // ラベルを一旦非表示
+      saveCanvas('emotion_canvas', 'png');  // キャンバスを保存
+      labelElements.forEach(label => label.show());  // ラベルを再表示
+    }
 
 function getMostSelectedEmotion() {
   let maxCount = -1;
