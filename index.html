@@ -44,6 +44,10 @@
       border: none;
       font-size: 18px;
     }
+    #second-page-canvas {
+      display: block;
+      margin: auto;
+    }
   </style>
 </head>
 <body>
@@ -391,12 +395,13 @@ function showSecondPage() {
 
   let squareSize = min(savedImgWidth, savedImgHeight);
   resizeCanvas(savedImgWidth, savedImgHeight);
+  canvas.position((windowWidth - savedImgWidth) / 2, (windowHeight - savedImgHeight) / 2);  // Center the canvas
   background(255);
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
   let gridSize = 5;
   let imgSize = squareSize / gridSize - 10;
-  let padding = 10;
+  let padding = 20;  // Add padding around the grid
   let startX = (squareSize - (gridSize * (imgSize + padding))) / 2;
   let startY = (squareSize - (gridSize * (imgSize + padding))) / 2;
 
@@ -416,7 +421,7 @@ function showSecondPage() {
       if (motifImage) {
         image(motifImage, posX, posY, imgSize, imgSize);
         let label = createDiv(emotionTranslations[emotion]);
-        label.position(posX + imgSize / 2 - 10, posY + imgSize + 5);
+        label.position(canvas.position().x + posX + imgSize / 2 - 10, canvas.position().y + posY + imgSize + 5);
         label.style('font-size', '10px');
         label.style('text-align', 'center');
         labelElements.push(label);
@@ -439,7 +444,7 @@ function downloadCanvas() {
     drawingContext.font = '10px Arial';
     drawingContext.textAlign = 'center';
     drawingContext.fillStyle = 'black';
-    drawingContext.fillText(label.elt.innerText, parseFloat(label.elt.style.left) + 10, parseFloat(label.elt.style.top) - 5);
+    drawingContext.fillText(label.elt.innerText, parseFloat(label.elt.style.left) + 10 - canvas.position().x, parseFloat(label.elt.style.top) - 5 - canvas.position().y);
   });
 
   saveCanvas('emotion_canvas', 'png');
