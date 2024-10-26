@@ -257,7 +257,7 @@ function getColCount() {
       buttons['驚き'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/thunder.PNG', '驚き').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('驚き'));
       labels['驚き'] = createDiv('驚き').addClass('emotion-label');
 
-      buttons['悲しみ'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/shooting_star-removebg-preview.png', '悲しみ').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('悲しみ'));
+    buttons['悲しみ'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/shooting_star-removebg-preview.png', '悲しみ').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('悲しみ'));
       labels['悲しみ'] = createDiv('悲しみ').addClass('emotion-label');
 
       buttons['嫌悪'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/rain.PNG', '嫌悪').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('嫌悪'));
@@ -388,7 +388,7 @@ function showSecondPage() {
 
   // キャンバスを中央に配置するためのオフセットを計算
   let offsetX = (windowWidth - savedImgWidth) / 2;
-  let offsetY = (windowHeight - savedImgHeight) / 2;
+    let offsetY = (windowHeight - savedImgHeight) / 2;
 
   clear();
   background(255);
@@ -398,15 +398,13 @@ function showSecondPage() {
 
   let selectedEmotionsList = Object.keys(selectedEmotions);
   let gridSize = 5;
-  let padding = 8;  // モチーフ画像間の余白を少なめに設定
-  let gridMargin = 30; // グリッド全体の余白を控えめに設定
+  let imgSize = savedImgWidth / gridSize - 10; // 画像サイズを1ページ目と同じにする
+  let padding = 10;
 
-  // モチーフ画像のサイズを計算（余白とグリッドサイズを含める）
-  let imgSize = (savedImgWidth - 2 * gridMargin - (gridSize - 1) * padding) / gridSize;
-
-  // グリッド全体が中央に配置されるように開始位置を計算
-  let startX = (savedImgWidth - (gridSize * imgSize + (gridSize - 1) * padding)) / 2;
-  let startY = (savedImgHeight - (gridSize * imgSize + (gridSize - 1) * padding)) / 2;
+  // グリッドの配置
+  let totalGridWidth = gridSize * (imgSize + padding) - padding;
+  let startX = (savedImgWidth - totalGridWidth) / 2;
+  let startY = (savedImgHeight - totalGridWidth) / 2;
 
   let posX, posY;
   let displayed = 0;
@@ -440,6 +438,7 @@ function showSecondPage() {
   nextPageBtn.hide();
   downloadBtn.show();
 }
+
 
 function downloadCanvas() {
   // キャンバスにラベルを描画
