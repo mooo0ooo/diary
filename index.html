@@ -120,7 +120,11 @@
     };
 
     const randomTexts = [
-      '今の気分は？'
+      '今の気分は？',
+      '締め切りに間に合わなそう！！',
+      '友達とけんかした',
+      '失恋した',
+      '推しのライブ当選！！',
     ];
 
     function showRandomText() {
@@ -172,13 +176,21 @@
       downloadBtn = select('#download-btn');
       downloadBtn.mousePressed(downloadCanvas);
     
-      countDisplay = createDiv(`${selectedCount}/25`);
-      countDisplay.style('font-size', '14px');
-      
-      checkButton = createButton('Check');
-      checkButton.mousePressed(displayResult);
-
-      effectLayer = createGraphics(windowWidth, windowHeight); // エフェクト用レイヤー
+      nextPageBtn = createButton('次のページ');
+      nextPageBtn.position(width - 100, height - 50);
+      nextPageBtn.hide();
+      nextPageBtn.mousePressed(showSecondPage);
+    
+      prevPageBtn = createButton('前のページ');
+      prevPageBtn.position(20, windowHeight - 50);
+      prevPageBtn.hide();
+      prevPageBtn.mousePressed(() => {
+        clear();
+        resizeCanvas(windowWidth, windowHeight);
+        labelElements.forEach(label => label.hide()); 
+        labelElements = []; 
+        displayResult(); 
+      });
     }
 
     function draw() {
@@ -198,31 +210,39 @@
         countDisplay.position(centerX - offset, windowHeight - 100);
         checkButton.position(centerX - offset + countWidth + 10, windowHeight - 100);
       }
-
-      image(effectLayer, 0, 0); // エフェクトレイヤーを描画
+    }
+  
+   function startEmotionSelection() {
+      createEmotionButtons();
+      countDisplay = createDiv(`${selectedCount}/25`);
+      countDisplay.style('font-size', '14px');
+      
+      checkButton = createButton('Check');
+      checkButton.mousePressed(displayResult);
     }
 
-    function drawEmotionGrid(emotions, row) {
-      let colCount = getColCount();
-      let xOffset = 20;
-      let yOffset = 120;
-      let totalRowWidth = (colCount * emotionSize) + ((colCount - 1) * xOffset);
-      let startX = (windowWidth - totalRowWidth) / 2;
 
-      for (let i = 0; i < emotions.length; i++) {
-        let x = startX + (i % colCount) * (emotionSize + xOffset);
-        let y = row * (emotionSize + yOffset) + yOffset;
+function drawEmotionGrid(emotions, row) {
+  let colCount = getColCount();
+  let xOffset = 20;
+  let yOffset = 120;
+  let totalRowWidth = (colCount * emotionSize) + ((colCount - 1) * xOffset);
+  let startX = (windowWidth - totalRowWidth) / 2;
 
-        buttons[emotions[i]].position(x, y);
-        labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);
-      }
-    }
+  for (let i = 0; i < emotions.length; i++) {
+    let x = startX + (i % colCount) * (emotionSize + xOffset);
+    let y = row * (emotionSize + yOffset) + yOffset;
 
-    function getColCount() {
-      if (windowWidth > 1200) return 8;
-      if (windowWidth > 800) return 6;
-      return 4;
-    }
+    buttons[emotions[i]].position(x, y);
+    labels[emotions[i]].position(x + emotionSize / 2 - 20, y + emotionSize + 5);
+  }
+}
+
+function getColCount() {
+  if (windowWidth > 1200) return 8;
+  if (windowWidth > 800) return 6;
+  return 4;
+}
 
     function createEmotionButtons() {
       buttons['喜び'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/fireworks-removebg-preview.png', '喜び').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('喜び'));
@@ -237,7 +257,7 @@
       buttons['驚き'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/thunder.PNG', '驚き').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('驚き'));
       labels['驚き'] = createDiv('驚き').addClass('emotion-label');
 
-      buttons['悲しみ'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/shooting_star-removebg-preview.png', '悲しみ').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('悲しみ'));
+    buttons['悲しみ'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/shooting_star-removebg-preview.png', '悲しみ').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('悲しみ'));
       labels['悲しみ'] = createDiv('悲しみ').addClass('emotion-label');
 
       buttons['嫌悪'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/rain.PNG', '嫌悪').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('嫌悪'));
@@ -246,7 +266,7 @@
       buttons['怒り'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/star-removebg-preview.png', '怒り').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('怒り'));
       labels['怒り'] = createDiv('怒り').addClass('emotion-label');
 
-      buttons['期待＜予期＞'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG', '期待＜予期＞').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('期待＜予期＞'));
+    　buttons['期待＜予期＞'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/balloon.PNG', '期待＜予期＞').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('期待＜予期＞'));
       labels['期待＜予期＞'] = createDiv('期待＜予期＞').addClass('emotion-label');
 
       buttons['恍惚'] = createImg('https://mooo0ooo.github.io/diary/rose.PNG', '恍惚').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('恍惚'));
@@ -255,7 +275,7 @@
       buttons['敬愛'] = createImg('https://mooo0ooo.github.io/diary/tulip.PNG', '敬愛').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('敬愛'));
       labels['敬愛'] = createDiv('敬愛').addClass('emotion-label');
 
-      buttons['恐怖'] = createImg('https://mooo0ooo.github.io/diary/yellowFlower.PNG', '恐怖').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('恐怖'));
+    　buttons['恐怖'] = createImg('https://mooo0ooo.github.io/diary/yellowFlower.PNG', '恐怖').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('恐怖'));
       labels['恐怖'] = createDiv('恐怖').addClass('emotion-label');
 
       buttons['驚嘆'] = createImg('https://mooo0ooo.github.io/diary/clover.PNG', '驚嘆').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('驚嘆'));
@@ -298,7 +318,7 @@
       labels['関心'] = createDiv('関心').addClass('emotion-label');
     }
 
-    function handleEmotionButton(emotionLabel) {
+  function handleEmotionButton(emotionLabel) {
       if (selectedCount >= 25) return;
     
       let emotion = emotionLabel;
@@ -307,140 +327,145 @@
       selectedCount++;
       
       countDisplay.html(`${selectedCount}/25`);
+    }  
 
-      // エフェクトを表示
-      showEffect(emotion);
+function displayResult() {
+  clear();
+  countDisplay.hide();
+  checkButton.hide();
+  for (let key in buttons) {
+    buttons[key].hide();
+    labels[key].hide();
+  }
+  labelElements.forEach(label => label.remove());
+  labelElements = []; 
+  
+  let positiveCount = 0;
+  let negativeCount = 0;
+
+  for (let emotion in selectedEmotions) {
+    if (positiveEmotions.includes(emotion)) {
+      positiveCount += selectedEmotions[emotion];
+    } else if (negativeEmotions.includes(emotion)) {
+      negativeCount += selectedEmotions[emotion];
     }
+  }
 
-    function showEffect(emotion) {
-      let color = emotionColors[emotion];
-      let shapes = ['star', 'hexagon', 'diamond', 'circle'];
-      for (let i = 0; i < 100; i++) {
-        let x = random(width);
-        let y = random(height);
-        let size = random(10, 30);
-        let shape = random(shapes);
-        let isFilled = random() < 0.5;
+  backgroundChoice = positiveCount > negativeCount ? (Math.random() < 0.5 ? 0 : 3) : (Math.random() < 0.5 ? 1 : 2);
 
-        drawShape(effectLayer, x, y, shape, size, color, isFilled);
+  let img = backgroundImages[backgroundChoice];
+  let imgAspect = img.width / img.height;
+  let canvasAspect = width / height;
+  let imgWidth, imgHeight;
 
-        setTimeout(() => {
-          effectLayer.clear(); // エフェクトレイヤーをクリア
-        }, 2000);
+  if (imgAspect > canvasAspect) {
+    imgWidth = width;
+    imgHeight = width / imgAspect;
+  } else {
+    imgHeight = height;
+    imgWidth = height * imgAspect;
+  }
+
+  savedImgWidth = imgWidth;
+  savedImgHeight = imgHeight;
+
+  image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
+
+  let mostSelectedEmotion = getMostSelectedEmotion();
+  let motif = motifImages[mostSelectedEmotion];
+  if (motif) {
+    image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
+  }
+
+  nextPageBtn.show();
+  prevPageBtn.hide();
+  downloadBtn.show();
+}
+
+function showSecondPage() {
+  // キャンバスを1ページ目と同じサイズに設定
+  resizeCanvas(savedImgWidth, savedImgHeight);
+
+  // キャンバスを中央に配置するためのオフセットを計算
+  let offsetX = (windowWidth - savedImgWidth) / 2;
+    let offsetY = (windowHeight - savedImgHeight) / 2;
+
+  clear();
+  background(255);
+
+  // キャンバスを中央に移動
+  translate(offsetX, offsetY);
+
+  let selectedEmotionsList = Object.keys(selectedEmotions);
+  let gridSize = 5;
+  let imgSize = savedImgWidth / gridSize - 10; // 画像サイズを1ページ目と同じにする
+  let padding = 10;
+
+  // グリッドの配置
+  let totalGridWidth = gridSize * (imgSize + padding) - padding;
+  let startX = (savedImgWidth - totalGridWidth) / 2;
+  let startY = (savedImgHeight - totalGridWidth) / 2;
+
+  let posX, posY;
+  let displayed = 0;
+
+  for (let emotion of selectedEmotionsList) {
+    let motifImage = motifImages[emotion];
+    let displayCount = selectedEmotions[emotion];
+
+    for (let i = 0; i < displayCount; i++) {
+      if (displayed >= 25) break;
+
+      posX = startX + (displayed % gridSize) * (imgSize + padding);
+      posY = startY + Math.floor(displayed / gridSize) * (imgSize + padding);
+
+      if (motifImage) {
+        image(motifImage, posX, posY, imgSize, imgSize);
+
+        // ラベルをキャンバス上に配置
+        let label = createDiv(emotionTranslations[emotion]);
+        label.position(offsetX + posX + imgSize / 2 - 10, offsetY + posY + imgSize + 5);
+        label.style('font-size', '10px');
+        label.style('text-align', 'center');
+        labelElements.push(label);
       }
+      displayed++;
     }
+    if (displayed >= 25) break;
+  }
 
-    function drawShape(layer, x, y, shape, size, color, isFilled) {
-      if (isFilled) {
-        layer.fill(color);
-      } else {
-        layer.noFill();
-      }
-      layer.stroke(color);
-      layer.strokeWeight(1);
+  prevPageBtn.show();
+  nextPageBtn.hide();
+  downloadBtn.show();
+}
 
-      switch (shape) {
-        case 'star':
-          layer.beginShape();
-          for (let i = 0; i < 10; i++) {
-            let angle = PI / 5 * i;
-            let radius = i % 2 === 0 ? size : size / 2;
-            let posX = x + cos(angle) * radius;
-            let posY = y + sin(angle) * radius;
-            layer.vertex(posX, posY);
-          }
-          layer.endShape(CLOSE);
-          break;
 
-        case 'hexagon':
-          layer.beginShape();
-          for (let i = 0; i < 6; i++) {
-            let angle = PI / 3 * i;
-            layer.vertex(x + cos(angle) * size, y + sin(angle) * size);
-          }
-          layer.endShape(CLOSE);
-          break;
+function downloadCanvas() {
+  // キャンバスにラベルを描画
+  labelElements.forEach(label => {
+    const x = label.position().x;
+    const y = label.position().y;
+    const textContent = label.html();
+    fill(0); // テキストカラー
+    textSize(10);
+    textAlign(CENTER);
+    text(textContent, x, y);
+  });
 
-        case 'diamond':
-          layer.beginShape();
-          layer.vertex(x, y - size);
-          layer.vertex(x + size / 2, y);
-          layer.vertex(x, y + size);
-          layer.vertex(x - size / 2, y);
-          layer.endShape(CLOSE);
-          break;
+  saveCanvas('emotion_canvas', 'png');  // キャンバスを保存
+}
 
-        case 'circle':
-          layer.ellipse(x, y, size * 2);
-          break;
-      }
+function getMostSelectedEmotion() {
+  let maxCount = -1;
+  let selectedEmotion = '';
+  for (let emotion in selectedEmotions) {
+    if (selectedEmotions[emotion] > maxCount) {
+      maxCount = selectedEmotions[emotion];
+      selectedEmotion = emotion;
     }
-
-    function displayResult() {
-      clear();
-      countDisplay.hide();
-      checkButton.hide();
-      for (let key in buttons) {
-        buttons[key].hide();
-        labels[key].hide();
-      }
-      labelElements.forEach(label => label.remove());
-      labelElements = []; 
-      
-      let positiveCount = 0;
-      let negativeCount = 0;
-
-      for (let emotion in selectedEmotions) {
-        if (positiveEmotions.includes(emotion)) {
-          positiveCount += selectedEmotions[emotion];
-        } else if (negativeEmotions.includes(emotion)) {
-          negativeCount += selectedEmotions[emotion];
-        }
-      }
-
-      backgroundChoice = positiveCount > negativeCount ? (Math.random() < 0.5 ? 0 : 3) : (Math.random() < 0.5 ? 1 : 2);
-
-      let img = backgroundImages[backgroundChoice];
-      let imgAspect = img.width / img.height;
-      let canvasAspect = width / height;
-      let imgWidth, imgHeight;
-
-      if (imgAspect > canvasAspect) {
-        imgWidth = width;
-        imgHeight = width / imgAspect;
-      } else {
-        imgHeight = height;
-        imgWidth = height * imgAspect;
-      }
-
-      savedImgWidth = imgWidth;
-      savedImgHeight = imgHeight;
-
-      image(img, (width - imgWidth) / 2, (height - imgHeight) / 2, imgWidth, imgHeight);
-
-      let mostSelectedEmotion = getMostSelectedEmotion();
-      let motif = motifImages[mostSelectedEmotion];
-      if (motif) {
-        image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
-      }
-
-      downloadBtn.show();
-    }
-
-    function downloadCanvas() {
-      // キャンバスにラベルを描画
-      labelElements.forEach(label => {
-        const x = label.position().x;
-        const y = label.position().y;
-        const textContent = label.html();
-        fill(0); // テキストカラー
-        textSize(10);
-        textAlign(CENTER);
-        text(textContent, x, y);
-      });
-
-      saveCanvas('emotion_canvas', 'png');  // キャンバスを保存
-    }
+  }
+  return selectedEmotion;
+}
 
     function getMostSelectedEmotion() {
       let maxCount = -1;
@@ -460,6 +485,8 @@
       drawEmotionGrid(emotionsA, 0);
       drawEmotionGrid(emotionsB, 1);
       drawEmotionGrid(emotionsC, 2);
+      nextPageBtn.position(width - 100, height - 50);
+      prevPageBtn.position(20, height - 50);
     }
 
   </script>
