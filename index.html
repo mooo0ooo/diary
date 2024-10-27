@@ -191,6 +191,8 @@
         labelElements = []; 
         displayResult(); 
       });
+
+      effectLayer = createGraphics(windowWidth, windowHeight); // エフェクト用レイヤー
     }
 
     function draw() {
@@ -210,6 +212,8 @@
         countDisplay.position(centerX - offset, windowHeight - 100);
         checkButton.position(centerX - offset + countWidth + 10, windowHeight - 100);
       }
+
+      image(effectLayer, 0, 0); // エフェクトレイヤーを描画
     }
   
    function startEmotionSelection() {
@@ -380,6 +384,74 @@ function displayResult() {
   nextPageBtn.show();
   prevPageBtn.hide();
   downloadBtn.show();
+  
+  showEffect(mostSelectedEmotion); // エフェクトを表示
+}
+
+function showEffect(emotion) {
+  let color = emotionColors[emotion];
+  let shapes = ['star', 'hexagon', 'diamond', 'circle'];
+  for (let i = 0; i < 100; i++) {
+    let x = random(width);
+    let y = random(height);
+    let size = random(2, 8);
+    let shape = random(shapes);
+    let isFilled = random() < 0.5;
+
+    drawShape(effectLayer, x, y, shape, size, color, isFilled);
+
+    setTimeout(() => {
+      effectLayer.noFill();
+      effectLayer.stroke(255);
+      drawShape(effectLayer, x, y, shape, size, color, isFilled);
+    }, 2000);
+  }
+}
+
+function drawShape(layer, x, y, shape, size, color, isFilled) {
+  if (isFilled) {
+    layer.fill(color);
+  } else {
+    layer.noFill();
+  }
+  layer.stroke(color);
+  layer.strokeWeight(0.5);
+
+  switch (shape) {
+    case 'star':
+      layer.beginShape();
+      for (let i = 0; i < 10; i++) {
+        let angle = PI / 5 * i;
+        let radius = i % 2 === 0 ? size : size / 2;
+        let posX = x + cos(angle) * radius;
+        let posY = y + sin(angle) * radius;
+        layer.vertex(posX, posY);
+      }
+      layer.endShape(CLOSE);
+      break;
+
+    case 'hexagon':
+      layer.beginShape();
+      for (let i = 0; i < 6; i++) {
+        let angle = PI / 3 * i;
+        layer.vertex(x + cos(angle) * size, y + sin(angle) * size);
+      }
+      layer.endShape(CLOSE);
+      break;
+
+    case 'diamond':
+      layer.beginShape();
+      layer.vertex(x, y - size);
+      layer.vertex(x + size / 2, y);
+      layer.vertex(x, y + size);
+      layer.vertex(x - size / 2, y);
+      layer.endShape(CLOSE);
+      break;
+
+    case 'circle':
+      layer.ellipse(x, y, size * 2);
+      break;
+  }
 }
 
 function showSecondPage() {
