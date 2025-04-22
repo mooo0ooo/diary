@@ -191,22 +191,9 @@
 
     function draw() {
       if (isResultDisplayed) return;
-      
-      clear();
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
-    
-      if (checkButton) {
-        const centerX = windowWidth / 2;
-        const countWidth = 40;
-        const checkButtonWidth = 100;
-        const offset = (checkButtonWidth + countWidth) / 2;
-    
-        countDisplay.position(centerX - offset, windowHeight - 100);
-        checkButton.position(centerX - offset + countWidth + 10, windowHeight - 100);
-      }
+      clear();  
     }
+
   
    function startEmotionSelection() {
       createEmotionButtons();
@@ -215,6 +202,10 @@
       
       checkButton = createButton('Check');
       checkButton.mousePressed(displayResult);
+
+     drawEmotionGrid(emotionsA, 0);
+     drawEmotionGrid(emotionsB, 1);
+     drawEmotionGrid(emotionsC, 2);
     }
 
 
@@ -476,14 +467,18 @@ function getMostSelectedEmotion() {
     }
 
     function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
-      clear();
-      drawEmotionGrid(emotionsA, 0);
-      drawEmotionGrid(emotionsB, 1);
-      drawEmotionGrid(emotionsC, 2);
-      nextPageBtn.position(width - 100, height - 50);
-      prevPageBtn.position(20, height - 50);
-    }
+  resizeCanvas(windowWidth, windowHeight);
+  clear();
+
+  if (!isResultDisplayed) {
+    drawEmotionGrid(emotionsA, 0);
+    drawEmotionGrid(emotionsB, 1);
+    drawEmotionGrid(emotionsC, 2);
+  }
+
+  nextPageBtn.position(width - 100, height - 50);
+  prevPageBtn.position(20, height - 50);
+}
 
   </script>
 </body>
