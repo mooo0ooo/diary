@@ -190,7 +190,16 @@
 
     function draw() {
       if (isResultDisplayed) return;
-      clear();  
+      clear();
+
+      if (checkButton && countDisplay) {
+        const centerX = windowWidth / 2;
+        const totalWidth = 200; // 両方の幅を合わせた値（仮）
+
+        // 中央揃えで並べる
+        checkButton.position(centerX - 50, windowHeight - 100);
+        countDisplay.position(centerX - 100, windowHeight - 100);
+      }
     }
 
   
@@ -245,7 +254,7 @@ function getColCount() {
       buttons['驚き'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/thunder.PNG', '驚き').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('驚き'));
       labels['驚き'] = createDiv('驚き').addClass('emotion-label');
 
-    buttons['悲しみ'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/shooting_star-removebg-preview.png', '悲しみ').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('悲しみ'));
+      buttons['悲しみ'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/shooting_star-removebg-preview.png', '悲しみ').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('悲しみ'));
       labels['悲しみ'] = createDiv('悲しみ').addClass('emotion-label');
 
       buttons['嫌悪'] = createImg('https://raw.githubusercontent.com/mooo0ooo/diary/main/rain.PNG', '嫌悪').size(emotionSize, emotionSize).mousePressed(() => handleEmotionButton('嫌悪'));
