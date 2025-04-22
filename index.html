@@ -374,9 +374,9 @@ function displayResult() {
 
   let mostSelectedEmotion = getMostSelectedEmotion();
   let motif = motifImages[mostSelectedEmotion];
-  if (motif) {
-    image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
-  }
+    if (motif && motif.width > 0 && motif.height > 0) {
+  image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
+    }
 
   nextPageBtn.show();
   prevPageBtn.hide();
