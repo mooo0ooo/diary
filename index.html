@@ -351,6 +351,8 @@ function displayResult() {
   backgroundChoice = positiveCount > negativeCount ? (Math.random() < 0.5 ? 0 : 3) : (Math.random() < 0.5 ? 1 : 2);
 
   let img = backgroundImages[backgroundChoice];
+  console.log("Background image choice:", backgroundChoice, img);
+  
   let imgAspect = img.width / img.height;
   let canvasAspect = width / height;
   let imgWidth, imgHeight;
