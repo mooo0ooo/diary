@@ -432,7 +432,7 @@ function showSecondPage() {
         image(motifImage, posX, posY, imgSize, imgSize);
 
         // ラベルをキャンバス上に配置
-        let label = createDiv(emotionTranslations[emotion]);
+        let label = createDiv(emotion);
         label.position(offsetX + posX + imgSize / 2 - 10, offsetY + posY + imgSize + 5);
         label.style('font-size', '10px');
         label.style('text-align', 'center');
