@@ -329,6 +329,7 @@ function getColCount() {
     }  
 
 function displayResult() {
+  isResultDisplayed = true;
   clear();
   countDisplay.hide();
   checkButton.hide();
@@ -351,10 +352,13 @@ function displayResult() {
   }
 
   backgroundChoice = positiveCount > negativeCount ? (Math.random() < 0.5 ? 0 : 3) : (Math.random() < 0.5 ? 1 : 2);
-
   let img = backgroundImages[backgroundChoice];
-  console.log("Background image choice:", backgroundChoice, img);
-  
+
+  if (!img || img.width === 0 || img.height === 0) {
+    console.warn("Background not ready:", backgroundChoice, img);
+    return;
+  }
+
   let imgAspect = img.width / img.height;
   let canvasAspect = width / height;
   let imgWidth, imgHeight;
@@ -374,14 +378,18 @@ function displayResult() {
 
   let mostSelectedEmotion = getMostSelectedEmotion();
   let motif = motifImages[mostSelectedEmotion];
-    if (motif && motif.width > 0 && motif.height > 0) {
-  image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
-    }
+
+  if (motif && motif.width > 0 && motif.height > 0) {
+    image(motif, width / 2 - motif.width / 2, height / 2 - motif.height / 2);
+  } else {
+    console.warn("Motif not ready:", mostSelectedEmotion, motif);
+  }
 
   nextPageBtn.show();
   prevPageBtn.hide();
   downloadBtn.show();
 }
+
 
 function showSecondPage() {
   // キャンバスを1ページ目と同じサイズに設定
